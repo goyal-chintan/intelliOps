@@ -1,0 +1,427 @@
+[
+  {
+    "incident_id": "INC-2635edd2-b315-4e62-b7a1-4b61c659c2af",
+    "source": "logs",
+    "title": "checkout-api incident: ERR_DB_CON_001",
+    "service": "checkout-api",
+    "tenant_id": "tenant-alpha",
+    "category": "Reliability",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_DB_CON_001"
+    ],
+    "start_time": "2025-12-17T16:11:32.495719+00:00",
+    "end_time": "2025-12-17T16:20:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_DB_CON_001",
+      "error_rate_pct": 80.0,
+      "status_code_counts": {
+        "503": 8
+      },
+      "p95_latency_ms": 10416,
+      "sample_trace_ids": [
+        "87a1dd37-7e7c-4a2a-b4c3-22183c1a14e0",
+        "1ad9a1e2-98e4-4dba-b564-4daa46a0709a",
+        "fa5f3d3d-578a-4da7-9f0d-9ca77966ed5b",
+        "646ca83f-eafb-4c3f-92b1-a54139f283a4",
+        "b2fb829a-bcf4-4700-a982-586d8208fade"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_DB_CON_001-db-connection-pool-exhaustion.md"
+    ]
+  },
+  {
+    "incident_id": "INC-5250e40f-b9a2-4e45-8d96-19b948af0ed1",
+    "source": "logs",
+    "title": "ml-serving incident: ERR_K8S_OOM_001",
+    "service": "ml-serving",
+    "tenant_id": "tenant-gamma",
+    "category": "Reliability",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_K8S_OOM_001"
+    ],
+    "start_time": "2025-12-17T16:35:32.495719+00:00",
+    "end_time": "2025-12-17T16:51:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_K8S_OOM_001",
+      "error_rate_pct": 88.24,
+      "status_code_counts": {
+        "503": 15
+      },
+      "p95_latency_ms": 11125,
+      "sample_trace_ids": [
+        "de8ae2c4-a52f-4ae5-b362-f4752014052a",
+        "2d0922bb-7a4f-4f86-8bff-2150dfbefac9",
+        "bdc20365-8d4f-4bb1-97f0-457604d0a80d",
+        "771ffce2-2d22-416e-8690-bc39d3fb9d2a",
+        "3c3929b9-1685-45a2-90f2-b7dbad9a340b"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_K8S_OOM_001-k8s-pod-oomkilled.md"
+    ]
+  },
+  {
+    "incident_id": "INC-ae8bf3d2-e9f6-4448-b3ac-7ad1cd4b7a10",
+    "source": "logs",
+    "title": "platform-infra incident: ERR_K8S_DISK_002",
+    "service": "platform-infra",
+    "tenant_id": "tenant-gamma",
+    "category": "Reliability",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_K8S_DISK_002"
+    ],
+    "start_time": "2025-12-17T17:02:32.495719+00:00",
+    "end_time": "2025-12-17T17:29:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_K8S_DISK_002",
+      "error_rate_pct": 78.57,
+      "status_code_counts": {
+        "0": 22
+      },
+      "p95_latency_ms": 10538,
+      "sample_trace_ids": [
+        "1e7ca02c-7489-49e3-809f-0ab31a237397",
+        "408a0fed-4eb8-43a8-8175-cf5cb51ac16e",
+        "11a97e09-59fb-4b0b-92a5-a331d1105628",
+        "da8ce1d6-8385-432c-8d6f-261fca42ba68",
+        "f2628068-be2d-49f4-bc5a-e782a930bc70"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_K8S_DISK_002-ephemeral-storage-exceeded-log-bloat.md"
+    ]
+  },
+  {
+    "incident_id": "INC-800bdf48-b086-4119-8b5f-13c6c146a096",
+    "source": "logs",
+    "title": "payment-gw incident: ERR_DB_DLK_001",
+    "service": "payment-gw",
+    "tenant_id": "tenant-alpha",
+    "category": "Reliability",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_DB_DLK_001"
+    ],
+    "start_time": "2025-12-17T18:25:32.495719+00:00",
+    "end_time": "2025-12-17T18:45:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_DB_DLK_001",
+      "error_rate_pct": 95.24,
+      "status_code_counts": {
+        "500": 20
+      },
+      "p95_latency_ms": 11870,
+      "sample_trace_ids": [
+        "2cbcfe61-1723-4a3a-a798-86c474842a37",
+        "88fb804b-db5c-4da6-ace4-2fdcc8dc895e",
+        "da3b0114-5373-4ade-856e-c78da2675928",
+        "f4ae4b3c-13bf-4175-a832-991bf10f208a",
+        "af2c3e14-d26f-4c52-b4b7-e9d881221965"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_DB_DLK_001-db-deadlock-detected.md"
+    ]
+  },
+  {
+    "incident_id": "INC-67111420-19c0-48fa-b657-65d20887138c",
+    "source": "logs",
+    "title": "data-ingestor incident: ERR_FLINK_CKPT_001",
+    "service": "data-ingestor",
+    "tenant_id": "tenant-gamma",
+    "category": "Reliability",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_FLINK_CKPT_001"
+    ],
+    "start_time": "2025-12-17T19:13:32.495719+00:00",
+    "end_time": "2025-12-17T19:29:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_FLINK_CKPT_001",
+      "error_rate_pct": 82.35,
+      "status_code_counts": {
+        "500": 14
+      },
+      "p95_latency_ms": 10680,
+      "sample_trace_ids": [
+        "fcdd4319-c06c-488f-bcbe-9021fb769d1c",
+        "79ce796f-e397-4459-8cbb-26b34b718dea",
+        "28f09f5b-d6fa-4cd3-8bea-9467bffac361",
+        "1176e9e0-2f7c-4b07-abac-fdebe21685e4",
+        "0acdcac8-2b08-48c4-a858-33f40a5e5dc3"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_FLINK_CKPT_001-flink-checkpoint-failures.md"
+    ]
+  },
+  {
+    "incident_id": "INC-c37d43b6-f32e-49c9-88b3-7a76195dff8e",
+    "source": "logs",
+    "title": "ml-serving incident: ERR_VECTOR_LAT_001",
+    "service": "ml-serving",
+    "tenant_id": "tenant-beta",
+    "category": "Performance",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_VECTOR_LAT_001"
+    ],
+    "start_time": "2025-12-17T20:26:32.495719+00:00",
+    "end_time": "2025-12-17T20:37:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_VECTOR_LAT_001",
+      "error_rate_pct": 100.0,
+      "status_code_counts": {
+        "504": 12
+      },
+      "p95_latency_ms": 10999,
+      "sample_trace_ids": [
+        "4ec25879-bb67-44a3-acb1-1faff90fa3ad",
+        "c59683e5-6cde-4f62-a414-b469131e3479",
+        "52ba657f-2060-4d3c-a949-165df7167925",
+        "002a41cb-23d1-4e75-b361-f006a72a6a8f",
+        "d5f852a4-5da9-499a-b89c-a0ce2373914f"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_VECTOR_LAT_001-vector-db-high-latency.md"
+    ]
+  },
+  {
+    "incident_id": "INC-04d1b960-a203-46b5-afe8-17a81b4b0d52",
+    "source": "logs",
+    "title": "checkout-api incident: ERR_DB_QRY_001",
+    "service": "checkout-api",
+    "tenant_id": "tenant-beta",
+    "category": "Performance",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_DB_QRY_001"
+    ],
+    "start_time": "2025-12-17T21:43:32.495719+00:00",
+    "end_time": "2025-12-17T21:52:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_DB_QRY_001",
+      "error_rate_pct": 100.0,
+      "status_code_counts": {
+        "500": 10
+      },
+      "p95_latency_ms": 10070,
+      "sample_trace_ids": [
+        "66e063c8-ea16-4736-a8ef-5fc8954bfc25",
+        "c0a0bb40-2d82-468a-b838-e92524084405",
+        "426aff80-a4ca-4e29-a074-542ec579ba2d",
+        "635df411-26af-428a-969b-9c194f677aea",
+        "670ec9f5-e767-4a0b-ab0d-9a75e50a712b"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_DB_QRY_001-db-slow-query-missing-index.md"
+    ]
+  },
+  {
+    "incident_id": "INC-4d885bd0-9051-4df7-985f-2331bc413f78",
+    "source": "logs",
+    "title": "platform-infra incident: ERR_K8S_NODE_MEM_001",
+    "service": "platform-infra",
+    "tenant_id": "tenant-alpha",
+    "category": "Reliability",
+    "severity": "P0",
+    "error_codes": [
+      "ERR_K8S_NODE_MEM_001"
+    ],
+    "start_time": "2025-12-17T22:49:32.495719+00:00",
+    "end_time": "2025-12-17T23:23:32.495719+00:00",
+    "status": "resolved",
+    "symptoms": {
+      "log_pattern": "Failure: ERR_K8S_NODE_MEM_001",
+      "error_rate_pct": 94.29,
+      "status_code_counts": {
+        "0": 33
+      },
+      "p95_latency_ms": 11308,
+      "sample_trace_ids": [
+        "250ef81c-77fc-496f-87cf-dd758b3baa77",
+        "7085e666-c149-497d-a8e4-dd0152be15ab",
+        "e08d0648-55ce-46b8-88d7-f5696a33f120",
+        "e5bca3dc-a171-4d45-92f1-ff43a7c26747",
+        "05cfc0ea-2326-4174-8241-fe8cb63a182c"
+      ]
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_K8S_NODE_MEM_001-k8s-node-memory-pressure-evictions.md"
+    ]
+  },
+  {
+    "incident_id": "COST-4ac6f813-01cb-4117-8cd4-3104f9fadea5",
+    "source": "cost",
+    "title": "NAT Gateway cost anomaly for tenant-alpha",
+    "service": "shared-infra",
+    "tenant_id": "tenant-alpha",
+    "category": "Cost",
+    "severity": "P1",
+    "error_codes": [
+      "ERR_COST_NAT_001"
+    ],
+    "start_time": "2025-12-18T09:24:32.501559+00:00",
+    "end_time": "2025-12-18T15:24:32.501559+00:00",
+    "status": "open",
+    "symptoms": {
+      "resource_type": "NAT Gateway",
+      "daily_spend_usd": 895.12,
+      "estimated_monthly_usd": 26853.6
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_COST_NAT_001-nat-gateway-overspending.md"
+    ]
+  },
+  {
+    "incident_id": "COST-bc1524a0-98da-4f74-bf46-2960720ddd41",
+    "source": "cost",
+    "title": "S3 cost anomaly for tenant-alpha",
+    "service": "shared-infra",
+    "tenant_id": "tenant-alpha",
+    "category": "Cost",
+    "severity": "P2",
+    "error_codes": [
+      "ERR_COST_S3_VER_001"
+    ],
+    "start_time": "2025-12-18T09:24:32.501559+00:00",
+    "end_time": "2025-12-18T15:24:32.501559+00:00",
+    "status": "open",
+    "symptoms": {
+      "resource_type": "S3",
+      "daily_spend_usd": 633.52,
+      "estimated_monthly_usd": 19005.6
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_COST_S3_VER_001-s3-versioning-storage-bloat.md"
+    ]
+  },
+  {
+    "incident_id": "COST-3fe688b1-9de3-4667-89de-e10c54a78ca2",
+    "source": "cost",
+    "title": "EBS cost anomaly for tenant-alpha",
+    "service": "shared-infra",
+    "tenant_id": "tenant-alpha",
+    "category": "Cost",
+    "severity": "P2",
+    "error_codes": [
+      "ERR_COST_EBS_001"
+    ],
+    "start_time": "2025-12-18T09:24:32.501559+00:00",
+    "end_time": "2025-12-18T15:24:32.501559+00:00",
+    "status": "open",
+    "symptoms": {
+      "resource_type": "EBS",
+      "daily_spend_usd": 121.39,
+      "estimated_monthly_usd": 3641.7
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_COST_EBS_001-unused-ebs-volumes.md"
+    ]
+  },
+  {
+    "incident_id": "COST-1c112551-ee9d-42c0-9899-e171bb769ebc",
+    "source": "cost",
+    "title": "EBS cost anomaly for tenant-beta",
+    "service": "shared-infra",
+    "tenant_id": "tenant-beta",
+    "category": "Cost",
+    "severity": "P2",
+    "error_codes": [
+      "ERR_COST_EBS_001"
+    ],
+    "start_time": "2025-12-18T09:24:32.501559+00:00",
+    "end_time": "2025-12-18T15:24:32.501559+00:00",
+    "status": "open",
+    "symptoms": {
+      "resource_type": "EBS",
+      "daily_spend_usd": 190.72,
+      "estimated_monthly_usd": 5721.6
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_COST_EBS_001-unused-ebs-volumes.md"
+    ]
+  },
+  {
+    "incident_id": "COST-c4f7ade9-963c-4e2a-aee9-b4eaa9f5ec14",
+    "source": "cost",
+    "title": "EBS Snapshot cost anomaly for tenant-beta",
+    "service": "shared-infra",
+    "tenant_id": "tenant-beta",
+    "category": "Cost",
+    "severity": "P2",
+    "error_codes": [
+      "ERR_COST_EBS_SNAP_001"
+    ],
+    "start_time": "2025-12-18T09:24:32.501559+00:00",
+    "end_time": "2025-12-18T15:24:32.501559+00:00",
+    "status": "open",
+    "symptoms": {
+      "resource_type": "EBS Snapshot",
+      "daily_spend_usd": 105.31,
+      "estimated_monthly_usd": 3159.3
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_COST_EBS_SNAP_001-ebs-snapshot-accumulation.md"
+    ]
+  },
+  {
+    "incident_id": "COST-80cf6b16-7018-48fb-ab3d-a397629e2e8c",
+    "source": "cost",
+    "title": "EBS cost anomaly for tenant-gamma",
+    "service": "shared-infra",
+    "tenant_id": "tenant-gamma",
+    "category": "Cost",
+    "severity": "P2",
+    "error_codes": [
+      "ERR_COST_EBS_001"
+    ],
+    "start_time": "2025-12-18T09:24:32.501559+00:00",
+    "end_time": "2025-12-18T15:24:32.501559+00:00",
+    "status": "open",
+    "symptoms": {
+      "resource_type": "EBS",
+      "daily_spend_usd": 151.27,
+      "estimated_monthly_usd": 4538.1
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_COST_EBS_001-unused-ebs-volumes.md"
+    ]
+  },
+  {
+    "incident_id": "COST-29dda4e2-6fb8-443c-bebe-046aec1d1d6b",
+    "source": "cost",
+    "title": "EBS Snapshot cost anomaly for tenant-gamma",
+    "service": "shared-infra",
+    "tenant_id": "tenant-gamma",
+    "category": "Cost",
+    "severity": "P2",
+    "error_codes": [
+      "ERR_COST_EBS_SNAP_001"
+    ],
+    "start_time": "2025-12-18T09:24:32.501559+00:00",
+    "end_time": "2025-12-18T15:24:32.501559+00:00",
+    "status": "open",
+    "symptoms": {
+      "resource_type": "EBS Snapshot",
+      "daily_spend_usd": 85.26,
+      "estimated_monthly_usd": 2557.8
+    },
+    "runbook_refs": [
+      "knowledge_base/runbooks/ERR_COST_EBS_SNAP_001-ebs-snapshot-accumulation.md"
+    ]
+  }
+]

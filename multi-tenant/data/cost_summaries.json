@@ -1,0 +1,191 @@
+[
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "checkout-api",
+    "daily_spend": 439.38,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "payment-gw",
+    "daily_spend": 102.82,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "data-ingestor",
+    "daily_spend": 415.35,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "ml-serving",
+    "daily_spend": 144.45,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "checkout-api",
+    "daily_spend": 381.93,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "payment-gw",
+    "daily_spend": 360.11,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "data-ingestor",
+    "daily_spend": 437.47,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "ml-serving",
+    "daily_spend": 324.62,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "checkout-api",
+    "daily_spend": 242.68,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "payment-gw",
+    "daily_spend": 327.27,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "data-ingestor",
+    "daily_spend": 403.18,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "ml-serving",
+    "daily_spend": 416.09,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "shared-infra",
+    "daily_spend": 895.12,
+    "currency": "USD",
+    "resource_type": "NAT Gateway"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "shared-infra",
+    "daily_spend": 633.52,
+    "currency": "USD",
+    "resource_type": "S3"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "shared-infra",
+    "daily_spend": 108.79,
+    "currency": "USD",
+    "resource_type": "S3 Requests"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "shared-infra",
+    "daily_spend": 121.39,
+    "currency": "USD",
+    "resource_type": "EBS"
+  },
+  {
+    "tenant_id": "tenant-alpha",
+    "service": "shared-infra",
+    "daily_spend": 37.83,
+    "currency": "USD",
+    "resource_type": "EBS Snapshot"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "shared-infra",
+    "daily_spend": 195.91,
+    "currency": "USD",
+    "resource_type": "NAT Gateway"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "shared-infra",
+    "daily_spend": 62.06,
+    "currency": "USD",
+    "resource_type": "S3"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "shared-infra",
+    "daily_spend": 116.68,
+    "currency": "USD",
+    "resource_type": "S3 Requests"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "shared-infra",
+    "daily_spend": 190.72,
+    "currency": "USD",
+    "resource_type": "EBS"
+  },
+  {
+    "tenant_id": "tenant-beta",
+    "service": "shared-infra",
+    "daily_spend": 105.31,
+    "currency": "USD",
+    "resource_type": "EBS Snapshot"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "shared-infra",
+    "daily_spend": 180.53,
+    "currency": "USD",
+    "resource_type": "NAT Gateway"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "shared-infra",
+    "daily_spend": 163.96,
+    "currency": "USD",
+    "resource_type": "S3"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "shared-infra",
+    "daily_spend": 31.44,
+    "currency": "USD",
+    "resource_type": "S3 Requests"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "shared-infra",
+    "daily_spend": 151.27,
+    "currency": "USD",
+    "resource_type": "EBS"
+  },
+  {
+    "tenant_id": "tenant-gamma",
+    "service": "shared-infra",
+    "daily_spend": 85.26,
+    "currency": "USD",
+    "resource_type": "EBS Snapshot"
+  }
+]
