@@ -59,11 +59,11 @@ def _iso(ts: datetime) -> str:
     return ts.astimezone(timezone.utc).isoformat()
 
 
-def build_runbook_index(runbooks_dir: Path) -> Dict[str, str]:
+def build_runbook_index(runbooks_dir: Path, repo_root: Path) -> Dict[str, str]:
+    """Build a mapping of error code -> runbook path (relative to repo root)."""
     index: Dict[str, str] = {}
     if not runbooks_dir.exists():
         return index
-    repo_root = Path(__file__).resolve().parent
     for p in sorted(runbooks_dir.glob("*.md")):
         code = p.name.split("-", 1)[0]
         if code in index:
@@ -373,8 +373,12 @@ def main() -> None:
 
     start_time = datetime.now(timezone.utc) - timedelta(hours=24)
 
-    runbooks_dir = Path(__file__).resolve().parent / "knowledge_base" / "runbooks"
-    runbook_index = build_runbook_index(runbooks_dir)
+    # Paths: script is at multi-tenant/scripts/generate.py
+    script_dir = Path(__file__).resolve().parent          # multi-tenant/scripts/
+    multi_tenant_dir = script_dir.parent                  # multi-tenant/
+    repo_root = multi_tenant_dir.parent                   # repo root
+    runbooks_dir = multi_tenant_dir / "knowledge_base" / "runbooks"
+    runbook_index = build_runbook_index(runbooks_dir, repo_root)
 
     plan = generate_incident_plan(rng=rng, count=args.count, start_time=start_time, max_incidents=args.incidents)
     logs = generate_logs(rng=rng, count=args.count, start_time=start_time, incident_plan=plan)
