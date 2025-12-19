@@ -1,0 +1,45 @@
+name: PR title + branch conventions
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Validate branch name
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          echo "Branch: ${BRANCH_NAME}"
+          if ! echo "${BRANCH_NAME}" | grep -Eq '^(feat|fix|docs|chore|refactor|test|ci|build|perf)/[a-z0-9]+(-[a-z0-9]+)*$'; then
+            echo ""
+            echo "Invalid branch name."
+            echo "Expected: <type>/<kebab-case>"
+            echo "Allowed types: feat|fix|docs|chore|refactor|test|ci|build|perf"
+            echo "Examples: feat/tenant-routing, fix/runbook-index, docs/roadmap-layer2"
+            exit 1
+          fi
+
+      - name: Validate PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+          echo "PR title: ${PR_TITLE}"
+          if ! echo "${PR_TITLE}" | grep -Eq '^(feat|fix|docs|chore|refactor|test|ci|build|perf)(\([a-z0-9-]+\))?: .+'; then
+            echo ""
+            echo "Invalid PR title."
+            echo "Expected: type(optional-scope): summary"
+            echo "Allowed types: feat|fix|docs|chore|refactor|test|ci|build|perf"
+            echo "Examples:"
+            echo "  - feat(level0): add deterministic dataset generator"
+            echo "  - fix: correct multi-tenant runbook indexing"
+            exit 1
+          fi
+
+
