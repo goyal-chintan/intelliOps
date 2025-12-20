@@ -1,0 +1,1202 @@
+[
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T00:00:00+00:00",
+    "requests": 533,
+    "errors": 25,
+    "error_rate_pct": 4.69,
+    "p50_latency_ms": 122,
+    "p95_latency_ms": 243
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T00:00:00+00:00",
+    "requests": 243,
+    "errors": 17,
+    "error_rate_pct": 7.0,
+    "p50_latency_ms": 268,
+    "p95_latency_ms": 2270
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T00:00:00+00:00",
+    "requests": 410,
+    "errors": 32,
+    "error_rate_pct": 7.8,
+    "p50_latency_ms": 183,
+    "p95_latency_ms": 3534
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T00:00:00+00:00",
+    "requests": 364,
+    "errors": 19,
+    "error_rate_pct": 5.22,
+    "p50_latency_ms": 148,
+    "p95_latency_ms": 1034
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T00:00:00+00:00",
+    "requests": 60,
+    "errors": 2,
+    "error_rate_pct": 3.33,
+    "p50_latency_ms": 41,
+    "p95_latency_ms": 63
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T01:00:00+00:00",
+    "requests": 538,
+    "errors": 31,
+    "error_rate_pct": 5.76,
+    "p50_latency_ms": 120,
+    "p95_latency_ms": 2333
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T01:00:00+00:00",
+    "requests": 238,
+    "errors": 16,
+    "error_rate_pct": 6.72,
+    "p50_latency_ms": 247,
+    "p95_latency_ms": 2997
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T01:00:00+00:00",
+    "requests": 412,
+    "errors": 21,
+    "error_rate_pct": 5.1,
+    "p50_latency_ms": 183,
+    "p95_latency_ms": 381
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T01:00:00+00:00",
+    "requests": 349,
+    "errors": 24,
+    "error_rate_pct": 6.88,
+    "p50_latency_ms": 144,
+    "p95_latency_ms": 2625
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T01:00:00+00:00",
+    "requests": 60,
+    "errors": 3,
+    "error_rate_pct": 5.0,
+    "p50_latency_ms": 38,
+    "p95_latency_ms": 73
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T02:00:00+00:00",
+    "requests": 544,
+    "errors": 42,
+    "error_rate_pct": 7.72,
+    "p50_latency_ms": 120,
+    "p95_latency_ms": 2586
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T02:00:00+00:00",
+    "requests": 237,
+    "errors": 14,
+    "error_rate_pct": 5.91,
+    "p50_latency_ms": 252,
+    "p95_latency_ms": 1666
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T02:00:00+00:00",
+    "requests": 418,
+    "errors": 32,
+    "error_rate_pct": 7.66,
+    "p50_latency_ms": 184,
+    "p95_latency_ms": 2826
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T02:00:00+00:00",
+    "requests": 355,
+    "errors": 20,
+    "error_rate_pct": 5.63,
+    "p50_latency_ms": 141,
+    "p95_latency_ms": 1828
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T02:00:00+00:00",
+    "requests": 60,
+    "errors": 5,
+    "error_rate_pct": 8.33,
+    "p50_latency_ms": 46,
+    "p95_latency_ms": 1893
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T03:00:00+00:00",
+    "requests": 542,
+    "errors": 23,
+    "error_rate_pct": 4.24,
+    "p50_latency_ms": 123,
+    "p95_latency_ms": 223
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T03:00:00+00:00",
+    "requests": 244,
+    "errors": 17,
+    "error_rate_pct": 6.97,
+    "p50_latency_ms": 252,
+    "p95_latency_ms": 2068
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T03:00:00+00:00",
+    "requests": 419,
+    "errors": 24,
+    "error_rate_pct": 5.73,
+    "p50_latency_ms": 185,
+    "p95_latency_ms": 1957
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T03:00:00+00:00",
+    "requests": 358,
+    "errors": 25,
+    "error_rate_pct": 6.98,
+    "p50_latency_ms": 145,
+    "p95_latency_ms": 2363
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T03:00:00+00:00",
+    "requests": 60,
+    "errors": 3,
+    "error_rate_pct": 5.0,
+    "p50_latency_ms": 42,
+    "p95_latency_ms": 81
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T04:00:00+00:00",
+    "requests": 534,
+    "errors": 38,
+    "error_rate_pct": 7.12,
+    "p50_latency_ms": 123,
+    "p95_latency_ms": 3420
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T04:00:00+00:00",
+    "requests": 242,
+    "errors": 10,
+    "error_rate_pct": 4.13,
+    "p50_latency_ms": 254,
+    "p95_latency_ms": 439
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T04:00:00+00:00",
+    "requests": 422,
+    "errors": 20,
+    "error_rate_pct": 4.74,
+    "p50_latency_ms": 175,
+    "p95_latency_ms": 334
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T04:00:00+00:00",
+    "requests": 375,
+    "errors": 20,
+    "error_rate_pct": 5.33,
+    "p50_latency_ms": 143,
+    "p95_latency_ms": 1715
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T04:00:00+00:00",
+    "requests": 60,
+    "errors": 1,
+    "error_rate_pct": 1.67,
+    "p50_latency_ms": 39,
+    "p95_latency_ms": 61
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T05:00:00+00:00",
+    "requests": 533,
+    "errors": 30,
+    "error_rate_pct": 5.63,
+    "p50_latency_ms": 124,
+    "p95_latency_ms": 1451
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T05:00:00+00:00",
+    "requests": 243,
+    "errors": 13,
+    "error_rate_pct": 5.35,
+    "p50_latency_ms": 264,
+    "p95_latency_ms": 1641
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T05:00:00+00:00",
+    "requests": 415,
+    "errors": 29,
+    "error_rate_pct": 6.99,
+    "p50_latency_ms": 185,
+    "p95_latency_ms": 2675
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T05:00:00+00:00",
+    "requests": 363,
+    "errors": 19,
+    "error_rate_pct": 5.23,
+    "p50_latency_ms": 142,
+    "p95_latency_ms": 1156
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T05:00:00+00:00",
+    "requests": 60,
+    "errors": 2,
+    "error_rate_pct": 3.33,
+    "p50_latency_ms": 42,
+    "p95_latency_ms": 63
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T06:00:00+00:00",
+    "requests": 565,
+    "errors": 30,
+    "error_rate_pct": 5.31,
+    "p50_latency_ms": 118,
+    "p95_latency_ms": 936
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T06:00:00+00:00",
+    "requests": 252,
+    "errors": 22,
+    "error_rate_pct": 8.73,
+    "p50_latency_ms": 262,
+    "p95_latency_ms": 3181
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T06:00:00+00:00",
+    "requests": 409,
+    "errors": 21,
+    "error_rate_pct": 5.13,
+    "p50_latency_ms": 183,
+    "p95_latency_ms": 992
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T06:00:00+00:00",
+    "requests": 376,
+    "errors": 25,
+    "error_rate_pct": 6.65,
+    "p50_latency_ms": 144,
+    "p95_latency_ms": 2004
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T06:00:00+00:00",
+    "requests": 60,
+    "errors": 5,
+    "error_rate_pct": 8.33,
+    "p50_latency_ms": 43,
+    "p95_latency_ms": 2675
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T07:00:00+00:00",
+    "requests": 534,
+    "errors": 28,
+    "error_rate_pct": 5.24,
+    "p50_latency_ms": 119,
+    "p95_latency_ms": 950
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T07:00:00+00:00",
+    "requests": 244,
+    "errors": 11,
+    "error_rate_pct": 4.51,
+    "p50_latency_ms": 257,
+    "p95_latency_ms": 436
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T07:00:00+00:00",
+    "requests": 412,
+    "errors": 26,
+    "error_rate_pct": 6.31,
+    "p50_latency_ms": 188,
+    "p95_latency_ms": 1936
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T07:00:00+00:00",
+    "requests": 345,
+    "errors": 27,
+    "error_rate_pct": 7.83,
+    "p50_latency_ms": 143,
+    "p95_latency_ms": 4559
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T07:00:00+00:00",
+    "requests": 60,
+    "errors": 6,
+    "error_rate_pct": 10.0,
+    "p50_latency_ms": 40,
+    "p95_latency_ms": 2604
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T08:00:00+00:00",
+    "requests": 548,
+    "errors": 37,
+    "error_rate_pct": 6.75,
+    "p50_latency_ms": 125,
+    "p95_latency_ms": 2738
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T08:00:00+00:00",
+    "requests": 236,
+    "errors": 18,
+    "error_rate_pct": 7.63,
+    "p50_latency_ms": 266,
+    "p95_latency_ms": 2546
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T08:00:00+00:00",
+    "requests": 412,
+    "errors": 15,
+    "error_rate_pct": 3.64,
+    "p50_latency_ms": 184,
+    "p95_latency_ms": 309
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T08:00:00+00:00",
+    "requests": 351,
+    "errors": 15,
+    "error_rate_pct": 4.27,
+    "p50_latency_ms": 142,
+    "p95_latency_ms": 250
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T08:00:00+00:00",
+    "requests": 60,
+    "errors": 5,
+    "error_rate_pct": 8.33,
+    "p50_latency_ms": 41,
+    "p95_latency_ms": 1732
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T09:00:00+00:00",
+    "requests": 519,
+    "errors": 115,
+    "error_rate_pct": 22.16,
+    "p50_latency_ms": 131,
+    "p95_latency_ms": 10914
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T09:00:00+00:00",
+    "requests": 245,
+    "errors": 14,
+    "error_rate_pct": 5.71,
+    "p50_latency_ms": 268,
+    "p95_latency_ms": 1991
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T09:00:00+00:00",
+    "requests": 420,
+    "errors": 107,
+    "error_rate_pct": 25.48,
+    "p50_latency_ms": 204,
+    "p95_latency_ms": 11526
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T09:00:00+00:00",
+    "requests": 371,
+    "errors": 26,
+    "error_rate_pct": 7.01,
+    "p50_latency_ms": 140,
+    "p95_latency_ms": 2272
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T09:00:00+00:00",
+    "requests": 60,
+    "errors": 5,
+    "error_rate_pct": 8.33,
+    "p50_latency_ms": 42,
+    "p95_latency_ms": 3190
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T10:00:00+00:00",
+    "requests": 515,
+    "errors": 75,
+    "error_rate_pct": 14.56,
+    "p50_latency_ms": 130,
+    "p95_latency_ms": 9565
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T10:00:00+00:00",
+    "requests": 234,
+    "errors": 13,
+    "error_rate_pct": 5.56,
+    "p50_latency_ms": 257,
+    "p95_latency_ms": 949
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T10:00:00+00:00",
+    "requests": 417,
+    "errors": 35,
+    "error_rate_pct": 8.39,
+    "p50_latency_ms": 189,
+    "p95_latency_ms": 3649
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T10:00:00+00:00",
+    "requests": 358,
+    "errors": 26,
+    "error_rate_pct": 7.26,
+    "p50_latency_ms": 143,
+    "p95_latency_ms": 2172
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T10:00:00+00:00",
+    "requests": 60,
+    "errors": 3,
+    "error_rate_pct": 5.0,
+    "p50_latency_ms": 41,
+    "p95_latency_ms": 63
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T11:00:00+00:00",
+    "requests": 534,
+    "errors": 36,
+    "error_rate_pct": 6.74,
+    "p50_latency_ms": 125,
+    "p95_latency_ms": 2368
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T11:00:00+00:00",
+    "requests": 236,
+    "errors": 110,
+    "error_rate_pct": 46.61,
+    "p50_latency_ms": 404,
+    "p95_latency_ms": 12257
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T11:00:00+00:00",
+    "requests": 426,
+    "errors": 23,
+    "error_rate_pct": 5.4,
+    "p50_latency_ms": 190,
+    "p95_latency_ms": 1404
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T11:00:00+00:00",
+    "requests": 364,
+    "errors": 25,
+    "error_rate_pct": 6.87,
+    "p50_latency_ms": 145,
+    "p95_latency_ms": 1828
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T11:00:00+00:00",
+    "requests": 60,
+    "errors": 3,
+    "error_rate_pct": 5.0,
+    "p50_latency_ms": 40,
+    "p95_latency_ms": 75
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T12:00:00+00:00",
+    "requests": 530,
+    "errors": 33,
+    "error_rate_pct": 6.23,
+    "p50_latency_ms": 122,
+    "p95_latency_ms": 2112
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T12:00:00+00:00",
+    "requests": 240,
+    "errors": 10,
+    "error_rate_pct": 4.17,
+    "p50_latency_ms": 257,
+    "p95_latency_ms": 428
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T12:00:00+00:00",
+    "requests": 411,
+    "errors": 17,
+    "error_rate_pct": 4.14,
+    "p50_latency_ms": 180,
+    "p95_latency_ms": 341
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T12:00:00+00:00",
+    "requests": 364,
+    "errors": 25,
+    "error_rate_pct": 6.87,
+    "p50_latency_ms": 141,
+    "p95_latency_ms": 2515
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T12:00:00+00:00",
+    "requests": 60,
+    "errors": 4,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 40,
+    "p95_latency_ms": 1240
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T13:00:00+00:00",
+    "requests": 549,
+    "errors": 41,
+    "error_rate_pct": 7.47,
+    "p50_latency_ms": 126,
+    "p95_latency_ms": 2409
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T13:00:00+00:00",
+    "requests": 247,
+    "errors": 55,
+    "error_rate_pct": 22.27,
+    "p50_latency_ms": 286,
+    "p95_latency_ms": 9534
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T13:00:00+00:00",
+    "requests": 427,
+    "errors": 25,
+    "error_rate_pct": 5.85,
+    "p50_latency_ms": 181,
+    "p95_latency_ms": 2996
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T13:00:00+00:00",
+    "requests": 357,
+    "errors": 25,
+    "error_rate_pct": 7.0,
+    "p50_latency_ms": 138,
+    "p95_latency_ms": 2685
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T13:00:00+00:00",
+    "requests": 60,
+    "errors": 18,
+    "error_rate_pct": 30.0,
+    "p50_latency_ms": 50,
+    "p95_latency_ms": 11039
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T14:00:00+00:00",
+    "requests": 538,
+    "errors": 146,
+    "error_rate_pct": 27.14,
+    "p50_latency_ms": 141,
+    "p95_latency_ms": 11442
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T14:00:00+00:00",
+    "requests": 242,
+    "errors": 38,
+    "error_rate_pct": 15.7,
+    "p50_latency_ms": 277,
+    "p95_latency_ms": 9491
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T14:00:00+00:00",
+    "requests": 413,
+    "errors": 179,
+    "error_rate_pct": 43.34,
+    "p50_latency_ms": 250,
+    "p95_latency_ms": 12907
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T14:00:00+00:00",
+    "requests": 357,
+    "errors": 21,
+    "error_rate_pct": 5.88,
+    "p50_latency_ms": 136,
+    "p95_latency_ms": 1710
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T14:00:00+00:00",
+    "requests": 60,
+    "errors": 36,
+    "error_rate_pct": 60.0,
+    "p50_latency_ms": 3775,
+    "p95_latency_ms": 12914
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T15:00:00+00:00",
+    "requests": 545,
+    "errors": 31,
+    "error_rate_pct": 5.69,
+    "p50_latency_ms": 125,
+    "p95_latency_ms": 1383
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T15:00:00+00:00",
+    "requests": 231,
+    "errors": 7,
+    "error_rate_pct": 3.03,
+    "p50_latency_ms": 264,
+    "p95_latency_ms": 436
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T15:00:00+00:00",
+    "requests": 412,
+    "errors": 28,
+    "error_rate_pct": 6.8,
+    "p50_latency_ms": 187,
+    "p95_latency_ms": 1601
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T15:00:00+00:00",
+    "requests": 349,
+    "errors": 20,
+    "error_rate_pct": 5.73,
+    "p50_latency_ms": 141,
+    "p95_latency_ms": 1617
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T15:00:00+00:00",
+    "requests": 60,
+    "errors": 10,
+    "error_rate_pct": 16.67,
+    "p50_latency_ms": 46,
+    "p95_latency_ms": 10498
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T16:00:00+00:00",
+    "requests": 513,
+    "errors": 28,
+    "error_rate_pct": 5.46,
+    "p50_latency_ms": 128,
+    "p95_latency_ms": 1124
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T16:00:00+00:00",
+    "requests": 236,
+    "errors": 9,
+    "error_rate_pct": 3.81,
+    "p50_latency_ms": 263,
+    "p95_latency_ms": 453
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T16:00:00+00:00",
+    "requests": 424,
+    "errors": 26,
+    "error_rate_pct": 6.13,
+    "p50_latency_ms": 182,
+    "p95_latency_ms": 2077
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T16:00:00+00:00",
+    "requests": 359,
+    "errors": 28,
+    "error_rate_pct": 7.8,
+    "p50_latency_ms": 146,
+    "p95_latency_ms": 2358
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T16:00:00+00:00",
+    "requests": 60,
+    "errors": 4,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 43,
+    "p95_latency_ms": 2283
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T17:00:00+00:00",
+    "requests": 526,
+    "errors": 21,
+    "error_rate_pct": 3.99,
+    "p50_latency_ms": 122,
+    "p95_latency_ms": 208
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T17:00:00+00:00",
+    "requests": 233,
+    "errors": 9,
+    "error_rate_pct": 3.86,
+    "p50_latency_ms": 249,
+    "p95_latency_ms": 437
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T17:00:00+00:00",
+    "requests": 411,
+    "errors": 20,
+    "error_rate_pct": 4.87,
+    "p50_latency_ms": 183,
+    "p95_latency_ms": 387
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T17:00:00+00:00",
+    "requests": 354,
+    "errors": 24,
+    "error_rate_pct": 6.78,
+    "p50_latency_ms": 143,
+    "p95_latency_ms": 1637
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T17:00:00+00:00",
+    "requests": 60,
+    "errors": 4,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 44,
+    "p95_latency_ms": 1236
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T18:00:00+00:00",
+    "requests": 546,
+    "errors": 33,
+    "error_rate_pct": 6.04,
+    "p50_latency_ms": 128,
+    "p95_latency_ms": 1388
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T18:00:00+00:00",
+    "requests": 241,
+    "errors": 12,
+    "error_rate_pct": 4.98,
+    "p50_latency_ms": 264,
+    "p95_latency_ms": 499
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T18:00:00+00:00",
+    "requests": 422,
+    "errors": 28,
+    "error_rate_pct": 6.64,
+    "p50_latency_ms": 187,
+    "p95_latency_ms": 2684
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T18:00:00+00:00",
+    "requests": 348,
+    "errors": 24,
+    "error_rate_pct": 6.9,
+    "p50_latency_ms": 146,
+    "p95_latency_ms": 2895
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T18:00:00+00:00",
+    "requests": 60,
+    "errors": 4,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 39,
+    "p95_latency_ms": 1168
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T19:00:00+00:00",
+    "requests": 556,
+    "errors": 34,
+    "error_rate_pct": 6.12,
+    "p50_latency_ms": 124,
+    "p95_latency_ms": 2064
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T19:00:00+00:00",
+    "requests": 232,
+    "errors": 15,
+    "error_rate_pct": 6.47,
+    "p50_latency_ms": 274,
+    "p95_latency_ms": 1956
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T19:00:00+00:00",
+    "requests": 420,
+    "errors": 28,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 185,
+    "p95_latency_ms": 1848
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T19:00:00+00:00",
+    "requests": 363,
+    "errors": 25,
+    "error_rate_pct": 6.89,
+    "p50_latency_ms": 136,
+    "p95_latency_ms": 2075
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T19:00:00+00:00",
+    "requests": 60,
+    "errors": 4,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 41,
+    "p95_latency_ms": 2088
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T20:00:00+00:00",
+    "requests": 557,
+    "errors": 35,
+    "error_rate_pct": 6.28,
+    "p50_latency_ms": 125,
+    "p95_latency_ms": 1979
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T20:00:00+00:00",
+    "requests": 242,
+    "errors": 16,
+    "error_rate_pct": 6.61,
+    "p50_latency_ms": 268,
+    "p95_latency_ms": 1237
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T20:00:00+00:00",
+    "requests": 407,
+    "errors": 18,
+    "error_rate_pct": 4.42,
+    "p50_latency_ms": 189,
+    "p95_latency_ms": 328
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T20:00:00+00:00",
+    "requests": 384,
+    "errors": 27,
+    "error_rate_pct": 7.03,
+    "p50_latency_ms": 147,
+    "p95_latency_ms": 1778
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T20:00:00+00:00",
+    "requests": 60,
+    "errors": 4,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 44,
+    "p95_latency_ms": 1289
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T21:00:00+00:00",
+    "requests": 545,
+    "errors": 25,
+    "error_rate_pct": 4.59,
+    "p50_latency_ms": 121,
+    "p95_latency_ms": 234
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T21:00:00+00:00",
+    "requests": 238,
+    "errors": 14,
+    "error_rate_pct": 5.88,
+    "p50_latency_ms": 257,
+    "p95_latency_ms": 1956
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T21:00:00+00:00",
+    "requests": 406,
+    "errors": 26,
+    "error_rate_pct": 6.4,
+    "p50_latency_ms": 186,
+    "p95_latency_ms": 2087
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T21:00:00+00:00",
+    "requests": 351,
+    "errors": 22,
+    "error_rate_pct": 6.27,
+    "p50_latency_ms": 146,
+    "p95_latency_ms": 1742
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T21:00:00+00:00",
+    "requests": 60,
+    "errors": 4,
+    "error_rate_pct": 6.67,
+    "p50_latency_ms": 42,
+    "p95_latency_ms": 2097
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T22:00:00+00:00",
+    "requests": 534,
+    "errors": 30,
+    "error_rate_pct": 5.62,
+    "p50_latency_ms": 123,
+    "p95_latency_ms": 1739
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T22:00:00+00:00",
+    "requests": 244,
+    "errors": 12,
+    "error_rate_pct": 4.92,
+    "p50_latency_ms": 246,
+    "p95_latency_ms": 489
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T22:00:00+00:00",
+    "requests": 427,
+    "errors": 31,
+    "error_rate_pct": 7.26,
+    "p50_latency_ms": 186,
+    "p95_latency_ms": 3038
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T22:00:00+00:00",
+    "requests": 365,
+    "errors": 28,
+    "error_rate_pct": 7.67,
+    "p50_latency_ms": 145,
+    "p95_latency_ms": 2447
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T22:00:00+00:00",
+    "requests": 60,
+    "errors": 6,
+    "error_rate_pct": 10.0,
+    "p50_latency_ms": 47,
+    "p95_latency_ms": 5595
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "timestamp_hour": "2025-01-01T23:00:00+00:00",
+    "requests": 532,
+    "errors": 29,
+    "error_rate_pct": 5.45,
+    "p50_latency_ms": 122,
+    "p95_latency_ms": 1252
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "timestamp_hour": "2025-01-01T23:00:00+00:00",
+    "requests": 241,
+    "errors": 14,
+    "error_rate_pct": 5.81,
+    "p50_latency_ms": 271,
+    "p95_latency_ms": 1538
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "timestamp_hour": "2025-01-01T23:00:00+00:00",
+    "requests": 423,
+    "errors": 24,
+    "error_rate_pct": 5.67,
+    "p50_latency_ms": 188,
+    "p95_latency_ms": 1189
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "timestamp_hour": "2025-01-01T23:00:00+00:00",
+    "requests": 360,
+    "errors": 20,
+    "error_rate_pct": 5.56,
+    "p50_latency_ms": 140,
+    "p95_latency_ms": 1162
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "platform-infra",
+    "timestamp_hour": "2025-01-01T23:00:00+00:00",
+    "requests": 60,
+    "errors": 2,
+    "error_rate_pct": 3.33,
+    "p50_latency_ms": 40,
+    "p95_latency_ms": 65
+  }
+]

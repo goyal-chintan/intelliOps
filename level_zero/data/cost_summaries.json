@@ -1,0 +1,102 @@
+[
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "checkout-api",
+    "daily_spend_usd": 47.49,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "payment-gw",
+    "daily_spend_usd": 219.96,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "data-ingestor",
+    "daily_spend_usd": 197.21,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "ml-serving",
+    "daily_spend_usd": 249.0,
+    "currency": "USD",
+    "resource_type": "EC2/EKS"
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 258.94,
+    "currency": "USD",
+    "resource_type": "NAT Gateway",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 331.3,
+    "currency": "USD",
+    "resource_type": "S3",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 108.72,
+    "currency": "USD",
+    "resource_type": "S3 Requests",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 15.18,
+    "currency": "USD",
+    "resource_type": "EBS",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 33.19,
+    "currency": "USD",
+    "resource_type": "EBS Snapshot",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 292.73,
+    "currency": "USD",
+    "resource_type": "Logs",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 16.0,
+    "currency": "USD",
+    "resource_type": "Data Transfer",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": 74.74,
+    "currency": "USD",
+    "resource_type": "Load Balancer",
+    "savings_coverage": null
+  },
+  {
+    "tenant_id": "tenant-demo",
+    "service_name": "shared-infra",
+    "daily_spend_usd": null,
+    "currency": "USD",
+    "resource_type": "Savings Coverage",
+    "savings_coverage": 0.3
+  }
+]

@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose a new feature or enhancement.
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe the feature, why it matters, and how you’d validate it.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should we build? Include API/CLI examples if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How do we know this is done? (metrics, tests, demos)
+      placeholder: |
+        - ...
+        - ...
+    validations:
+      required: true
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Roadmap layer
+      options:
+        - Layer 0
+        - Layer 1
+        - Layer 2
+        - Layer 3
+        - Unsure
+    validations:
+      required: true
+
+
