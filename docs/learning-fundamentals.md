@@ -2,10 +2,14 @@
 
 This file is the **theory book**.
 
-How to use it (30–45 min/day):
+How to use it (~45 min/day):
 - Each day, your daily guide (`docs/learning-book.md`) tells you which section(s) to read here.
 - If you are short on time, read the **Must know** bullets and answer the **Core interview questions**.
 - If you have extra time, answer the **Deep interview questions**.
+
+Where “why did we choose X?” lives:
+- Canonical decision docs (ADRs): `docs/decisions/`
+- Optional copy/paste playbooks: `docs/hints/`
 
 Tip for Obsidian:
 - Make one note per day.
@@ -1222,9 +1226,9 @@ Deep (optional):
 
 
 
-## 15) Ecosystem terms from the roadmap (plain definitions)
+## 15) Ecosystem terms (plain definitions)
 
-These show up in `docs/roadmap.md`.
+These are common terms you’ll see in LLM/data platform roadmaps (and in older drafts of this repo).
 
 - **Kafka**: a log/event streaming system (like a durable message bus).  
 - **Scala job**: a JVM program (often used in data infra) that can produce/consume Kafka events.  
@@ -4501,10 +4505,12 @@ Deep (optional):
 
 This section teaches a staff skill: turn roadmap targets into **numbers** you can defend.
 
-### 40.1 The targets (from `docs/roadmap.md`)
+### 40.1 Example targets (pick your own)
 
-- Layer 0: p95 ≤ 2.0s at 1 QPS (single user)
-- Layer 1: p95 ≤ 2.5s at 2–3 QPS (low load)
+These are example “low-load” targets to practice the math. You can pick different numbers based on your machine/model:
+
+- Layer 0 example: p95 ≤ 2.0s at 1 QPS (single user)
+- Layer 1 example: p95 ≤ 2.5s at 2–3 QPS (low load)
 
 ### 40.2 Step 1: define one “typical request shape”
 

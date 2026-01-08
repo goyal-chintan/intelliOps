@@ -8,6 +8,9 @@ Start with these resources:
 
 - **[README.md](README.md)** – Project overview and quickstart
 - **[docs/roadmap.md](docs/roadmap.md)** – Layer 0–3 milestones and acceptance criteria
+- **[docs/learning-book.md](docs/learning-book.md)** – Day-by-day build plan + interview drills
+- **[docs/learning-fundamentals.md](docs/learning-fundamentals.md)** – Definitions + mental models + math + interview questions
+- **[docs/hints/README.md](docs/hints/README.md)** – Optional “hints” (rationale + playbooks)
 - **[docs/architecture.md](docs/architecture.md)** – System diagrams and data contracts
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** – How to contribute, conventions, and runbook guidelines
 
