@@ -2,7 +2,7 @@
 
 Thanks for taking the time to contribute.
 
-This repo is being built in layers (see `docs/roadmap.md`). Please keep changes small, demoable, and well-documented.
+This repo is being built in layers (see `docs/roadmap.md`). For the day-by-day plan, see `docs/learning-book.md`. Please keep changes small, demoable, and well-documented.
 
 ## Quickstart for contributors
 
@@ -93,5 +93,4 @@ Most runbooks in this repo follow:
 ## Security
 
 If you believe you’ve found a security issue, please follow `SECURITY.md` (do not open a public issue with exploit details).
-
 

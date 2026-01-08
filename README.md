@@ -65,7 +65,14 @@ Notes:
 
 ## Roadmap
 
-See `docs/roadmap.md`.
+Build spec: `docs/roadmap.md`
+
+Daily plan + interview drills:
+- `docs/learning-book.md`
+- `docs/learning-fundamentals.md`
+
+Optional:
+- `docs/hints/README.md`
 
 ## Contributing
 
@@ -74,5 +81,3 @@ See `CONTRIBUTING.md` (branch naming + PR title conventions are enforced on PRs)
 ## License
 
 Apache-2.0. See `LICENSE`.
-
-

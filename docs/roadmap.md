@@ -1,170 +1,201 @@
-# OpsPilot roadmap (Layers 0 → 3)
+# OpsPilot Roadmap (Staff-level, production-shaped)
 
-OpsPilot is built in **4 layers**, each intentionally adding a new “infra-grade” capability.
+This is the **canonical build spec** for the repo.
 
-This doc is the canonical roadmap + acceptance criteria for the repo.
+Plain-English map (no ambiguity):
 
-## Layer 0 — Understandable Demo (1–1.5 weeks)
+- `docs/roadmap.md` (this file) = **what to build** + **pass/fail gates**
+- `docs/learning-book.md` = **what to do today** (reading + coding, time-boxed)
+- `docs/learning-fundamentals.md` = **the “textbook”** (definitions, mental models, math, interview questions)
+- `docs/hints/` = **optional help** (rationale + copy/paste playbooks)
 
-**Goal**: Single-tenant, simple RAG copilot over synthetic incidents & runbooks.
+You are not “learning random AI stuff”. You are building one project, in layers, and collecting proof artifacts as you go.
 
-### What we build
+## Your constraints (baked into this plan)
 
-#### Synthetic incident stream
-- Scala job emitting JSON logs to Kafka:
-  - `service_name`, `status_code`, `latency_ms`, `env`, `timestamp`
-- Batch job writes hourly aggregates to a data store (e.g., Postgres or ClickHouse).
+- You are a beginner in LLM frameworks.
+- You have **~90 minutes/day**:
+  - ~45 min deep fundamentals (theory + math + interview questions)
+  - ~45 min building (agent‑assisted coding + your review)
+- You want something that looks like a real production system and can be defended in Staff/Senior interviews.
+- MacBook M2 Pro, Postgres + pgvector.
+- Optional: **Week 6** one-evening cloud GPU smoke test (vLLM) if you feel confident.
 
-#### Knowledge base
-- 50–100 Markdown runbooks:
-  - “How to debug latency spikes”
-  - “How to analyze 5xx errors”
-  - “How to reduce S3 costs”
-- Ingestion pipeline:
-  - ingest → chunk (e.g., 500 tokens with overlap) → embed → index into a vector DB
+## What “Staff LLM Platform Engineer” means (practically)
 
-#### LLM API
-- Python FastAPI service
-- LangChain/LangGraph flow:
-  - retrieve top‑k docs
-  - construct prompt: runbook context + recent metrics summary
-  - answer with citations
+You don’t need to compete with ML researchers. The Staff platform bar is:
 
-#### Simple UI / CLI
-- CLI or minimal React UI
-- Input: free-text question about incidents/cost
-- Output: answer + supporting docs
+- Make LLM systems **safe, fast, cheap, reliable, observable, and governable**.
+- Design the control plane: **tenancy, auth, budgets, routing, quotas**.
+- Build tool infrastructure: **tool registry, approvals, audit logs, sandboxing**.
+- Treat evals as a **release gate** (quality regressions block shipping).
+- Operate failure: timeouts, retries, partial outages, incident drills.
 
-### Acceptance criteria
-- **Latency**: p95 ≤ 2.0s at 1 QPS (single user) using hosted model
-- **RAG eval**:
-  - build 20-case goldset (question → expected key points)
-  - run RAGAS (or similar)
-  - Answer Faithfulness ≥ 0.7
-  - Context Recall ≥ 0.8
-- **Docs**: README includes architecture diagram + one-command local run (docker-compose/helm) + example screenshots
+## Defaults (keep it simple)
 
-### Interview story
-“I can go from raw data → RAG → evals → usable API, with basic quality + latency measurements.”
+These are the defaults we will use so you don’t get distracted:
 
-## Layer 1 — Production-shaped RAG (multi-tenant + basic agents)
+- API: `POST /ask` returns **schema-valid JSON**
+- Services: Python AI service (FastAPI) + Spring Boot gateway
+- Storage: Postgres + pgvector
+- Local inference (Mac): **Ollama** (default)
+- Alternative local inference (Mac): `llama.cpp` server (optional)
+- Tools boundary: MCP
+- Optional (Week 6): cloud GPU smoke test (vLLM)
 
-**Goal**: Make OpsPilot feel like something a real team could adopt.
+Canonical “why + alternatives + interview talk-track”: `docs/decisions/roadmap-decisions.md`
 
-### What we build
+## Layers (0 → 3)
 
-#### Multi-tenant design
-- Tenants = teams/services (e.g., `payments`, `search`, `data-pipeline`)
-- Partitioning:
-  - metrics partitioned by `tenant_id`
-  - vector DB namespaces or metadata filters per tenant
+Each layer is a **shippable bar** with measurable pass/fail gates. This is how you avoid “surface-level learning”.
 
-#### Gateway (Spring Boot)
-- Auth (simple API keys)
-- Select tenant and inject tenant context into the AI layer
+Important: we are keeping the **same layers** as the original roadmap — we are only making each layer more “production-shaped” (testable, measurable, safe).
 
-#### Agentic “diagnose incident” flow (LangGraph/LangChain)
-Tools:
-- `get_metric_timeseries(service, metric, window)`
-- `get_top_errors(service, window)`
-- `search_runbooks(query, tenant)`
+### Layer 0 — Understandable demo (baseline → single-tenant RAG)
 
-Agent steps:
-- classify query (latency vs errors vs cost)
-- call metrics/log tools
-- call RAG over runbooks
-- summarize RCA + recommended actions
-- explicitly log decision traces (tools called + order)
+**Goal**: A single-tenant copilot that can answer incident/cost questions with citations, plus a baseline you can trust.
 
-#### Observability
-- OpenTelemetry traces from gateway → AI service
-- Grafana dashboard:
-  - p50/p95 latency
-  - QPS
-  - vector search time vs LLM time
-  - per-tenant traffic
+**Deliverables**
 
-### Acceptance criteria
-- **Latency**: p95 ≤ 2.5s at 2–3 QPS (low-load test)
-- **Tenants**: ≥ 3 tenants with distinct metrics + runbooks
-- **Traces**: Grafana makes it obvious which tools were used and where time was spent
+- Deterministic dataset + CLI baseline (`level_zero/`).
+- Postgres + pgvector retrieval over runbooks/docs.
+- `POST /ask` (AI service) that returns **schema-valid JSON**:
+  - `summary`, `hypotheses[]`, `evidence[]`, `actions[]`, `risk_level`
+- First gold set (20 cases) + eval harness you can re-run.
+- Basic request logging (tokens + retrieval_ms + llm_ms + total_ms).
 
-### Interview story
-“I built a multi-tenant incident & cost copilot with an agent that calls tools + a RAG layer, with OTEL traces and dashboards.”
+**Pass/Fail gates**
 
-## Layer 2 — LLM Infra Excellence (serving, batching, KV cache, routing)
+- One-command run works locally (DB + AI service).
+- Answers include stable citations (no sources → refuse/ask).
+- Eval harness runs and you saved a baseline score.
+- You recorded p50/p95 latency once (don’t optimize yet; just measure).
 
-**Goal**: Take control of inference and show hard numbers.
+**Interview prompts you must be able to answer**
 
-### What we build
+- Why build a deterministic baseline before “trusting” an LLM?
+- What breaks RAG in production, and how do you detect it quickly?
 
-#### Self-hosted inference
-- Run an open model via vLLM or TGI
-- Enable continuous batching and measure throughput gains vs naïve serving
-- Reproduce a real (smaller) improvement locally and document results
+### Layer 1 — Production-shaped RAG (gateway + tools + observability)
 
-#### KV / prefix cache & routing
-- Prefix-aware router in Spring Boot gateway:
-  - repetitive prompts route to the same backend shard to maximize cache hits
-- Instrumentation:
-  - cache hit-rate
-  - TTFT hot vs cold
+**Goal**: Something a real team could safely expose internally (even single‑tenant) with correct controls and proof.
 
-#### Model routing (SLM + LLM)
-- “Model cascade”:
-  - simple queries → cheaper/faster model
-  - hard/ambiguous queries → larger model
+**Deliverables**
 
-#### FinOps dashboards
-- Tag every request with:
-  - model name, tenant, route, token counts
-- Grafana panels:
-  - cost per 1k tokens per model
-  - cost per tenant
-  - % requests hitting cheap vs expensive model
+- Spring Boot gateway:
+  - API key auth (start single‑tenant)
+  - rate limits + concurrency caps
+  - basic budgets/quotas (fail closed)
+  - audit log (who asked what, which sources/tools were used)
+- “Tools” that fetch facts (even if implemented as simple internal functions first):
+  - metrics query
+  - log search
+  - incident/event lookup
+- Observability:
+  - OpenTelemetry traces across gateway → AI service → DB
+  - one dashboard that shows where time is spent
+- Evals as a gate:
+  - a “ship/no‑ship” threshold you can defend (and re-run)
 
-### Acceptance criteria
-- **Throughput**: 3–5× improvement vs baseline “no batching, no cache”
-- **Cache**: ≥ 70–80% hit-rate on seeded repetitive workloads; TTFT hot vs cold clearly different
-- **Cost**: ≥ 30–40% reduction in avg cost/query using routing + token budgeting vs single big model
+**Pass/Fail gates**
 
-### Interview story
-“I implemented a cache-aware, multi-model gateway on top of vLLM/TGI. It gave ~4× throughput and ~40% lower cost, and I can show the Grafana breakdown per tenant + model.”
+- 401/403 auth behavior is correct and API keys never get logged.
+- Traces make it obvious where time is spent (retrieve vs generate vs tools).
+- A regression in your gold set blocks shipping (even if the threshold is simple).
 
-## Layer 3 — Agentic Ecosystem & Cloud Integration (high bar)
+**Interview prompts you must be able to answer**
 
-**Goal**: Show you understand agentic ecosystems + cloud platforms from an infra angle.
+- What do you log, what do you never log, and why?
+- Where do you enforce policy (gateway vs AI service), and why?
 
-### What we build
+### Layer 2 — LLM infra excellence (local inference, caching/batching, routing, cost)
 
-#### Rich agent workflows
-Example workflow: “Cut infra cost by 20% for the data-pipeline service this month.”
+**Goal**: Show real engineering: measurement → change → measured improvement.
 
-Agents:
-- Planner agent: chooses windows + cost sources
-- Metrics agent: pulls time-series and finds waste patterns
-- FinOps agent: proposes concrete actions (e.g., shrink EMR, turn off dev at night)
-- Reporter agent: generates final report with tables + bullets
+**Deliverables**
 
-Persistence:
-- per-tenant “memory” (Postgres/Redis) storing previous recommendations
+- Local inference on Mac:
+  - run Ollama locally and call it via OpenAI-compatible API
+  - (optional) run a `llama.cpp` server for more low-level control
+  - document the exact model + settings you used
+- Benchmark harness + reports:
+  - throughput/latency curve vs concurrency
+  - tokens in/out per request
+  - “cost estimate per request” (math, even if local is $0)
+- At least two optimizations with measured deltas:
+  - caching (prompt/prefix or retrieval)
+  - batching (where applicable)
+  - (optional) speculative decoding (measure; don’t assume)
+- Cost controls:
+  - per-tenant budgets/quotas enforced
+  - routing/model cascade (cheap-first, big model only when needed)
+  - cost dashboards (per tenant, per model)
 
-#### n8n / LangFlow integration (optional)
-- Expose OpsPilot APIs as n8n nodes or LangFlow tools
-- Example: daily cron generates weekly incident summary → sends to Slack/email
+**Pass/Fail gates**
 
-#### Managed LLM backend toggle (e.g., Vertex AI)
-- Two backends:
-  - self-hosted open model
-  - managed model (Vertex)
-- Toggle via config flag; log latency/cost differences
+- You show ≥ 2 measured improvements (your machine decides the scale).
+- You can explain trade-offs (latency vs throughput vs quality vs cost).
 
-### Acceptance criteria
-- End-to-end agent workflow on seeded dataset produces non-trivial, metric-grounded recommendations
-- n8n/LangFlow: at least one public screenshot + flow export committed
-- Managed LLM: recorded latency & cost vs self-hosted for at least one scenario
+**Interview prompts you must be able to answer**
 
-### Interview story
-“I built a multi-agent cost & incident advisor with LangGraph, integrated it with n8n, and made it run on both self-hosted vLLM and Vertex AI, with clear latency/cost trade-offs.”
+- How do you capacity plan from tokens/sec and concurrency?
+- When does caching backfire (privacy, staleness, correctness)?
 
+### Layer 3 — Agentic ecosystem (MCP), hardening, and optional cloud GPU smoke test
 
+**Goal**: Prove you can build tool-using agents safely and operate them.
+
+**Deliverables**
+
+- MCP server(s) exposing your tools (read-only by default):
+  - `events_search(query)`
+  - `metrics_query(query)`
+  - `log_search(query)`
+  - `cost_estimate(service, window)`
+- Agent loop: plan → tool call → validate tool output → final answer with citations.
+- Tool governance:
+  - per-tenant allowlists
+  - timeouts + max rows
+  - no silent actions (audit everything)
+- Threat model doc: prompt injection + data exfil + tool abuse + mitigations.
+- Failure drills:
+  - tool outage
+  - DB slow
+  - model timeout
+
+**Optional (Week 6, if you feel confident)**
+
+- One-evening cloud GPU smoke test to prove portability:
+  - stand up vLLM and run your bench harness once
+  - show “same API adapter, different backend” (don’t claim multipliers; show your numbers)
+
+**Pass/Fail gates**
+
+- Tool-call correctness improves over baseline on your gold set.
+- 0 unapproved “write” tool calls (start read-only; add writes only if you have time).
+- Threat model is referenced from the README.
+
+**Interview prompts you must be able to answer**
+
+- What are the top risks of tool-using agents, and how do you mitigate them?
+- Why are remote tool servers a security risk?
+
+## Glossary (simple)
+
+- **SLO**: a reliability target you promise (example: “p95 latency under 2s”).
+- **p50 / p95**: median vs “slow tail” latency. p95 means 95% of requests are faster than that number.
+- **ADR**: a short “decision note” explaining *why* you chose something.
+- **RAG**: “retrieve then generate” (pull relevant docs first, then answer using them).
+- **Gold set**: a set of test questions with expected evidence/answers for regression testing.
+- **MCP**: a protocol for connecting an LLM app to external tools/data sources via standardized messages.
+
+---
+
+## Post‑30 extension — Multi‑tenant isolation (do after the 30‑day sprint)
+
+Multi‑tenancy is important, but it is explicitly **out of the first 30 days** to keep focus.
+
+When you extend:
+- Add `tenant_id` as a hard boundary across: request → auth → retrieval → caches → tools → logs.
+- Add automated “leak tests” (tenant A must never see tenant B citations).
+- Move budgets/quotas to be per‑tenant.

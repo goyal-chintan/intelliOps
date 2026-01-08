@@ -1,4 +1,4 @@
-# OpsPilot Daily Guide (8 weeks, 30–45 min/day)
+# OpsPilot Daily Guide (30 days, ~45 min fundamentals + ~45 min build/day)
 
 This file is your **day-by-day plan**.
 
@@ -6,13 +6,22 @@ Theory (definitions + mental models + math + interview questions) is in:
 - `docs/learning-fundamentals.md`
 
 How to use this daily (don’t overthink it):
-1) Read today’s **Theory** sections (10–15 min)
-2) Answer today’s **Core interview questions** (5–10 min)
-3) Do today’s **Build step** (20–45 min, time-boxed)
+1) Read today’s **Theory** sections (~30 min)
+2) Answer today’s **Core interview questions** (~15 min)
+3) Do today’s **Build step** (~45 min, time-boxed)
 4) Write 5 lines in Obsidian (2–5 min)
 5) Stop.
 
-If you only have ~30 minutes total:
+Beginner rule (non-negotiable):
+- If something feels confusing, **don’t detour** into random videos/docs.
+  Do exactly what the day says, then write “confusing: X” in Obsidian and move on.
+  You’ll address it using the assigned `docs/learning-fundamentals.md` sections (not Google rabbit holes).
+
+Optional help (only if you are stuck):
+- `docs/hints/README.md`
+- `docs/decisions/README.md` (the “why we chose X” interview talk‑track)
+
+If you only have ~60 minutes total:
 - Read the **Must know (fast path)** blocks in `docs/learning-fundamentals.md` for today.
 - Answer only the **Core Q1–Q3** questions.
 - Do only the “If short on time” line in today’s Build step.
@@ -23,6 +32,21 @@ If you feel stuck (motivation saver):
 - Tomorrow, your only goal is to unblock that one thing.
 - Progress > perfection. You win by showing measurable results at each layer.
 
+## Spec‑first + agent‑assisted coding (how you avoid “surface level”)
+
+You are allowed to use Codex/Copilot for boilerplate. The Staff‑level bar is that **you** own the engineering decisions.
+
+Daily build workflow (repeat every day):
+1) Write a **spec** (5–10 bullets): goal, non‑goals, inputs/outputs, “done when”, failure modes, and 1–2 tests/evals.
+2) Ask the coding agent to implement *exactly* that spec.
+3) You review: interfaces, logging, safety, and whether it matches “done when”.
+4) Save an artifact: screenshot/trace/eval report/ADR note.
+
+If you feel lost, open these (in this order):
+1) `docs/roadmap.md` (what “done” means)
+2) `docs/learning-fundamentals.md` (theory + interview questions)
+3) `docs/decisions/roadmap-decisions.md` (why we chose the defaults)
+
 ## What “industry‑grade LLM platform” means (simple checklist)
 
 If you want to be treated like an LLM/AI platform engineer (not “someone who can prompt”), you must show these:
@@ -30,8 +54,8 @@ If you want to be treated like an LLM/AI platform engineer (not “someone who c
 - **Correctness mindset**: you don’t trust the model; you verify with data + evals.
 - **Measurable quality**: a gold set, repeatable scoring, regression tracking.
 - **Measurable performance**: p50/p95 latency with a clear breakdown (DB vs LLM vs app).
-- **Measurable cost**: tokens in/out, cost per tenant/team, and cost controls.
-- **Safety**: tenant isolation, no data leakage, prompt injection awareness, safe logging.
+- **Measurable cost**: tokens in/out, cost per feature/team, and cost controls.
+- **Safety**: auth, safe logging, prompt injection awareness, and no data leaks.
 - **Operability**: tracing/logging/metrics, timeouts, retries, fallbacks, dashboards.
 - **Change discipline**: when you change prompts/models/retrieval, you re-run evals.
 
@@ -44,23 +68,18 @@ If you want to be treated like an LLM/AI platform engineer (not “someone who c
 
 ## Model recommendations (pick one set and move on)
 
-Default hosted baseline (fast progress):
-- **Hosted LLM**: `gpt-4o-mini`  
-- **Hosted embeddings**: `text-embedding-3-small`
-
-Cheapest learning option (local-first, optional):
-- **Local LLM (Ollama)**: `qwen2.5:7b-instruct` or `llama3.1:8b-instruct`
+Default (cheapest + beginner‑friendly): local models via **Ollama**
+- **Local LLM**: `qwen2.5:7b` (better answers) or `qwen2.5:3b` (faster)
 - **Local embeddings**: `nomic-embed-text`
 
-Rule of thumb:
-- Use hosted models for Layer 0/1 (stable, less friction).
-- Use local models to learn serving, caching, routing, and cost control (Layer 2).
+Optional calibration (when you want a stronger reference point):
+- Run the same eval once with a strong hosted model (any OpenAI‑compatible provider) and compare.
 
 ## Tools (keep it simple)
 
 - **CLI only** (no UI required)
 - **Database**: Postgres + pgvector
-- **Gateway**: Spring Boot (auth, tenant routing, observability, later routing/cost controls)
+- **Gateway**: Spring Boot (auth, rate limits, audit logs, observability tags, budgets)
 - **AI service**: Python + FastAPI (RAG + agents + tool calls)
 
 ## Default tech choices (don’t overthink)
@@ -70,8 +89,8 @@ Pick these defaults unless you have a strong reason not to:
 - AI service (Python): FastAPI + Uvicorn + Pydantic
 - HTTP client: `httpx`
 - Postgres driver: `psycopg` (simple) or `asyncpg` (async) — pick one and stick to it
-- LLM + embeddings: OpenAI-compatible client (so you can swap hosted/self-hosted later)
-- Agent workflow: LangGraph (predictable graphs over “freeform chains”)
+- LLM + embeddings: client that supports OpenAI‑style APIs (Ollama is OpenAI‑compatible for chat/embeddings)
+- Agent workflow: start with a simple explicit flow (plan → tools → retrieve → answer); add LangGraph only if you want
 - Tracing: OpenTelemetry (OTLP exporter)
 - Dashboards: Grafana (Tempo for traces, Prometheus for metrics)
 
@@ -82,6 +101,7 @@ You can do this on Day 4–5 if you prefer, but it’s easier if setup is not bl
 - Install prerequisites:
   - Python 3.x (`python3`)
   - Docker Desktop (daemon running)
+  - Ollama (local model runtime)
   - Java 17+ (for Spring Boot gateway)
 - Pick your “service folders” (recommended):
   - `services/ai-service/` (FastAPI)
@@ -93,7 +113,7 @@ You can do this on Day 4–5 if you prefer, but it’s easier if setup is not bl
   - `OPENAI_API_KEY` (or your provider key)
   - `DATABASE_URL` (Postgres connection string)
 
-## The “don’t waste time” rules (so you finish in 2 months)
+## The “don’t waste time” rules (so you finish in 30 days)
 
 - Don’t chase perfection early. Ship Layer 0 first.
 - Don’t tune prompts before retrieval works.
@@ -106,39 +126,32 @@ You can do this on Day 4–5 if you prefer, but it’s easier if setup is not bl
 If you finish the days below, you will also finish `docs/roadmap.md` and have a strong “LLM infra engineer” interview story.
 
 - **Days 1–20 = Layer 0 (single-tenant RAG)**:
-  - p95 ≤ 2.0s at 1 QPS (hosted model)
-  - 20-case gold set + eval run (faithfulness + context recall targets)
-  - citations + refusal rules
-  - one-command local run (compose) + screenshots
-- **Days 21–30 = Layer 1 (multi-tenant + gateway + tools + traces)**:
-  - ≥ 3 tenants with isolated retrieval and metrics
-  - p95 ≤ 2.5s at 2–3 QPS
-  - OpenTelemetry traces show tool usage and time breakdown clearly
-- **Days 31–37 = Layer 2 (serving + batching/cache + routing + FinOps)**:
-  - self-hosted inference via **vLLM or TGI** (or equivalent open-model server) and measured results
-  - 3–5× throughput gain vs “no batching/no cache” baseline
-  - ≥ 70–80% prefix/KV cache hit-rate on seeded repetitive workloads; TTFT hot vs cold is clearly different
-  - ≥ 30–40% cost/query reduction using model routing + token budgeting
-- **Days 38–40 = Layer 3 (multi-agent workflows + integrations)**:
-  - one non-trivial workflow that produces metric-grounded recommendations
-  - optional: n8n/LangFlow integration screenshot + export
-  - optional: managed backend toggle + recorded latency/cost comparison
+  - deterministic baseline exists (so you know what “correct” means)
+  - `POST /ask` returns **schema-valid JSON** + stable citations (no sources → refuse/ask)
+  - 20-case gold set + eval harness: you can re-run it and show baseline + at least 1 improvement
+  - one-command local run (compose) + one saved demo example
+- **Days 21–30 = Layer 1 + minimal Layer 2/3 (production controls)**:
+  - Spring Boot gateway: auth + rate limits + audit logs + budgets
+  - tools + agent flow + decision traces (debuggable answers)
+  - OpenTelemetry traces show time breakdown clearly (retrieve vs generate vs tools)
+  - local inference via Ollama and a simple benchmark + cost report
+
+Post‑30 extension (intentionally deferred):
+- multi‑tenant isolation (hard boundary) + scale‑out serving (vLLM on GPU)
 
 **Proof pack (collect as you go)**:
 - a table of p50/p95 latency per layer, plus a simple trace screenshot (Layer 1)
-- a table of throughput (tokens/sec) baseline vs optimized (Layer 2)
-- a table of cost/query before vs after routing (Layer 2)
-- one 5-minute demo script (Layer 0/1) and one 60-second pitch (Day 40)
+- a table of throughput (tokens/sec) baseline vs improved (Layer 2 slice)
+- a table of cost/query (token math + budgets) and what you did to control it
+- one 5-minute demo script (Day 20/30) and one 60-second pitch (Day 30)
 
 ---
-# Part 2 — 8-week curriculum (build track)
+# Part 2 — 30-day sprint (build track)
 
-## Week-by-week map to the roadmap
+## Day ranges (map to the roadmap)
 
-- **Weeks 1–4 = Layer 0** (single-tenant RAG copilot, evals, latency basics)
-- **Weeks 5–6 = Layer 1** (multi-tenant + gateway + agent tools + traces)
-- **Week 7 = Layer 2 foundations** (local serving + batching/cache concepts + benchmarks)
-- **Week 8 = Layer 2/3** (routing + cost dashboards + multi-agent workflow)
+- **Days 1–20 = Layer 0** (single‑tenant RAG copilot + evals + baseline + latency/cost logging)
+- **Days 21–30 = Layer 1 (+ slices of Layer 2/3)** (gateway + tools + traces + MCP + local inference basics)
 
 If you complete everything here, you’ll be able to:
 - build the system in the roadmap,
@@ -155,10 +168,10 @@ If you complete everything here, you’ll be able to:
 - All theory reading is listed inside each day’s **Theory** block below (from `docs/learning-fundamentals.md`).
 
 ## Day 1 — Read the roadmap like a spec
-**Theory (10–15 min)**:
+**Theory (~30 min)**:
 - `docs/learning-fundamentals.md` Section 1, Section 2
 
-**Core interview questions (5–10 min)**:
+**Core interview questions (~15 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
@@ -195,7 +208,7 @@ If you complete everything here, you’ll be able to:
   - `level_zero/data/synthetic_incidents.json`
   - `level_zero/data/hourly_metrics.json`
   - `level_zero/data/cost_summaries.json`
-- Write down the *minimum* fields your future tools will need (time window, service, env, tenant).
+- Write down the *minimum* fields your future tools will need (time window, service, env).
 - If short on time: only do incidents + hourly metrics and list the key fields.
 - Done when: you can explain how **logs → incidents → runbooks** connect in this repo.
 
@@ -300,7 +313,7 @@ services:
   - `docker compose up -d postgres`
 - In Postgres:
   1) `CREATE EXTENSION IF NOT EXISTS vector;`
-  2) Create a `runbook_chunks` table (tenant_id, runbook_id, chunk_index, chunk_text, embedding).
+  2) Create a `runbook_chunks` table (runbook_id, chunk_index, chunk_text, embedding).
 - Verify you can connect from your AI service (even if you don’t query vectors yet).
 - If short on time: only bring up Postgres + run `CREATE EXTENSION`.
 - Done when: your AI service can connect to Postgres and run a simple `SELECT 1`.
@@ -429,7 +442,7 @@ services:
 - `docs/learning-fundamentals.md` Section 8
 
 **Optional (if time)**:
-- `docs/learning-fundamentals.md` Section 11
+- `docs/learning-fundamentals.md` Section 22
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
@@ -437,20 +450,19 @@ services:
 
 
 **Plain definition**:
-- Retrieval = embed the query → find top‑k similar chunks → filter by metadata (like tenant/service).
+- Retrieval = embed the query → find top‑k similar chunks → (optional) filter by metadata (like service/env).
 
 **Build step**:
-- **Roadmap focus**: retrieval must be deterministic and tenant-safe.
-- Implement `retrieve(query_text, tenant_id, k)`:
+- **Roadmap focus**: retrieval must be deterministic and debuggable.
+- Implement `retrieve(query_text, k)`:
   1) embed query
-  2) SQL: `WHERE tenant_id = ... ORDER BY embedding <=> :q LIMIT k`
+  2) SQL: `ORDER BY embedding <=> :q LIMIT k`
   3) return chunk_text + citation IDs
 - Add a debug mode (temporary) that returns retrieved chunk IDs/text without calling the LLM.
-- If short on time: retrieval can be single-tenant for now, but keep the `tenant_id` parameter.
 - Done when: your 3 test queries return the expected runbook chunks in top‑k.
 
 **Interview answer**:
-- “How do you prevent cross-tenant retrieval leakage?”
+- “How do you debug a wrong answer: retrieval vs prompt vs model?”
 
 ---
 
@@ -668,7 +680,7 @@ services:
 - p95 latency: 95% of requests are faster than this time.
 
 **Build step**:
-- **Roadmap focus**: hit Layer 0 latency target (p95 ≤ 2s at 1 QPS).
+- **Roadmap focus**: measure baseline latency (p50/p95) and where time goes.
 - Add a tiny load test (any one):
   - a Python script that sends 50–100 requests at 1 QPS, or `hey`/`vegeta`.
 - Record:
@@ -679,7 +691,7 @@ services:
   2) reduce `k`
   3) tighten tool/retrieval timeouts
 - If short on time: run 20 requests and compute p95 manually.
-- Done when: you can show p95 ≤ 2.0s at 1 QPS (hosted model).
+- Done when: you saved baseline p50/p95 + a short note: “biggest latency contributor is X; next fix is Y”.
 
 **Interview answer**:
 - “Why tail latency matters for user experience and scaling?”
@@ -701,7 +713,7 @@ services:
 **Build step**:
 - **Roadmap focus**: make the system observable (so you can debug).
 - Implement structured logging for every `/ask` request:
-  - request_id, tenant_id, model, tokens_in/out, retrieval_ms, llm_ms, total_ms
+  - request_id, model, tokens_in/out, retrieval_ms, llm_ms, total_ms
 - Add OpenTelemetry instrumentation plan to code (spans you will create):
   - `ai.request`, `ai.retrieve`, `ai.llm`, `db.vector_search`
 - If short on time: at least log retrieval_ms vs llm_ms separately.
@@ -725,61 +737,66 @@ services:
 - **Roadmap focus**: Layer 0 ship + proof pack.
 - Run your Layer 0 demo script (5 minutes) and record:
   - one good answer with citations
-  - one eval run output (scores)
-  - one latency run output (p95)
+  - one eval run output (baseline scores)
+  - one latency run output (p50/p95 at low load)
 - Create “one command local run” (compose) for:
   - Postgres + AI service
-- If short on time: capture the demo + p95 numbers.
-- Done when: you can meet Layer 0 acceptance criteria and explain your metrics.
+- If short on time: capture the demo + baseline eval + baseline p50/p95.
+- Done when: you can demo one grounded answer and explain how you measure quality + latency.
 
 **Interview answer**:
 - “How do you turn an AI prototype into something demoable and measurable?”
 
 ### Layer 0 acceptance checklist (from `docs/roadmap.md`)
 
-- [ ] Latency: p95 ≤ 2.0s at 1 QPS (hosted model) and you saved the numbers.
-- [ ] RAG eval: 20-case gold set exists and you can re-run it any time.
-- [ ] RAG eval: you measured **Answer Faithfulness ≥ 0.7** and **Context Recall ≥ 0.8** (RAGAS or similar).
+- [ ] Baseline: deterministic CLI still works and gives stable references (so you know what “correct” means).
+- [ ] API: `POST /ask` returns schema-valid JSON (no free-form output).
 - [ ] Citations: answers include stable citations; “no sources → refuse/ask”.
+- [ ] Eval: 20-case gold set exists and you can re-run it any time.
+- [ ] Eval: you saved baseline scores and can show at least 1 improvement you made (retrieval/chunking/prompt/schema).
+- [ ] Latency: you recorded p50/p95 once at low load and you can explain the breakdown (retrieve vs LLM).
 - [ ] One-command run: `docker compose up` (or equivalent) runs Postgres + AI service locally.
 - [ ] Docs: README includes an architecture diagram + a screenshot of a working answer with citations.
 
 ---
 
-# Week 5 — Multi-tenancy + Spring Boot gateway (Layer 1 core)
+# Days 21–30 — Production controls (gateway + tools + traces + cost)
 
-**Week focus (keep it simple)**:
-- Add tenant isolation and a gateway (auth + routing + observability tags).
-- Learn the “never leak tenant data” rules.
-- All theory reading is listed inside each day’s **Theory** block below (from `docs/learning-fundamentals.md`).
+You are still single‑tenant in the 30‑day sprint. That’s intentional.
 
-## Day 21 — Multi-tenant rules (non-negotiable)
-**Theory (10–15 min)**:
-- `docs/learning-fundamentals.md` Section 11, Section 24
+Your job in these days is to make the system **production‑shaped**:
+- a clear control plane (gateway),
+- observable request path (traces),
+- tool use with governance (MCP),
+- eval gates + cost math.
+
+## Day 21 — Layer 1 rules (non‑negotiable)
+**Theory (~30 min)**:
+- `docs/learning-fundamentals.md` Section 20, Section 24
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
 
-**Goal**: Prevent “tenant A sees tenant B”.
+**Goal**: Know what “production‑shaped” means and what you will (and will not) build in the 30‑day sprint.
 
 **Build step**:
-- **Roadmap focus**: Layer 1 multi-tenancy (hard security boundary).
-- Add `tenant_id` everywhere (no default tenant):
-  - request header → app context → DB queries → cache keys
-- Ingest multi-tenant runbooks/data (use `multi-tenant/` datasets).
-- Add one automated “leak test”:
-  - query as tenant A must never return tenant B citations.
-- If short on time: enforce tenant_id in every retrieval query.
-- Done when: you can run the same question for 2 tenants and get different sources.
+- **Roadmap focus**: Layer 1 kickoff (controls + proof).
+- Write a short “Layer 1 spec” in Obsidian:
+  - what moves into the gateway (auth/rate limits/budgets/audit),
+  - what stays in the AI service (RAG/tools/agent logic),
+  - what you will measure (latency breakdown + tokens + eval score).
+- Read `docs/decisions/roadmap-decisions.md` Sections 1–3 (strict JSON, Python AI service, Spring gateway).
+- If short on time: write only the “gateway vs AI service responsibilities” bullets.
+- Done when: you can explain Layer 1 in **Inputs → Policies → Data plane → Proof artifacts** terms.
 
 **Interview answer**:
-- “How do you prove tenant isolation?”
+- “What does ‘production‑shaped’ mean for an LLM platform project?”
 
-## Day 22 — API keys (start simple)
-**Theory (10–15 min)**:
-- `docs/learning-fundamentals.md` Section 21, Section 27
+## Day 22 — API keys (start simple, safe)
+**Theory (~30 min)**:
+- `docs/learning-fundamentals.md` Section 21, Section 24
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
@@ -790,24 +807,25 @@ services:
 
 **Build step**:
 - **Roadmap focus**: gateway auth (simple, correct, and safe).
-- Implement API key auth in the gateway (or AI service if gateway not ready yet):
-  - `X-API-Key` → maps to `tenant_id`
+- Implement API key auth in the gateway:
+  - require `X-API-Key`
+  - map it to a simple `principal_id` (single‑tenant is OK)
 - Security rules:
-  - never log API keys
+  - never log API keys (not even partially)
   - return 401/403 correctly
 - Add a tiny “auth test”:
   - missing key → 401
   - wrong key → 403
   - correct key → 200
-- If short on time: implement the auth middleware/filter first.
-- Done when: tenant_id is derived from the key and cannot be overridden by the caller.
+- If short on time: implement the auth filter + 1 test (missing key → 401).
+- Done when: the caller cannot bypass auth via headers/body parameters.
 
 **Interview answer**:
 - “What should you never log in an auth system?”
 
 ## Day 23 — Gateway responsibilities (why it exists)
-**Theory (10–15 min)**:
-- `docs/learning-fundamentals.md` Section 16, Section 23
+**Theory (~30 min)**:
+- `docs/learning-fundamentals.md` Section 21, Section 23
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
@@ -815,7 +833,7 @@ services:
 
 
 **Gateway does**:
-- auth, tenant selection, rate limits, routing, tracing.
+- auth, rate limits, budgets, audit logs, tracing.
 
 **AI service does**:
 - RAG, tools, agent logic, citations.
@@ -826,15 +844,15 @@ services:
   - `/health`
   - `/ask` (proxy to AI service)
 - Gateway responsibilities today:
-  - authenticate, set tenant_id, forward request_id/trace headers
+  - authenticate, forward request_id/trace headers
 - If short on time: implement a simple proxy that forwards `/ask` to the AI service.
 - Done when: CLI → gateway → AI service → Postgres works end-to-end.
 
 **Interview answer**:
 - “Why keep the gateway separate from the AI service?”
 
-## Day 24 — Tenant-aware pgvector design
-**Theory (10–15 min)**:
+## Day 24 — pgvector query plan (indexing + latency)
+**Theory (~30 min)**:
 - `docs/learning-fundamentals.md` Section 37, Section 39
 
 **Core interview questions (5–10 min)**:
@@ -842,57 +860,50 @@ services:
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
 
-**Goal**: Make isolation hard to get wrong.
+**Goal**: Make retrieval performance explainable (and debuggable) with real DB evidence.
 
 **Build step**:
-- **Roadmap focus**: tenant-safe pgvector at “real” shape.
-- Enforce tenant filtering in SQL:
-  - `WHERE tenant_id = :tenant`
+- **Roadmap focus**: Postgres retrieval performance (production shape).
 - Run `EXPLAIN (ANALYZE, BUFFERS)` on your retrieval query and confirm:
   - index usage (or understand why not)
-- Decide your isolation strategy:
-  - one table + filter (simple) or partition per tenant (predictable)
 - If short on time: just run EXPLAIN and save the plan output.
-- Done when: you can explain your retrieval plan and why it’s safe.
+- Done when: you can explain your retrieval plan and what makes it fast/slow.
 
 **Interview answer**:
-- “What are safe defaults for multi-tenant retrieval storage?”
+- “How do you debug slow vector search in Postgres?”
 
-## Day 25 — Layer 1 ‘done’ skeleton
-**Theory (10–15 min)**:
-- `docs/learning-fundamentals.md` Section 26, Section 28
+## Day 25 — Budgets + audit logs (fail closed)
+**Theory (~30 min)**:
+- `docs/learning-fundamentals.md` Section 23, Section 30
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
 
-**Goal**: Minimal end-to-end multi-tenant call.
+**Goal**: Add governance: rate limits, budgets, and an audit log you can defend in interviews.
 
 **Build step**:
-- **Roadmap focus**: Layer 1 skeleton demo.
-- Support ≥ 3 tenants:
-  - `tenant-alpha`, `tenant-beta`, `tenant-gamma`
-- For each tenant, run 1 question through the gateway and verify:
-  - citations are tenant-scoped
-  - response includes decision_trace placeholder (even empty)
-- If short on time: get 2 tenants working, then add the third.
-- Done when: multi-tenant request routing works reliably.
+- **Roadmap focus**: Layer 1 governance.
+- Add rate limits (even a simple in‑memory limiter is fine for now):
+  - limit requests/sec
+  - limit in‑flight concurrency
+- Add a first budget control:
+  - clamp `max_tokens`
+  - refuse requests that exceed a simple per‑day token budget (fail closed)
+- Add an audit log record for every request:
+  - request_id, timestamp, model, tokens_in/out, citations count, tool names called
+  - never store raw API keys; redact sensitive text
+- If short on time: implement only `max_tokens` clamp + one audit log row per request.
+- Done when: one `/ask` call produces a correct response AND an audit log record.
 
 **Interview answer**:
 - “What makes a system ‘production-shaped’ even at low scale?”
 
 ---
 
-# Week 6 — Agents + tools + observability (Layer 1 interview-grade)
-
-**Week focus (keep it simple)**:
-- Make the system fetch facts via tools.
-- Make the agent debuggable (decision traces + OTEL traces).
-- All theory reading is listed inside each day’s **Theory** block below (from `docs/learning-fundamentals.md`).
-
 ## Day 26 — Tools (LLM should fetch facts, not guess facts)
-**Theory (10–15 min)**:
+**Theory (~30 min)**:
 - `docs/learning-fundamentals.md` Section 12
 
 **Optional (if time)**:
@@ -908,12 +919,11 @@ services:
 **Build step**:
 - **Roadmap focus**: tools (fetch facts, don’t guess facts).
 - Implement 3 tools (as functions or endpoints) with strict inputs:
-  1) `get_metric_timeseries(service, metric, window, tenant)`
-  2) `get_top_errors(service, window, tenant)`
-  3) `search_runbooks(query, tenant)`
+  1) `get_metric_timeseries(service, metric, window)`
+  2) `get_top_errors(service, window)`
+  3) `search_runbooks(query)`
 - Enforce:
   - time window bounds
-  - tenant_id required
   - timeouts
 - If short on time: implement `search_runbooks` first (it powers RAG).
 - Done when: tools return JSON that you can include in prompts.
@@ -922,7 +932,7 @@ services:
 - “How do tools reduce hallucinations?”
 
 ## Day 27 — Agent flow (simple graph)
-**Theory (10–15 min)**:
+**Theory (~30 min)**:
 - `docs/learning-fundamentals.md` Section 12, Section 15
 
 **Core interview questions (5–10 min)**:
@@ -934,7 +944,7 @@ services:
 
 **Build step**:
 - **Roadmap focus**: agent flow (predictable, not “freestyle”).
-- Implement a simple diagnose flow (LangGraph recommended, manual is OK):
+- Implement a simple diagnose flow (manual is OK; frameworks are optional):
   1) classify query (latency vs errors vs cost)
   2) call the right tool(s)
   3) retrieve runbooks
@@ -947,7 +957,7 @@ services:
 - “Why use a graph-based flow for agents?”
 
 ## Day 28 — Decision traces (make the agent debuggable)
-**Theory (10–15 min)**:
+**Theory (~30 min)**:
 - `docs/learning-fundamentals.md` Section 10, Section 12
 
 **Optional (if time)**:
@@ -975,7 +985,7 @@ services:
 - “How do you debug an agent that made a bad call?”
 
 ## Day 29 — OpenTelemetry (what it gives you)
-**Theory (10–15 min)**:
+**Theory (~30 min)**:
 - `docs/learning-fundamentals.md` Section 10
 
 **Optional (if time)**:
@@ -1003,9 +1013,9 @@ services:
 **Interview answer**:
 - “How do you find where latency is coming from?”
 
-## Day 30 — Layer 1 acceptance criteria
-**Theory (10–15 min)**:
-- `docs/learning-fundamentals.md` Section 20, Section 10
+## Day 30 — Sprint acceptance + proof pack
+**Theory (~30 min)**:
+- `docs/learning-fundamentals.md` Section 25, Section 30
 
 **Optional (if time)**:
 - `docs/learning-fundamentals.md` Section 16
@@ -1015,143 +1025,55 @@ services:
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
 
-**Goal**: Match the roadmap.
+**Goal**: Finish the 30‑day sprint with proof artifacts you can show in interviews.
 
 **Build step**:
-- **Roadmap focus**: Layer 1 acceptance proof.
-- Run a low-load test at 2–3 QPS and record p95 (target ≤ 2.5s).
+- **Roadmap focus**: Layer 1 + cost + eval gate.
+- Run your eval harness and record:
+  - baseline score (from Day 20) vs today’s score
+  - one failure you still see and how you would fix it
+- Run a low‑load test at 2–3 QPS and record p50/p95.
 - Verify:
-  - ≥ 3 tenants work
+  - auth works (401/403 are correct)
+  - audit logs exist and contain no secrets
   - traces clearly show tool calls + timings
-- Create 1 screenshot (trace view) and save it for your proof pack.
-- If short on time: run 2 QPS for a smaller number of requests and capture one trace.
-- Done when: you can demonstrate Layer 1 “production-shaped” behavior.
+- Local inference smoke test (Ollama):
+  - run 5 requests and record median latency
+- Save your proof artifacts (one folder is fine):
+  - eval output, latency numbers, one trace screenshot, one grounded answer screenshot
+- If short on time: run eval once + capture one trace + one grounded answer screenshot.
+- Done when: you can demo “grounded answer + numbers + governance” in 5 minutes.
 
 **Interview answer**:
 - “What does a good ‘done’ definition look like for an LLM platform feature?”
 
-### Layer 1 acceptance checklist (from `docs/roadmap.md`)
+### Sprint acceptance checklist (from `docs/roadmap.md`)
 
-- [ ] Tenants: ≥ 3 tenants with distinct runbooks + data (`tenant-alpha`, `tenant-beta`, `tenant-gamma`).
-- [ ] Isolation: tenant_id required on every request; retrieval/tools never cross tenants.
-- [ ] Latency: p95 ≤ 2.5s at 2–3 QPS (low-load test) and you saved the numbers.
-- [ ] Traces: Grafana shows tool calls and clearly separates vector time vs LLM time.
-- [ ] Gateway: API key auth + tenant routing + request tagging (tenant_id, model, route).
+- [ ] API: `POST /ask` returns schema‑valid JSON with citations (no sources → refuse/ask).
+- [ ] Evals: gold set exists; you can re-run and show baseline vs current.
+- [ ] Gateway: API key auth + rate limits + request ids; no API keys in logs.
+- [ ] Governance: audit log exists (who/what/model/tokens/citations/tools) with redaction.
+- [ ] Traces: Grafana/Tempo shows one end‑to‑end trace with spans for retrieve/tools/LLM.
+- [ ] Cost: tokens in/out are logged and you can estimate cost per request (even if local is $0).
 
 ---
 
-# Week 7 — Layer 2 foundations (serving, batching, cache, benchmarks)
+# Post‑30 extension (optional) — serving + scale‑out
+
+Stop here for the 30‑day sprint. Everything below is optional extension work.
+
+If you choose to do a cloud GPU smoke test, use `docs/hints/layer2-serving.md` (Section B).
+
+# Extension — Layer 2 foundations (serving, batching, cache, benchmarks)
 
 **Week focus (keep it simple)**:
 - Learn the real infra knobs: batching, KV cache, routing, benchmarking.
 - Replace claims with measurements (tokens/sec, p95, cost/query).
 - All theory reading is listed inside each day’s **Theory** block below (from `docs/learning-fundamentals.md`).
 
-### GPU lab (budget-safe) — do Days 31–35 with minimal confusion
+### Default lab (Mac-first) — Ollama (recommended)
 
-You said you’re willing to rent a GPU, but you don’t want to burn money or get lost.
-This is a “copy/paste + guardrails” plan.
-
-**Budget guardrails (do these first)**:
-- Decide a hard cap: `$10` (or `$20`) for the whole Layer 2 experiment. Write it down.
-- Pick an instance billed **per-hour** (or per-minute) with **no long minimum**. Avoid monthly subscriptions.
-- Set an auto-stop timer in the provider UI. Extra safety on the VM: `sudo shutdown -h +150` (auto-poweroff in 150 minutes).
-- Don’t expose ports to the internet. For this lab: benchmark from the **same GPU VM** and use `127.0.0.1`.
-- When done: **stop the VM** and confirm billing stopped. If storage keeps charging, delete the volume too.
-
-**Recommended GPU choice (cheap + low confusion)**:
-- Best balance: **L4 (24GB)** or **A10 (24GB)**.
-- Ultra-cheap fallback: **T4 (16GB)** (use a 3B model and short context).
-
-**Recommended model for the lab**:
-- Start with: `Qwen/Qwen2.5-3B-Instruct` (small, open, fast to download)
-- Upgrade later (optional): `Qwen/Qwen2.5-7B-Instruct` on 24GB GPUs (keep context small)
-
-**Remote GPU setup checklist (vLLM path)**:
-1) Create a GPU VM:
-   - Ubuntu 22.04 (or similar)
-   - NVIDIA drivers work (`nvidia-smi`)
-   - Docker works (`docker ps`)
-2) Verify GPU:
-   - `nvidia-smi`
-3) Pull vLLM:
-   - `docker pull vllm/vllm-openai:latest`
-4) Start the server (bound to localhost only):
-   - `docker run --gpus all --rm --ipc=host -p 127.0.0.1:8000:8000 vllm/vllm-openai:latest --model Qwen/Qwen2.5-3B-Instruct --dtype half --max-model-len 2048 --host 0.0.0.0 --port 8000`
-5) Smoke test (from the same VM):
-   - `curl -s http://127.0.0.1:8000/v1/models | head`
-
-If you want to call the server from your laptop (optional, safer than opening firewall):
-- `ssh -L 8000:127.0.0.1:8000 <user>@<vm-ip>`
-
-If you get stuck on flags:
-- Run `docker run --rm vllm/vllm-openai:latest --help | grep -iE "cache|prefix|batch|len|max-model-len"` and use the exact flag names shown.
-
-**Minimal measurements to record (you’ll use these in Days 31–35)**:
-- Baseline vs improved: `tokens/sec`, `p95 latency`
-- Cache proof: `TTFT hot vs cold` (approx) and, if available, `prefix-cache hit-rate`
-
-**TTFT (approx = first-byte time)** — run once (cold), then a few times (hot):
-
-```bash
-for i in 1 2 3 4 5; do
-  curl -s -o /dev/null \
-    -w "ttfb_s=%{time_starttransfer} total_s=%{time_total}" \
-    http://127.0.0.1:8000/v1/chat/completions \
-    -H 'Content-Type: application/json' \
-    -d '{"model":"Qwen/Qwen2.5-3B-Instruct","messages":[{"role":"user","content":"You are an SRE. Explain the same 3 steps to debug a 5xx spike. Use short bullets."}],"max_tokens":128,"temperature":0,"stream":true}'; echo
-done
-```
-
-**Baseline vs batching throughput** (standard library Python, no installs):
-
-```bash
-python3 - <<'PY'
-import json, time, urllib.request
-from concurrent.futures import ThreadPoolExecutor, as_completed
-
-endpoint = "http://127.0.0.1:8000/v1/chat/completions"
-payload = {
-  "model": "Qwen/Qwen2.5-3B-Instruct",
-  "messages": [{"role": "user", "content": "Explain in 3 short bullets why caching helps LLM serving."}],
-  "max_tokens": 256,
-  "temperature": 0,
-}
-headers = {"Content-Type": "application/json"}
-
-def one():
-  req = urllib.request.Request(endpoint, data=json.dumps(payload).encode(), headers=headers)
-  t0 = time.time()
-  with urllib.request.urlopen(req, timeout=180) as r:
-    out = json.loads(r.read())
-  dt = time.time() - t0
-  usage = out.get("usage", {}) or {}
-  return dt, int(usage.get("prompt_tokens", 0)), int(usage.get("completion_tokens", 0))
-
-def bench(concurrency, total):
-  times=[]; pt=0; ct=0
-  t0=time.time()
-  with ThreadPoolExecutor(max_workers=concurrency) as ex:
-    futures=[ex.submit(one) for _ in range(total)]
-    for f in as_completed(futures):
-      dt, p, c = f.result()
-      times.append(dt); pt+=p; ct+=c
-  wall=time.time()-t0
-  times.sort()
-  p95 = times[max(0, int(0.95*len(times))-1)]
-  tps = (pt+ct)/wall if wall>0 else 0
-  print(f"concurrency={concurrency} requests={total} wall_s={wall:.2f} p95_s={p95:.2f} tokens_per_s={tps:.1f} prompt={pt} completion={ct}")
-
-for c in (1, 8):
-  bench(concurrency=c, total=c*10)
-PY
-```
-
-**Cache metrics (if exposed by vLLM)**:
-- `curl -s http://127.0.0.1:8000/metrics | grep -iE "ttft|prefix|cache|prompt_tokens|generated_tokens" | head`
-
-**Important cost saver**:
-- Model download time costs money. Start the VM, download once, run benchmarks, then shut down.
+Copy/paste commands + benchmarks: `docs/hints/layer2-serving.md` (Section A).
 
 ## Day 31 — Serving: why Layer 2 exists
 **Theory (10–15 min)**:
@@ -1169,13 +1091,13 @@ PY
 
 **Build step**:
 - **Roadmap focus**: self-hosted inference start (Layer 2).
-- Preferred: follow the “GPU lab” section above (vLLM path) until `curl -s http://127.0.0.1:8000/v1/models | head` works.
-- Local fallback (if you can’t rent a GPU today): Ollama (you still learn routing/caching, but not full vLLM batching).
-- Run one real chat completion and confirm the response includes `usage` (token counts).
-- Record a baseline:
-  - run the “Baseline vs batching throughput” snippet with `concurrency=1`
-  - save `tokens/sec` and `p95 latency`
-- If short on time: just get `/v1/models` to respond from the GPU VM.
+- Default: follow `docs/hints/layer2-serving.md` (Section A) until `curl -s http://127.0.0.1:11434/v1/models | head` works.
+- If local inference is blocked today: use a hosted model for the rest of the week, and come back to local inference later (don’t derail the plan).
+- Run one real chat completion.
+- Record a baseline using the benchmark snippet from `docs/hints/layer2-serving.md` (Section A):
+  - run `concurrency=1`
+  - save `p95 latency` (and `tokens/sec` if token counts exist)
+- If short on time: just get `/v1/models` to respond from your local server.
 - Done when: your AI service can switch providers via config (hosted vs self-host) and still answers one question end-to-end.
 
 **Interview answer**:
@@ -1198,7 +1120,7 @@ PY
 
 **Build step**:
 - **Roadmap focus**: continuous batching throughput gain.
-- On the GPU VM, run the “Baseline vs batching throughput” snippet from the GPU lab section.
+- Run the “Baseline vs concurrency” snippet from `docs/hints/layer2-serving.md` (Section A).
 - Treat `concurrency=1` as baseline and `concurrency=8` as batching load (drop to 4 if you hit timeouts).
 - Record `tokens/sec` and `p95 latency` for both.
 - If short on time: run only the higher concurrency case and save `tokens/sec`.
@@ -1225,11 +1147,10 @@ PY
 **Build step**:
 - **Roadmap focus**: KV/prefix cache (TTFT hot vs cold).
 - Create a seeded workload where the prompt prefix repeats (same system prompt + template).
-- Use the “TTFT (approx)” curl loop from the GPU lab section and record:
+- Use the “TTFT cold vs hot” curl loop from `docs/hints/layer2-serving.md` (Section A) and record:
   - cold (first run after server start)
   - hot (repeated runs)
-- If hot is not faster: check vLLM `--help` for a prefix-cache flag, restart vLLM with it, and re-run.
-- If `/metrics` works: grep for `prefix|cache|ttft` counters and record the hit-rate or the raw counters.
+- If hot is not faster: write down your hypothesis (cache miss? prompt changed? server setting?) and move on — the key is the measurement + reasoning.
 - If short on time: record only cold vs hot numbers.
 - Done when: you can show “hot is faster than cold” with numbers and explain what is being reused.
 
@@ -1253,7 +1174,7 @@ PY
   - compute a stable `routing_key = (tenant_id + prompt_template_version + prompt_prefix_hash)`
   - pick a backend shard by hashing the routing_key (or rendezvous hashing)
 - Tag + log every request with: `tenant_id`, `routing_key`, `shard_id`, `fallback=true/false`.
-- Optional (only if you have enough VRAM): run 2 vLLM servers on the same VM (ports 8000 and 8001) so routing changes cache hit behavior in a visible way.
+- Optional (only if you want a stronger demo): run 2 local servers on different ports so routing visibly changes cache behavior.
 - Add a safe fallback: if a shard fails, retry on another shard and mark `fallback=true`.
 - If short on time: route by `tenant_id` only and make sure you can see shard_id in traces/logs.
 - Done when: the same tenant+template maps to the same shard and you can explain why this improves cache hits without breaking correctness.
@@ -1273,19 +1194,17 @@ PY
 **Goal**: No claims without measurements.
 
 **Build step**:
-- **Roadmap focus**: benchmark report (prove 3–5×).
-- Run the two GPU lab measurements and save the outputs:
-  - throughput snippet (`concurrency=1` vs `concurrency=8`)
-  - TTFT loop (cold vs hot)
-- If `/metrics` exposes cache counters, record them and compute hit-rate.
-- Do one back-of-envelope cost calc from your GPU price:
+- **Roadmap focus**: benchmark report (prove improvements).
+- Run the two measurements from `docs/hints/layer2-serving.md` (Section A) and save the outputs:
+  - throughput (`concurrency=1` vs `concurrency=8` or 4)
+  - TTFT (cold vs hot)
+- Do one back-of-envelope cost calc (method matters more than the exact number):
   - `$ per second = ($ per hour) / 3600`
   - `$ per 1M tokens ≈ ($ per second / tokens_per_second) * 1_000_000`
 - Produce a small report (table + 5 bullets) in your proof pack:
-  - baseline vs optimized throughput, p95, TTFT cold/hot, cache hit-rate, $/1M tokens
-- Target (roadmap): 3–5× throughput gain vs baseline.
-- If short on time: record the best tokens/sec you saw and stop the GPU VM.
-- Done when: you can defend your benchmark as fair (same workload, same model, only one knob changed) and you stopped billing.
+  - baseline vs loaded p95, TTFT cold/hot, and (if available) tokens/sec + $/1M tokens
+- If short on time: record the best tokens/sec you saw and stop there.
+- Done when: you can defend your benchmark as fair (same workload, same model, only one knob changed) and you saved the outputs.
 
 **Interview answer**:
 - “How do you run fair performance experiments?”
@@ -1349,7 +1268,7 @@ PY
   - cost per tenant (daily)
   - % requests by route/model
   - avg tokens in/out
-- Target (roadmap): 30–40% cost/query reduction using routing + token budgeting.
+- Target (roadmap): reduce cost/query vs baseline using routing + token budgeting (any measurable improvement is fine).
 - If short on time: output a CSV/table (tenant → cost/query) and screenshot it.
 - Done when: you can answer “what did tenant X spend yesterday?” from your data.
 
@@ -1358,10 +1277,10 @@ PY
 
 ### Layer 2 acceptance checklist (from `docs/roadmap.md`)
 
-- [ ] Self-hosted inference: open model running via vLLM or TGI and you can route traffic to it.
-- [ ] Throughput: baseline vs optimized benchmark shows **3–5×** improvement (same workload).
-- [ ] Cache: ≥ 70–80% hit-rate on seeded repetitive workload and TTFT hot vs cold is clearly different.
-- [ ] Routing: model cascade + token budgeting reduces avg cost/query by **30–40%** vs “single big model”.
+- [ ] Local inference: a local OpenAI‑compatible endpoint works (Ollama recommended) and your app can route traffic to it.
+- [ ] Performance: you ran a fair baseline vs improved benchmark and saved the numbers (don’t claim multipliers you didn’t measure).
+- [ ] Cache: you measured TTFT cold vs hot and can explain what is being reused.
+- [ ] Routing: model cascade + token budgeting reduces avg cost/query vs baseline (or you can explain why it didn’t and what you’d try next).
 - [ ] FinOps: dashboards show cost per model, cost per tenant, and % requests routed cheap vs expensive.
 - [ ] Evidence: you saved the benchmark table + one screenshot of the dashboard.
 
