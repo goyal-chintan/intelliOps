@@ -4,28 +4,32 @@
     "service_name": "checkout-api",
     "daily_spend_usd": 47.49,
     "currency": "USD",
-    "resource_type": "EC2/EKS"
+    "resource_type": "EC2/EKS",
+    "savings_coverage": null
   },
   {
     "tenant_id": "tenant-demo",
     "service_name": "payment-gw",
     "daily_spend_usd": 219.96,
     "currency": "USD",
-    "resource_type": "EC2/EKS"
+    "resource_type": "EC2/EKS",
+    "savings_coverage": null
   },
   {
     "tenant_id": "tenant-demo",
     "service_name": "data-ingestor",
     "daily_spend_usd": 197.21,
     "currency": "USD",
-    "resource_type": "EC2/EKS"
+    "resource_type": "EC2/EKS",
+    "savings_coverage": null
   },
   {
     "tenant_id": "tenant-demo",
     "service_name": "ml-serving",
     "daily_spend_usd": 249.0,
     "currency": "USD",
-    "resource_type": "EC2/EKS"
+    "resource_type": "EC2/EKS",
+    "savings_coverage": null
   },
   {
     "tenant_id": "tenant-demo",

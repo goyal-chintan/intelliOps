@@ -11,6 +11,8 @@ Start with these resources:
 - **[docs/architecture.md](docs/architecture.md)** – System diagrams and data contracts
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** – How to contribute, conventions, and runbook guidelines
 
+Learning resources (daily plan, fundamentals, hints) are in the `learning-resources` branch.
+
 ### Running the Demos
 
 - **Layer 0 (single-tenant)**: See [`level_zero/README.md`](level_zero/README.md)

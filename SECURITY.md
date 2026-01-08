@@ -13,8 +13,8 @@ If you discover a security vulnerability in OpsPilot, please report it
 
 ### How to Report
 
-1. **Email**: Send details to **[INSERT SECURITY EMAIL]**
-2. **Subject**: Use `[SECURITY] OpsPilot: <brief description>`
+1. **Preferred**: Open a **GitHub Security Advisory** for this repository (private by default).
+2. **If you cannot use advisories**: contact the maintainers privately (do not share exploit details in issues).
 3. **Include**:
    - Description of the vulnerability
    - Steps to reproduce

@@ -14,10 +14,22 @@ This folder is a **self-contained Layer 0 demo** for OpsPilot:
   - **50** Markdown runbooks.
   - Each runbook has a unique **Error Code** (e.g., `ERR_DB_CON_001`) used for retrieval.
 - `data/`
-  - `synthetic_logs.json`: structured logs (single tenant, multi-service)
+  - `synthetic_logs.raw.txt`: raw log lines (single tenant, multi-service)
+  - `synthetic_logs.raw.txt.gz`: compressed raw logs
+  - `synthetic_logs.json`: parsed/structured logs (JSON)
   - `synthetic_incidents.json`: incident summaries + `runbook_refs` pointers
+  - `synthetic_incidents.jsonl`: line-delimited incidents (raw-ish)
+  - `synthetic_incidents.jsonl.gz`: compressed incidents
   - `hourly_metrics.json`: per-hour aggregates per service
+  - `hourly_metrics.csv`: raw metrics table (CSV)
+  - `hourly_metrics.csv.gz`: compressed metrics
   - `cost_summaries.json`: daily spend + shared infra line items
+  - `cost_summaries.csv`: raw cost table (CSV)
+  - `cost_summaries.csv.gz`: compressed cost table
+
+Note: In real systems logs are raw at ingest and get parsed/structured downstream for querying.
+This demo stores logs as normalized JSON for deterministic, repeatable examples.
+
 - `scripts/`
   - `generate_level_zero.py`: generates the Layer 0 datasets deterministically
 - `api/` (optional, demo scaffold)
@@ -45,5 +57,4 @@ This keeps timestamps stable (fixed base date `2025-01-01`) so demos like “bet
 This makes it easy for RAG retrieval and agentic workflows to do:
 
 **logs → incident summary → runbook remediation steps**
-
 

@@ -1,4 +1,6 @@
 import argparse
+import csv
+import gzip
 import json
 import math
 import re
@@ -97,6 +99,11 @@ class IncidentPlan:
 
 def iso(ts: datetime) -> str:
     return ts.astimezone(timezone.utc).isoformat()
+
+
+def deterministic_uuid(rng) -> str:
+    # uuid.uuid4() is not seeded; use RNG bits so dataset regeneration is stable for a given seed.
+    return str(uuid.UUID(int=rng.getrandbits(128), version=4))
 
 
 def percentile(values: List[int], p: float) -> int:
@@ -244,7 +251,7 @@ def generate_logs(
                 logs.append(
                     {
                         "timestamp": iso(ts + timedelta(seconds=rng.randint(0, 59))),
-                        "trace_id": str(uuid.uuid4()),
+                        "trace_id": deterministic_uuid(rng),
                         "tenant_id": TENANT_ID,
                         "service_name": service,
                         "env": ENV,
@@ -263,6 +270,45 @@ def generate_logs(
     # Keep logs in chronological-ish order for readability
     logs.sort(key=lambda x: x["timestamp"])
     return logs
+
+
+def format_raw_log(log: Dict[str, Any]) -> str:
+    message = str(log.get("message") or "").replace("\n", " ").replace('"', '\\"')
+    error_code = log.get("error_code") or "-"
+    return (
+        f'{log["timestamp"]} '
+        f'level={log["level"]} '
+        f'tenant={log["tenant_id"]} '
+        f'service={log["service_name"]} '
+        f'env={log["env"]} '
+        f'region={log["region"]} '
+        f'path={log["request_path"]} '
+        f'status={log["status_code"]} '
+        f'latency_ms={log["latency_ms"]} '
+        f'trace_id={log["trace_id"]} '
+        f'error_code={error_code} '
+        f'msg="{message}"'
+    )
+
+
+def write_jsonl(path: Path, rows: List[Dict[str, Any]]) -> None:
+    lines = [json.dumps(row, ensure_ascii=True, separators=(",", ":")) for row in rows]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_csv(path: Path, rows: List[Dict[str, Any]]) -> None:
+    if not rows:
+        path.write_text("", encoding="utf-8")
+        return
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_gzip_text(path: Path, text: str) -> None:
+    with gzip.open(path, "wt", encoding="utf-8") as handle:
+        handle.write(text)
 
 
 def compute_hourly_metrics(logs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -314,7 +360,7 @@ def summarize_incidents_from_plans(
         meta = ERROR_CATALOG[p.error_code]
         incidents.append(
             {
-                "incident_id": f"INC-{uuid.uuid4()}",
+                "incident_id": f"INC-{deterministic_uuid(rng)}",
                 "source": "logs",
                 "title": f"{p.service} incident: {p.error_code}",
                 "tenant_id": TENANT_ID,
@@ -351,6 +397,7 @@ def generate_cost_summaries(rng) -> List[Dict[str, Any]]:
                 "daily_spend_usd": round(rng.uniform(40.0, 250.0), 2),
                 "currency": "USD",
                 "resource_type": "EC2/EKS",
+                "savings_coverage": None,
             }
         )
 
@@ -433,7 +480,7 @@ def generate_cost_incidents(cost: List[Dict[str, Any]], runbook_index: Dict[str,
             meta = {"category": "Cost", "severity": "P2"}
             incidents.append(
                 {
-                    "incident_id": f"COST-{uuid.uuid4()}",
+                    "incident_id": f"COST-{deterministic_uuid(rng)}",
                     "source": "cost",
                     "title": f"Savings coverage low ({int(coverage*100)}%)",
                     "tenant_id": TENANT_ID,
@@ -456,7 +503,7 @@ def generate_cost_incidents(cost: List[Dict[str, Any]], runbook_index: Dict[str,
         monthly = round(daily * 30.0, 2)
         incidents.append(
             {
-                "incident_id": f"COST-{uuid.uuid4()}",
+                "incident_id": f"COST-{deterministic_uuid(rng)}",
                 "source": "cost",
                 "title": f"{rt} cost anomaly",
                 "tenant_id": TENANT_ID,
@@ -539,10 +586,21 @@ def main() -> None:
     (out_dir / "cost_summaries.json").write_text(json.dumps(cost, indent=2), encoding="utf-8")
     (out_dir / "synthetic_incidents.json").write_text(json.dumps(incidents, indent=2), encoding="utf-8")
 
+    raw_log_text = "\n".join(format_raw_log(log) for log in logs) + "\n"
+    (out_dir / "synthetic_logs.raw.txt").write_text(raw_log_text, encoding="utf-8")
+    write_gzip_text(out_dir / "synthetic_logs.raw.txt.gz", raw_log_text)
+
+    write_jsonl(out_dir / "synthetic_incidents.jsonl", incidents)
+    write_gzip_text(out_dir / "synthetic_incidents.jsonl.gz", (out_dir / "synthetic_incidents.jsonl").read_text(encoding="utf-8"))
+
+    write_csv(out_dir / "hourly_metrics.csv", hourly_metrics)
+    write_gzip_text(out_dir / "hourly_metrics.csv.gz", (out_dir / "hourly_metrics.csv").read_text(encoding="utf-8"))
+
+    write_csv(out_dir / "cost_summaries.csv", cost)
+    write_gzip_text(out_dir / "cost_summaries.csv.gz", (out_dir / "cost_summaries.csv").read_text(encoding="utf-8"))
+
     print(f"Generated Layer 0 data under: {out_dir}")
 
 
 if __name__ == "__main__":
     main()
-
-

@@ -1,4 +1,6 @@
 import argparse
+import csv
+import gzip
 import json
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -359,6 +361,45 @@ def generate_cost_incidents(*, cost_metrics: List[Dict[str, Any]], runbook_index
     return incidents
 
 
+def format_raw_log(log: Dict[str, Any]) -> str:
+    message = str(log.get("message") or "").replace("\n", " ").replace('"', '\\"')
+    error_code = log.get("error_code") or "-"
+    return (
+        f'{log["timestamp"]} '
+        f'level={log["level"]} '
+        f'tenant={log["tenant_id"]} '
+        f'service={log["service"]} '
+        f'env={log["env"]} '
+        f'region={log["region"]} '
+        f'path={log["request_path"]} '
+        f'status={log["status_code"]} '
+        f'latency_ms={log["latency_ms"]} '
+        f'trace_id={log["trace_id"]} '
+        f'error_code={error_code} '
+        f'msg="{message}"'
+    )
+
+
+def write_jsonl(path: Path, rows: List[Dict[str, Any]]) -> None:
+    lines = [json.dumps(row, ensure_ascii=True, separators=(",", ":")) for row in rows]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_csv(path: Path, rows: List[Dict[str, Any]]) -> None:
+    if not rows:
+        path.write_text("", encoding="utf-8")
+        return
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_gzip_text(path: Path, text: str) -> None:
+    with gzip.open(path, "wt", encoding="utf-8") as handle:
+        handle.write(text)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate synthetic logs, incidents, and cost summaries for OpsPilot demos.")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for deterministic output.")
@@ -392,7 +433,17 @@ def main() -> None:
     (out_dir / "cost_summaries.json").write_text(json.dumps(cost_metrics, indent=2), encoding="utf-8")
     (out_dir / "synthetic_incidents.json").write_text(json.dumps(incidents, indent=2), encoding="utf-8")
 
-    print("Generated synthetic_logs.json, cost_summaries.json, and synthetic_incidents.json")
+    raw_log_text = "\n".join(format_raw_log(log) for log in logs) + "\n"
+    (out_dir / "synthetic_logs.raw.txt").write_text(raw_log_text, encoding="utf-8")
+    write_gzip_text(out_dir / "synthetic_logs.raw.txt.gz", raw_log_text)
+
+    write_jsonl(out_dir / "synthetic_incidents.jsonl", incidents)
+    write_gzip_text(out_dir / "synthetic_incidents.jsonl.gz", (out_dir / "synthetic_incidents.jsonl").read_text(encoding="utf-8"))
+
+    write_csv(out_dir / "cost_summaries.csv", cost_metrics)
+    write_gzip_text(out_dir / "cost_summaries.csv.gz", (out_dir / "cost_summaries.csv").read_text(encoding="utf-8"))
+
+    print("Generated synthetic logs, incidents, and cost summaries (JSON + raw/csv variants).")
 
 
 if __name__ == "__main__":

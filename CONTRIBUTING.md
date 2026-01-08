@@ -4,6 +4,8 @@ Thanks for taking the time to contribute.
 
 This repo is being built in layers (see `docs/roadmap.md`). Please keep changes small, demoable, and well-documented.
 
+Note: Learning-only materials (daily plan, fundamentals, hints) are maintained on the `learning-resources` branch.
+
 ## Quickstart for contributors
 
 ### Layer 0 dataset + CLI
@@ -93,5 +95,4 @@ Most runbooks in this repo follow:
 ## Security
 
 If you believe you’ve found a security issue, please follow `SECURITY.md` (do not open a public issue with exploit details).
-
 
