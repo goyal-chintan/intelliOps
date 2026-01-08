@@ -1,0 +1,14 @@
+tenant_id,service_name,daily_spend_usd,currency,resource_type,savings_coverage
+tenant-demo,checkout-api,47.49,USD,EC2/EKS,
+tenant-demo,payment-gw,219.96,USD,EC2/EKS,
+tenant-demo,data-ingestor,197.21,USD,EC2/EKS,
+tenant-demo,ml-serving,249.0,USD,EC2/EKS,
+tenant-demo,shared-infra,258.94,USD,NAT Gateway,
+tenant-demo,shared-infra,331.3,USD,S3,
+tenant-demo,shared-infra,108.72,USD,S3 Requests,
+tenant-demo,shared-infra,15.18,USD,EBS,
+tenant-demo,shared-infra,33.19,USD,EBS Snapshot,
+tenant-demo,shared-infra,292.73,USD,Logs,
+tenant-demo,shared-infra,16.0,USD,Data Transfer,
+tenant-demo,shared-infra,74.74,USD,Load Balancer,
+tenant-demo,shared-infra,,USD,Savings Coverage,0.3

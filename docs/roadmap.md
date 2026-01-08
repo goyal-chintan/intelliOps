@@ -1,170 +1,80 @@
-# OpsPilot roadmap (Layers 0 → 3)
+# IntelliOps / OpsPilot roadmap
 
-OpsPilot is built in **4 layers**, each intentionally adding a new “infra-grade” capability.
+This is the **product-facing roadmap** for IntelliOps (OpsPilot). It describes what we are building and how to validate each increment.
 
-This doc is the canonical roadmap + acceptance criteria for the repo.
+Learning-only materials (daily plan, fundamentals, hints) live on the `learning-resources` branch.
 
-## Layer 0 — Understandable Demo (1–1.5 weeks)
+## Milestone 0 — Deterministic baseline (dataset + CLI)
 
-**Goal**: Single-tenant, simple RAG copilot over synthetic incidents & runbooks.
+Goal: Establish a trustworthy baseline that behaves deterministically.
 
-### What we build
+Deliverables:
 
-#### Synthetic incident stream
-- Scala job emitting JSON logs to Kafka:
-  - `service_name`, `status_code`, `latency_ms`, `env`, `timestamp`
-- Batch job writes hourly aggregates to a data store (e.g., Postgres or ClickHouse).
+- Synthetic datasets for incidents, logs, metrics, and cost (single-tenant + multi-tenant)
+- A deterministic CLI that can answer time-window questions over the dataset
+- Runbooks as the primary knowledge base artifacts (`ERR_*` Markdown)
 
-#### Knowledge base
-- 50–100 Markdown runbooks:
-  - “How to debug latency spikes”
-  - “How to analyze 5xx errors”
-  - “How to reduce S3 costs”
-- Ingestion pipeline:
-  - ingest → chunk (e.g., 500 tokens with overlap) → embed → index into a vector DB
+Acceptance:
 
-#### LLM API
-- Python FastAPI service
-- LangChain/LangGraph flow:
-  - retrieve top‑k docs
-  - construct prompt: runbook context + recent metrics summary
-  - answer with citations
+- One-command dataset regeneration works locally
+- CLI results are deterministic for a fixed seed
 
-#### Simple UI / CLI
-- CLI or minimal React UI
-- Input: free-text question about incidents/cost
-- Output: answer + supporting docs
+## Milestone 1 — Retrieval + RAG API (single-tenant)
 
-### Acceptance criteria
-- **Latency**: p95 ≤ 2.0s at 1 QPS (single user) using hosted model
-- **RAG eval**:
-  - build 20-case goldset (question → expected key points)
-  - run RAGAS (or similar)
-  - Answer Faithfulness ≥ 0.7
-  - Context Recall ≥ 0.8
-- **Docs**: README includes architecture diagram + one-command local run (docker-compose/helm) + example screenshots
+Goal: Serve grounded answers via an API with explicit schemas and citations.
 
-### Interview story
-“I can go from raw data → RAG → evals → usable API, with basic quality + latency measurements.”
+Deliverables:
 
-## Layer 1 — Production-shaped RAG (multi-tenant + basic agents)
+- Postgres + pgvector ingestion for runbooks (chunk + embed + index)
+- `POST /ask` in an AI service that returns schema-valid JSON
+- Answers include citations to runbooks and/or dataset evidence
 
-**Goal**: Make OpsPilot feel like something a real team could adopt.
+Acceptance:
 
-### What we build
+- API rejects invalid requests and produces schema-valid responses
+- If no sources are available, the service refuses or asks for clarification (fail-closed)
 
-#### Multi-tenant design
-- Tenants = teams/services (e.g., `payments`, `search`, `data-pipeline`)
-- Partitioning:
-  - metrics partitioned by `tenant_id`
-  - vector DB namespaces or metadata filters per tenant
+## Milestone 2 — Gateway controls (auth + rate limits + budgets)
 
-#### Gateway (Spring Boot)
-- Auth (simple API keys)
-- Select tenant and inject tenant context into the AI layer
+Goal: Put policy enforcement and auditability in front of the AI service.
 
-#### Agentic “diagnose incident” flow (LangGraph/LangChain)
-Tools:
-- `get_metric_timeseries(service, metric, window)`
-- `get_top_errors(service, window)`
-- `search_runbooks(query, tenant)`
+Deliverables:
 
-Agent steps:
-- classify query (latency vs errors vs cost)
-- call metrics/log tools
-- call RAG over runbooks
-- summarize RCA + recommended actions
-- explicitly log decision traces (tools called + order)
+- Gateway with API key auth
+- Rate limiting + concurrency caps
+- Audit logging (request metadata, sources/tools used; never log secrets)
 
-#### Observability
-- OpenTelemetry traces from gateway → AI service
-- Grafana dashboard:
-  - p50/p95 latency
-  - QPS
-  - vector search time vs LLM time
-  - per-tenant traffic
+Acceptance:
 
-### Acceptance criteria
-- **Latency**: p95 ≤ 2.5s at 2–3 QPS (low-load test)
-- **Tenants**: ≥ 3 tenants with distinct metrics + runbooks
-- **Traces**: Grafana makes it obvious which tools were used and where time was spent
+- Correct 401/403 behavior, and API keys never appear in logs
 
-### Interview story
-“I built a multi-tenant incident & cost copilot with an agent that calls tools + a RAG layer, with OTEL traces and dashboards.”
+## Milestone 3 — Observability + eval gates
 
-## Layer 2 — LLM Infra Excellence (serving, batching, KV cache, routing)
+Goal: Make quality and performance measurable and regressions visible.
 
-**Goal**: Take control of inference and show hard numbers.
+Deliverables:
 
-### What we build
+- Traces across gateway → AI service → DB (OpenTelemetry)
+- A small gold set + eval harness that can be re-run
 
-#### Self-hosted inference
-- Run an open model via vLLM or TGI
-- Enable continuous batching and measure throughput gains vs naïve serving
-- Reproduce a real (smaller) improvement locally and document results
+Acceptance:
 
-#### KV / prefix cache & routing
-- Prefix-aware router in Spring Boot gateway:
-  - repetitive prompts route to the same backend shard to maximize cache hits
-- Instrumentation:
-  - cache hit-rate
-  - TTFT hot vs cold
+- A known regression blocks a release (even if the “release” is just a tag)
+- Latency breakdown is visible (retrieve vs generate vs tool time)
 
-#### Model routing (SLM + LLM)
-- “Model cascade”:
-  - simple queries → cheaper/faster model
-  - hard/ambiguous queries → larger model
+## Milestone 4 — Multi-tenant hardening
 
-#### FinOps dashboards
-- Tag every request with:
-  - model name, tenant, route, token counts
-- Grafana panels:
-  - cost per 1k tokens per model
-  - cost per tenant
-  - % requests hitting cheap vs expensive model
+Goal: Enforce tenant isolation across retrieval, tools, caches, and observability.
 
-### Acceptance criteria
-- **Throughput**: 3–5× improvement vs baseline “no batching, no cache”
-- **Cache**: ≥ 70–80% hit-rate on seeded repetitive workloads; TTFT hot vs cold clearly different
-- **Cost**: ≥ 30–40% reduction in avg cost/query using routing + token budgeting vs single big model
+Deliverables:
 
-### Interview story
-“I implemented a cache-aware, multi-model gateway on top of vLLM/TGI. It gave ~4× throughput and ~40% lower cost, and I can show the Grafana breakdown per tenant + model.”
+- Tenant context propagation end-to-end
+- “Leak tests” proving tenant A cannot access tenant B data
 
-## Layer 3 — Agentic Ecosystem & Cloud Integration (high bar)
+Acceptance:
 
-**Goal**: Show you understand agentic ecosystems + cloud platforms from an infra angle.
+- Cross-tenant citations never occur in evals
 
-### What we build
+## Decisions (ADRs)
 
-#### Rich agent workflows
-Example workflow: “Cut infra cost by 20% for the data-pipeline service this month.”
-
-Agents:
-- Planner agent: chooses windows + cost sources
-- Metrics agent: pulls time-series and finds waste patterns
-- FinOps agent: proposes concrete actions (e.g., shrink EMR, turn off dev at night)
-- Reporter agent: generates final report with tables + bullets
-
-Persistence:
-- per-tenant “memory” (Postgres/Redis) storing previous recommendations
-
-#### n8n / LangFlow integration (optional)
-- Expose OpsPilot APIs as n8n nodes or LangFlow tools
-- Example: daily cron generates weekly incident summary → sends to Slack/email
-
-#### Managed LLM backend toggle (e.g., Vertex AI)
-- Two backends:
-  - self-hosted open model
-  - managed model (Vertex)
-- Toggle via config flag; log latency/cost differences
-
-### Acceptance criteria
-- End-to-end agent workflow on seeded dataset produces non-trivial, metric-grounded recommendations
-- n8n/LangFlow: at least one public screenshot + flow export committed
-- Managed LLM: recorded latency & cost vs self-hosted for at least one scenario
-
-### Interview story
-“I built a multi-agent cost & incident advisor with LangGraph, integrated it with n8n, and made it run on both self-hosted vLLM and Vertex AI, with clear latency/cost trade-offs.”
-
-
+See `docs/decisions/` for the rationale behind key architecture choices.
