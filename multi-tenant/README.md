@@ -13,9 +13,19 @@ This folder contains **multi-tenant sample data** for OpsPilot Layer 1 demos:
   - **20** Markdown runbooks (subset covering DB, K8s, Data/ML, and Cost categories)
   - Each runbook has a unique **Error Code** (e.g., `ERR_DB_CON_001`)
 - `data/`
-  - `synthetic_logs.json`: structured logs with `tenant_id` field
+  - `synthetic_logs.raw.txt`: raw log lines with `tenant_id`
+  - `synthetic_logs.raw.txt.gz`: compressed raw logs
+  - `synthetic_logs.json`: parsed/structured logs (JSON)
   - `synthetic_incidents.json`: incident summaries with `tenant_id` + `runbook_refs` pointers
+  - `synthetic_incidents.jsonl`: line-delimited incidents (raw-ish)
+  - `synthetic_incidents.jsonl.gz`: compressed incidents
   - `cost_summaries.json`: daily spend per tenant + shared infra line items
+  - `cost_summaries.csv`: raw cost table (CSV)
+  - `cost_summaries.csv.gz`: compressed cost table
+
+Note: In real systems logs are raw at ingest and get parsed/structured downstream for querying.
+This demo stores logs as normalized JSON for deterministic, repeatable examples.
+
 - `scripts/`
   - `generate.py`: regenerates datasets deterministically
 
