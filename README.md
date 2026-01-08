@@ -51,12 +51,12 @@ To better mirror production pipelines, datasets include both “raw-ish” and s
 ## Documentation
 
 - Architecture: `docs/architecture.md`
-- Roadmap (product-facing): `docs/roadmap.md`
+- Roadmap: `docs/roadmap.md`
 - Decisions (ADRs): `docs/decisions/`
 
-## Learning resources
+## Development resources
 
-The day-by-day learning plan, fundamentals, and optional hints live on the `learning-resources` branch.
+Additional development guides, implementation details, and reference materials are available on the `learning-resources` branch.
 
 ```bash
 git checkout learning-resources
