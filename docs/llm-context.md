@@ -1,5 +1,7 @@
 # IntelliOps / OpsPilot context (consolidated requirements)
 
+_Last updated: 2026-01-09 16:10 IST_
+
 This file is a **clean handoff** you can paste into any LLM so it understands what you want, without reading chat history.
 
 ## Primary goal (30 days)
@@ -35,8 +37,10 @@ This file is a **clean handoff** you can paste into any LLM so it understands wh
 
 ## 30‑day scope boundaries (no ambiguity)
 
-- **In the first 30 days**: single‑tenant is fine, but it must be production‑shaped (auth, audit logs, evals, observability, cost math).
-- **After day 30 (extension)**: multi‑tenant/multi‑customer isolation.
+- **In the first 30 days**: build it **tenant-aware** (start with 1 tenant), but production‑shaped (auth, audit logs, evals, observability, cost math).
+  - By ~Day 21: MCP server + approval-gated tool loop exists.
+  - By ~Day 30: one measurable optimization proof exists (routing OR caching OR batching) with a reproducible benchmark + graph.
+- **After day 30 (extension)**: customer‑grade multi‑tenant/multi‑customer isolation (hard boundaries + leak tests).
 
 ## Data realism requirement (raw vs derived)
 
@@ -51,6 +55,7 @@ This file is a **clean handoff** you can paste into any LLM so it understands wh
 - `docs/learning-fundamentals.md` = the **textbook** (definitions, mental models, math, interview questions).
 - `docs/decisions/` = canonical **architecture decisions (ADRs)** you can reference in interviews.
 - `docs/hints/` = optional copy/paste playbooks (only when stuck).
+- `AGENTS.md` = how coding agents should work in this repo (so agents don’t guess).
 
 ## Positioning (how this should sound in interviews)
 
