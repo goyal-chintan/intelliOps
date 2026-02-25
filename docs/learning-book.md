@@ -142,8 +142,11 @@ If you finish the days below, you will also finish `docs/roadmap.md` and have a 
   - **Gate G4 (by Day 30)**: one measurable optimization + reproducible benchmark + graph (routing OR caching OR batching)
   - local inference via Ollama is optional; cost/latency math is required
 
-Post‑30 extension (intentionally deferred):
-- customer‑grade multi‑tenant isolation (hard boundary) + scale‑out serving (vLLM on GPU)
+Post‑30 extension (optional, Days 31–60):
+- deepen Layer 2/3 (serving, batching, caching, routing, benchmarks)
+- customer‑grade multi‑tenant isolation (hard boundary) + budgets + leak tests
+- unstructured ingestion + advanced retrieval (reranking, GraphRAG)
+- agent hardening + constrained decoding (structured generation)
 
 **Proof pack (collect as you go)**:
 - a table of p50/p95 latency per layer, plus a simple trace screenshot (Layer 1)
@@ -288,6 +291,9 @@ If you complete everything here, you’ll be able to:
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 7, Section 39
 
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 22 (focus 22.5–22.7)
+
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
@@ -297,6 +303,7 @@ If you complete everything here, you’ll be able to:
 
 **Plain definition**:
 - pgvector lets Postgres store embeddings (number arrays) and do “find the closest ones”.
+- Indexing strategy is workload-driven: you add indexes to match your real queries, then prove it with `EXPLAIN` (you’ll do this in Day 24).
 
 **Build step**:
 - **Roadmap focus**: make retrieval real (Postgres + pgvector).
@@ -367,7 +374,7 @@ services:
 
 ## Day 7 — Tokens, cost, and latency (what you measure)
 **Theory (10–15 min)**:
-- `docs/learning-fundamentals.md` Section 23, Section 30
+- `docs/learning-fundamentals.md` Section 3 (focus 3.10–3.13), Section 23, Section 30
 
 **Optional (if time)**:
 - `docs/learning-fundamentals.md` Section 35
@@ -437,6 +444,7 @@ services:
 - Implement a first chunker for Markdown runbooks:
   - start with ~300–500 token chunks with overlap (simple heuristic is fine)
   - preserve: runbook_id, section/title, chunk_index
+- Design it as: `parse → blocks → chunk` (not “split a string”), so you can later ingest PDFs/wikis/slides with layout-aware parsing and tables (see Section 6.4–6.8).
 - Run it on 1 runbook and print the produced chunks + metadata.
 - If short on time: chunk one runbook by headings (section-based).
 - Done when: you can point to a stable chunk ID you would cite in answers.
@@ -458,6 +466,7 @@ services:
 
 **Plain definition**:
 - Retrieval = embed the query → find top‑k similar chunks → (optional) filter by metadata (like service/env).
+- Mental model: top‑k embedding retrieval is candidate generation (bi-encoder); reranking is final selection (cross-encoder) when you need higher precision (Section 8.6A–8.6C).
 
 **Build step**:
 - **Roadmap focus**: retrieval must be deterministic and debuggable.
@@ -515,7 +524,7 @@ services:
 
 ## Day 12 — Prompt template (simple and strict)
 **Theory (10–15 min)**:
-- `docs/learning-fundamentals.md` Section 3 (focus 3.4 + 3.10–3.12), Section 21
+- `docs/learning-fundamentals.md` Section 3 (focus 3.4 + 3.6 + 3.10–3.13), Section 21
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
@@ -533,6 +542,7 @@ services:
   - start with `temperature=0`, `top_p=1`, and a reasonable `max_tokens` cap
   - log the config per request (so you can defend it and reproduce results)
 - Add a fallback: if JSON parsing fails, retry once or return a safe error.
+- Optional (advanced): if your serving stack supports constrained/guided decoding for JSON, try enforcing the schema at inference time (Section 3.6A). Keep validation anyway.
 - If short on time: only enforce JSON + validate required fields.
 - Done when: `/ask` always returns valid JSON (or a safe error) and never free-text.
 
@@ -1495,5 +1505,647 @@ Copy/paste commands + benchmarks: `docs/hints/layer2-serving.md` (Section A).
 - [ ] Optional integration: n8n/LangFlow node/flow exists and you saved one screenshot + export.
 - [ ] Optional managed toggle: config flag switches between self-hosted and managed model backend, and you recorded latency/cost comparison.
 - [ ] Evidence: you can demo the workflow end-to-end in <10 minutes.
+
+---
+
+# Week 9 — Customer-grade multi-tenant (hard boundaries)
+
+**Week focus (keep it simple)**:
+- Turn “tenant-aware” into “tenant-safe” (hard leak prevention, not just conventions).
+- Make cache + budgets tenant-correct (these are common real-world leak sources).
+- Add drills/tests so you can prove isolation, not just claim it.
+
+## Day 41 (optional) — Tenant isolation hardening (DB-level)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 11
+- `docs/learning-fundamentals.md` Section 22 (focus 22.4–22.7)
+- `docs/learning-fundamentals.md` Section 24
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 26
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Make cross-tenant leaks impossible-by-default.
+
+**Build step**:
+- **Roadmap focus**: customer-grade isolation.
+- Pick one DB isolation approach and write down why (5 bullets):
+  - RLS, schema-per-tenant, or DB-per-tenant.
+- Implement the minimum hard boundary:
+  - RLS is the simplest “hard boundary” you can demo in Postgres.
+  - Apply it to at least `runbook_chunks` and one facts table (logs/metrics/incidents).
+- Update your “tenant leak” regression test so it proves:
+  - retrieval cannot return other-tenant chunks even if a developer forgets a filter,
+  - tool queries cannot read other-tenant facts.
+- If short on time: enforce RLS only on `runbook_chunks` + prove the leak test fails without it and passes with it.
+- Done when: “developer forgot the tenant filter” no longer causes a leak.
+
+**Interview answer**:
+- “How do you prevent cross-tenant leaks in an LLM platform?”
+
+## Day 42 (optional) — Cache partitioning (tenant-safe caches)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 23 (focus 23.2)
+- `docs/learning-fundamentals.md` Section 30
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 22 (focus 22.5)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Prevent “cache leaks” (one of the easiest ways to violate tenant isolation).
+
+**Build step**:
+- **Roadmap focus**: tenant-safe caching.
+- Make a list of every cache you have (or will have):
+  - retrieval cache
+  - rerank cache (if any)
+  - response cache (if any)
+  - tool result cache (if any)
+- Implement a single shared cache-key builder that always includes:
+  - `tenant_id`, `principal_id` (if relevant), tool/model id, prompt template version, retrieval params, doc_version
+- Add a regression test: two tenants ask the same question and must not share cached results/citations.
+- Add a “cache audit log” line in debug mode:
+  - `cache_hit=true/false` and a redacted cache key hash (not the raw key).
+- If short on time: only implement the cache-key builder + one regression test.
+- Done when: you can explain (and prove) why caches can’t cross tenants.
+
+**Interview answer**:
+- “What is one subtle multi-tenant bug that causes real incidents?”
+
+## Day 43 (optional) — Budgets + quotas (per-tenant controls)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 3 (focus 3.10–3.13)
+- `docs/learning-fundamentals.md` Section 23 (focus 23.5–23.8)
+- `docs/learning-fundamentals.md` Section 30
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Budgets are part of correctness (fail closed, not “surprise bills”).
+
+**Build step**:
+- **Roadmap focus**: quotas + degradation ladder.
+- Implement per-tenant budgets at the gateway (minimum):
+  - rate limits (requests/sec)
+  - max tool calls per request
+  - max token budget per request (input and output)
+- Make budget failure a first-class response:
+  - return a structured error (not a 500),
+  - include which budget was exceeded and the measured value.
+- Record budget decisions in the decision trace (for debuggability).
+- If short on time: enforce only `max_tokens` + max tool calls + return a safe error.
+- Done when: you can deliberately trigger a budget exceed and see clean, safe behavior.
+
+**Interview answer**:
+- “How do you control cost in a multi-tenant LLM platform?”
+
+## Day 44 (optional) — Leak drills + abuse tests (multi-tenant + RAG)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 24 (focus 24.1–24.8)
+- `docs/learning-fundamentals.md` Section 8 (focus 8.7)
+- `docs/learning-fundamentals.md` Section 11
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Prove safety with tests, not “we are careful”.
+
+**Build step**:
+- **Roadmap focus**: abuse harness (tenant leak + injection + tool bounds).
+- Add 5 automated drills (script or tests) and run them in CI:
+  1) tenant A tries to retrieve tenant B runbook content (must fail closed)
+  2) prompt injection string inside a retrieved chunk (must not override rules)
+  3) tool call with oversized time window (must be rejected by schema/bounds)
+  4) missing sources (must refuse / ask clarifying question)
+  5) budget exceeded (must degrade/fail closed predictably)
+- Keep the artifacts: one “before/after” screenshot or log snippet for at least one drill.
+- If short on time: implement 1) + 2) + 3) only.
+- Done when: you can run `pytest` (or your harness) and see green “safety gates”.
+
+**Interview answer**:
+- “How do you test prompt injection and tool abuse?”
+
+## Day 45 (optional) — Versioning + migrations (re-embed safely)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 7 (focus 7.6)
+- `docs/learning-fundamentals.md` Section 26
+- `docs/learning-fundamentals.md` Section 28
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Treat re-embedding and chunking changes like migrations, not “oops”.
+
+**Build step**:
+- **Roadmap focus**: version everything (docs, chunks, embeddings, prompts).
+- Make sure every chunk row has:
+  - `doc_version`, `chunker_version`, `embedding_model`
+- Implement idempotent ingestion semantics:
+  - same `(doc_id, doc_version, chunker_version, embedding_model)` → safe to re-run
+- Add a “migration plan” note in Obsidian (or a repo doc if you prefer):
+  - how you backfill embeddings
+  - how you roll forward/back
+  - how you prevent mixed-version serving bugs
+- If short on time: add version fields and log them per request.
+- Done when: you can explain a safe rollout of “new embedding model” in 60 seconds.
+
+**Interview answer**:
+- “How do you ship retrieval changes without breaking everything?”
+
+---
+
+# Week 10 — Unstructured ingestion (the “real” ETL for AI)
+
+**Week focus (keep it simple)**:
+- Ingest messy sources (PDF/wiki/slides) without losing hierarchy.
+- Preserve page/anchor metadata so citations are debuggable.
+- Treat tables as first-class data (not just text).
+
+## Day 46 (optional) — Document ingestion pipeline (parse → blocks → chunk)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 6 (focus 6.4–6.8)
+- `docs/learning-fundamentals.md` Section 19
+- `docs/learning-fundamentals.md` Section 21
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 24 (focus 24.3)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Stop treating “docs” as clean strings; ingest them as structured data.
+
+**Build step**:
+- **Roadmap focus**: real ingestion (beyond Markdown runbooks).
+- Define a minimal internal document model (conceptual is fine):
+  - `Document` (doc_id, source_type, version, metadata)
+  - `DocBlock` (block_id, section_path, page_start/end or url_anchor, block_type, text, table_payload_id?)
+- Refactor your ingest path into 3 explicit stages:
+  1) parse raw source → blocks (preserve hierarchy)
+  2) chunk blocks into retrieval units (stable IDs)
+  3) embed + store with metadata
+- Pick one messy source and ingest it end-to-end:
+  - recommended: a PDF with headings and at least one table.
+- Update citations so they can point to:
+  - page ranges (PDF) or anchors (wiki), not just “chunk_index”.
+- If short on time: ingest one PDF page range and prove you can retrieve a block with page metadata.
+- Done when: you can ask one question whose best source is the messy doc and get a citation with a page/anchor reference.
+
+**Interview answer**:
+- “Why is ingestion the real bottleneck in production RAG?”
+
+## Day 47 (optional) — OCR (scanned docs are common)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 6 (focus 6.6)
+- `docs/learning-fundamentals.md` Section 24
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Handle the “no text extraction” case without breaking the pipeline.
+
+**Build step**:
+- **Roadmap focus**: ingestion resilience.
+- Add an OCR fallback path for PDFs/images:
+  - store OCR confidence (even coarse),
+  - store page numbers (required),
+  - keep original binary available for debugging.
+- Create one OCR-specific retrieval test:
+  - a question that requires a line that exists only in the scanned doc.
+- If short on time: implement OCR only for one page and prove a single keyword can be retrieved.
+- Done when: scanned docs don’t become silent “missing knowledge”.
+
+**Interview answer**:
+- “What changes in RAG when the source is OCR’d and noisy?”
+
+## Day 48 (optional) — Tables (embed summaries, not raw cells)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 6 (focus 6.7)
+- `docs/learning-fundamentals.md` Section 8 (focus 8.10)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Make tables retrievable and useful without bloating tokens.
+
+**Build step**:
+- **Roadmap focus**: table-aware ingestion.
+- For each extracted table, store two artifacts:
+  1) raw structured payload (CSV/JSON)
+  2) a short table summary text used for embeddings and retrieval
+- Update retrieval so a “table chunk” citation can reference:
+  - doc_id + page + table_id
+- Add one table-specific gold question:
+  - the correct answer must cite the table and quote the relevant cell/row.
+- If short on time: store raw table + one generated summary and show retrieval returns the summary.
+- Done when: you can answer one table question grounded in the table evidence.
+
+**Interview answer**:
+- “How do you handle tables in RAG without dumping raw CSV into prompts?”
+
+## Day 49 (optional) — Wiki/HTML ingestion (hierarchy + anchors)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 6 (focus 6.5, 6.8)
+- `docs/learning-fundamentals.md` Section 21
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 24 (focus 24.3)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Ingest a wiki page without losing the heading structure and anchors.
+
+**Build step**:
+- **Roadmap focus**: wiki-shaped knowledge sources.
+- Pick one HTML-like source:
+  - export a Confluence/Notion page to HTML, or use any long HTML doc you have access to.
+- Parse it into blocks while preserving:
+  - heading levels (H1/H2/H3),
+  - list nesting (flattening loses meaning),
+  - stable anchors (URL + fragment).
+- Store block IDs and citation anchors so you can open the exact section later.
+- If short on time: preserve only heading path + paragraph text + URL anchor.
+- Done when: citations include `url#anchor` (or equivalent) and map back to the original page.
+
+**Interview answer**:
+- “What makes Confluence ingestion harder than Markdown?”
+
+## Day 50 (optional) — Ingestion evals (regressions happen)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 9
+- `docs/learning-fundamentals.md` Section 6 (focus 6.4–6.8)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Prevent ingestion regressions from silently breaking retrieval.
+
+**Build step**:
+- **Roadmap focus**: ingestion quality gate.
+- Add an ingestion-focused mini gold set (start with 10):
+  - 3 questions whose answer is in a PDF paragraph
+  - 3 questions whose answer is in a PDF table
+  - 2 questions whose answer is in an HTML/wiki section
+  - 2 “failure cases” (missing doc / ambiguous question) that must refuse safely
+- Track retrieval metrics first (before generation):
+  - can you retrieve the correct chunk/table summary in top‑k?
+- If short on time: add 5 questions and measure recall@k.
+- Done when: ingestion changes must pass an ingestion retrieval gate before you ship them.
+
+**Interview answer**:
+- “How do you test RAG systems when the data source is messy and changing?”
+
+---
+
+# Week 11 — Advanced retrieval (beyond top‑k)
+
+**Week focus (keep it simple)**:
+- Improve precision without bloating tokens (rerank, hybrid, compression).
+- Make retrieval debuggable (metrics first, then model).
+- Learn retrieval patterns used in modern production stacks.
+
+## Day 51 (optional) — Reranking (bi-encoder + cross-encoder)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 8 (focus 8.6–8.6C)
+- `docs/learning-fundamentals.md` Section 9 (focus 9.6)
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 23 (focus 23.8)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Improve retrieval precision without increasing context size.
+
+**Build step**:
+- **Roadmap focus**: SOTA-ish retrieval pattern (2-stage retrieve → rerank).
+- Implement the production-shaped pipeline:
+  1) retrieve top‑N (example N=50)
+  2) rerank those N
+  3) keep top‑K (example K=8) for generation
+- Add strict operational guardrails:
+  - timeout for reranker
+  - fallback to vector ordering if rerank fails
+  - log `rerank_used=true/false` and latency
+- Prove impact with numbers:
+  - retrieval: recall@k or MRR on a fixed test set
+  - end-to-end: fewer wrong/noisy citations on 10–20 questions
+- If short on time: rerank only top‑20 and keep top‑5; measure MRR once.
+- Done when: you can show a measurable retrieval improvement and explain the latency trade-off.
+
+**Interview answer**:
+- “Why do teams combine bi-encoders and cross-encoders?”
+
+## Day 52 (optional) — Hybrid retrieval (keyword + vector) + diversity
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 8 (focus 8.5)
+- `docs/learning-fundamentals.md` Section 5 (focus 5.7)
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 23 (focus 23.2)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Win on exact terms (IDs/error codes) without losing semantic recall.
+
+**Build step**:
+- **Roadmap focus**: exact-match + semantic retrieval.
+- Implement a hybrid strategy:
+  - keyword search for exact terms (error codes, service names)
+  - vector search for meaning
+  - merge + dedup + rerank (optional)
+- Add one diversity control (optional but useful):
+  - prevent near-duplicate chunks from dominating the context (MMR-style selection or simple “same runbook cap”)
+- If short on time: implement keyword-first fallback only (if query contains `ERR_` or looks like an ID).
+- Done when: error-code questions retrieve the right chunk even when embeddings are noisy.
+
+**Interview answer**:
+- “When does keyword search beat embeddings?”
+
+## Day 53 (optional) — Query rewriting + multi-query retrieval
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 8 (focus 8.8–8.9)
+- `docs/learning-fundamentals.md` Section 24 (prompt injection mindset)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Improve recall without blindly increasing `k`.
+
+**Build step**:
+- **Roadmap focus**: better retrieval inputs, not bigger prompts.
+- Add query rewriting as a constrained step:
+  - start rule-based (extract service/env/time window)
+  - optionally add LLM-based rewriting later, but keep it bounded and schema-validated
+- Add multi-query retrieval (2–5 rewrites):
+  - retrieve for each rewrite
+  - merge + dedup
+  - rerank and select final context
+- Measure impact with retrieval metrics first (recall@k / MRR).
+- If short on time: implement only 2 rewrites (service-focused and error-code-focused).
+- Done when: you can show a measurable recall improvement without increasing final context tokens.
+
+**Interview answer**:
+- “How do you improve retrieval without changing the model?”
+
+## Day 54 (optional) — Context compression (token budget without losing evidence)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 8 (focus 8.10)
+- `docs/learning-fundamentals.md` Section 3 (focus 3.13)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Fit more signal into fewer tokens (and keep citations correct).
+
+**Build step**:
+- **Roadmap focus**: token strategy for retrieval context.
+- Implement one compression strategy:
+  - extract key lines from chunks (cheap and safe), or
+  - summarize chunks into smaller bullets (riskier; must preserve citations and avoid invention)
+- Keep an invariant:
+  - every compressed line must map to an original chunk ID/citation
+- Run a before/after measurement:
+  - average input tokens
+  - quality impact on a small eval slice
+- If short on time: only implement “trim chunk to relevant section” using headings + line windows.
+- Done when: you can reduce input tokens meaningfully without losing groundedness.
+
+**Interview answer**:
+- “What is context compression and why is it risky?”
+
+## Day 55 (optional) — GraphRAG (knowledge graph + vector hybrid)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 8 (focus 8.12)
+- `docs/learning-fundamentals.md` Section 22 (data modeling mindset)
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 12 (agents/tools mindset)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Answer multi-hop dependency questions with explicit evidence.
+
+**Build step**:
+- **Roadmap focus**: relationship-aware retrieval.
+- Build a minimal dependency graph for services/APIs:
+  - simplest: a Postgres table `service_dependencies(tenant_id, service, depends_on)`
+  - optional: use a graph DB if you want, but keep it tenant-scoped
+- Add a graph retrieval step before vector search:
+  - extract entities from the question
+  - fetch neighbors/path for those entities
+  - use the result to filter vector retrieval (only docs for those services)
+- Add one multi-hop gold question and prove:
+  - the graph step executed (decision trace)
+  - the final answer cites real text sources, not just “the graph says so”
+- If short on time: use the graph only as a filter for retrieval and stop there.
+- Done when: a dependency-style question produces a grounded answer with a debuggable retrieval trace.
+
+**Interview answer**:
+- “Why do some teams combine knowledge graphs with vector search?”
+
+---
+
+# Week 12 — Agent hardening + structured generation (production patterns)
+
+**Week focus (keep it simple)**:
+- Make agent behavior predictable (state machine, budgets, termination).
+- Add critique loops and multi-agent patterns only where they measurably help.
+- Reduce “format failures” with constrained decoding where possible.
+
+## Day 56 (optional) — Orchestration as a state machine (plus reflection)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 12 (focus 12.13–12.17)
+- `docs/learning-fundamentals.md` Section 23 (focus 23.8)
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 25
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Turn “agent” into “workflow you can debug and test”.
+
+**Build step**:
+- **Roadmap focus**: controllable orchestration.
+- Implement one workflow as an explicit graph/state machine:
+  - nodes: plan → retrieve → tool calls → synthesize → finalize
+  - edges are explicit (no hidden recursion)
+- Add strict termination:
+  - max steps, max tool calls, global deadline, token budget (Section 3.13)
+- Add a reflection pass (single critic loop):
+  - verify citations exist and are relevant
+  - verify budgets/bounds were respected
+  - if violated: revise once, otherwise finalize
+- If short on time: implement only max-steps + a single “critic check” that fails closed when citations are missing.
+- Done when: you can show a decision trace that explains every tool call and why the run stopped.
+
+**Interview answer**:
+- “Why do graphs beat freeform agent loops in production?”
+
+## Day 57 (optional) — Multi-agent debate (bounded, evidence-first)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 12 (focus 12.15–12.16)
+- `docs/learning-fundamentals.md` Section 9 (eval mindset)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Reduce “single-agent blind spots” without exploding cost.
+
+**Build step**:
+- **Roadmap focus**: alternate hypotheses for diagnosis.
+- Implement a debate pattern:
+  - agent A proposes diagnosis + evidence (citations/tool facts)
+  - agent B proposes independently
+  - judge selects the best based on evidence (not confidence)
+- Hard bounds:
+  - one round only
+  - shared tool budget (no doubling tool calls blindly)
+  - strict termination
+- Measure impact on a small fixed set (10–20 questions):
+  - does debate reduce “wrong but confident” outputs?
+  - does it improve citation relevance?
+- If short on time: implement two independent drafts + a deterministic judge rule (e.g., “must include citations + tool facts”).
+- Done when: you can show debate helps at least one measurable metric, or you can explain why it didn’t.
+
+**Interview answer**:
+- “What makes multi-agent workflows useful, and what makes them risky?”
+
+## Day 58 (optional) — Tool governance hardening (MCP security minimum + replay)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 12 (focus 12.9A–12.11)
+- `docs/learning-fundamentals.md` Section 24 (threat model)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Treat tool boundaries like production APIs (fail closed, auditable, replayable).
+
+**Build step**:
+- **Roadmap focus**: governance + debuggability.
+- Prove MCP security minimum (Section 12.9A) with tests:
+  - strict schema validation (reject unknown fields)
+  - bounded windows/rows/payload
+  - timeouts and safe retries
+  - per-tenant allowlists
+  - redaction in logs/traces/audit
+- Implement replay mode for one workflow:
+  - recorded tool outputs are reused
+  - synthesis step reruns deterministically (`temperature=0`)
+- If short on time: add strict schema validation + bounded windows and record one replayable run.
+- Done when: you can replay a failed run without calling live tools.
+
+**Interview answer**:
+- “What are the top risks of tool-using agents and how do you mitigate them?”
+
+## Day 59 (optional) — Constrained decoding (inference-level structured output)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 3 (focus 3.6–3.6A)
+- `docs/learning-fundamentals.md` Section 21 (contracts)
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 25 (testing gates)
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Reduce retries and tool-call bugs by enforcing schema at decode time (when possible).
+
+**Build step**:
+- **Roadmap focus**: contract reliability.
+- Apply constrained decoding to one high-value output:
+  - tool arguments, or your `/ask` response schema
+- Keep validation anyway (defense in depth).
+- Measure impact on a fixed set:
+  - JSON parse failure rate (before vs after)
+  - retry rate and average cost/query impact
+- If constrained decoding isn’t available in your stack:
+  - simulate the intent with strict validation + retry + “fail closed” behavior
+  - document what you would change in production (engine/library choice).
+- If short on time: measure JSON failure rate and implement only strict validation + one retry.
+- Done when: you can defend why structured generation is an inference concern, not just a prompt concern.
+
+**Interview answer**:
+- “What’s the difference between ‘ask for JSON’ and ‘enforce JSON’?”
+
+## Day 60 (optional) — Extension acceptance + proof pack (world-class close)
+**Theory (10–15 min)**:
+- `docs/learning-fundamentals.md` Section 16
+- `docs/learning-fundamentals.md` Section 26
+
+**Optional (if time)**:
+- `docs/learning-fundamentals.md` Section 40
+
+**Core interview questions (5–10 min)**:
+- Answer the **Core (must)** questions at the end of each section above.
+- If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+
+**Goal**: Finish with evidence you can defend in an interview.
+
+**Build step**:
+- **Roadmap focus**: final proof pack (extension).
+- Save 6 artifacts (minimum):
+  - ingestion proof: one messy PDF/table question answered with debuggable citations
+  - retrieval proof: baseline vs rerank/hybrid metrics (table)
+  - agent proof: one replayable decision trace for a multi-step workflow
+  - safety proof: tenant leak + injection drills passing (CI screenshot/link)
+  - reliability proof: JSON failure rate before vs after (table)
+  - cost/latency proof: p50/p95 + cost/query numbers with configs recorded
+- Prepare your final story:
+  - 60-second pitch (what you built)
+  - 5-minute demo script (what you show)
+  - 3 trade-offs you chose and why (with numbers)
+- If short on time: pick 3 artifacts and make them crisp (screenshots/tables).
+- Done when: you can demo the system live and defend the design decisions with measurements.
+
+**Interview answer**:
+- “What did you build, what trade-offs did you choose, and how did you measure success?”
 
 ---

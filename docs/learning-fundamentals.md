@@ -471,6 +471,37 @@ Why staff engineers care:
 - it reduces ambiguity and makes testing easier,
 - it enables automation (n8n workflows, tickets, alerts).
 
+### 3.6A Constrained decoding (schema enforced at inference)
+
+Prompting for JSON + validating is the minimum. It is not a guarantee.
+
+Constrained decoding means you *constrain the model's next-token choices* so the output must follow:
+- valid JSON syntax, and/or
+- a specific schema (keys, types, enums), and/or
+- a grammar (a formal output language).
+
+Common 2025/2026-era ways teams do this (examples):
+- inference engines with **guided decoding** (schema/grammar-guided generation),
+- libraries like **Outlines** or **Guidance** to constrain generation,
+- provider features that enforce JSON schema / function arguments at decode time.
+
+What this buys you (and what it does not):
+- It greatly reduces "broken JSON" retries and tool-arg parsing bugs.
+- It does **not** make the content true. You still need retrieval/tools/evals.
+
+When to use it:
+- tool arguments (high leverage; failures are costly),
+- top-level API contracts where downstream systems depend on strict types,
+- safety-critical fields (e.g., `approved=false` is not optional).
+
+Operational reality (trade-offs):
+- it can increase latency (more decode-time constraints),
+- schemas must be versioned like code (changes can break clients),
+- you still need fallback behavior when the constraint system fails or is unavailable.
+
+Staff habit:
+- treat "schema correctness" and "factual correctness" as separate quality gates.
+
 ### 3.7 Prompt roles (system vs user vs tool/data)
 
 A practical mental model:
@@ -598,6 +629,34 @@ So your *true* cost is ~10% higher than your “per request” math.
 **Example C — why “tool output shaping” matters**
 - If you paste 200 raw log lines into the prompt at ~20 tokens/line → ~4000 extra input tokens.
 - That one decision can add more cost/latency than switching models.
+
+### 3.13 Token budgets (a token strategy you can implement)
+
+If you cannot explain your token budget, you cannot explain your cost and p95.
+
+**Mental model:** you have a fixed input budget. Every component competes for it.
+
+Simple budgeting rules (OpsPilot-shaped):
+- reserve output tokens first (`max_tokens`) so the model can finish,
+- reserve a safety margin (providers tokenize differently; tools add overhead),
+- then allocate the remaining input budget across:
+  - system rules + schema (do not trim this),
+  - conversation history (trim aggressively),
+  - retrieval context (tune `k` and chunk sizes),
+  - tool outputs (summaries by default; raw only via explicit debug flag).
+
+Practical implementation pattern:
+1) estimate tokens for each candidate input block (use a tokenizer if you have one; otherwise use a rough heuristic and add margin),
+2) build the prompt from highest priority blocks to lowest,
+3) if over budget: drop lowest-priority blocks first (extra chunks, verbose tool output),
+4) log the final budget decision (`k_used`, tokens per block, what was dropped).
+
+Rule-of-thumb math you should be able to do:
+- if avg retrieved chunk is ~350 tokens and you have ~2800 tokens for retrieval, `k_max ≈ 2800/350 ≈ 8`.
+
+Staff-level outcomes:
+- you can explain why `k=8` is a safe default for your p95 and cost goals,
+- you have a predictable degradation ladder (Section 23.8) when budgets are exceeded.
 ### Must know (fast path)
 
 - An LLM predicts the next tokens; it does not “know truth” unless you give it truth.
@@ -843,11 +902,72 @@ If you want citations to be useful, you need stable IDs:
 - version
 
 This becomes critical when runbooks change over time.
+
+### 6.4 Real-world ingestion (PDFs, wikis, and slide decks)
+
+The "chunking problem" is often an "ingestion problem" disguised.
+
+In the real world, your sources are not clean Markdown:
+- PDFs with columns, headers/footers, and page numbers
+- Confluence/Notion pages with nested tables
+- slide decks (PPT) with sparse text and diagrams
+- scanned docs (images) that require OCR
+
+If ingestion flattens these sources badly (wrong reading order, merged columns, lost headings),
+chunking cannot recover the meaning later.
+
+### 6.5 Layout-aware parsing (preserve hierarchy)
+
+Layout-aware parsing means you extract content as **structured blocks** instead of one big string:
+- heading blocks (with levels),
+- paragraphs and lists,
+- code blocks,
+- tables (as structured data),
+- figures (as captions + references).
+
+Common tools teams use for this (examples, pick one):
+- Unstructured, Docling, LlamaParse,
+- PDF-focused libs (pdfplumber / PyMuPDF) plus your own block rules.
+
+Staff mental model:
+- a document becomes a tree: `doc_title → H1 → H2 → paragraph/table/code`
+- chunk IDs include the **heading path** (so citations are meaningful).
+
+### 6.6 OCR (scanned PDFs are common)
+
+If the PDF is scanned, "text extraction" returns nothing useful.
+You need OCR, and you must treat OCR output as noisy:
+- store OCR confidence (even a coarse signal),
+- keep page numbers and (if you have them) bounding boxes,
+- expect spelling errors that affect retrieval (keyword search can help here).
+
+### 6.7 Tables in RAG (do not embed raw cells blindly)
+
+Tables often contain the highest-signal information (limits, thresholds, mappings).
+But embedding raw CSV-like dumps can be noisy.
+
+Practical pattern:
+- store the table as structured data (CSV/JSON) with a stable table ID,
+- generate a short **table summary** (what the table means, what columns represent),
+- embed the summary for retrieval,
+- when retrieved: include the structured table (or a relevant slice) in the final context with citations.
+
+### 6.8 Chunk metadata (minimum viable, production-shaped)
+
+For each chunk/block, store enough metadata to debug and to enforce safety:
+- `doc_id`, `doc_version`
+- `source_type` (markdown/pdf/wiki/slides)
+- `section_path` (heading chain)
+- `page_start/page_end` (for PDFs) or `url/anchor` (for wikis)
+- `block_type` (paragraph/list/code/table_summary)
+- `tenant_id` (when multi-tenant)
+
 ### Must know (fast path)
 
 - Chunking controls what retrieval can “see”. Bad chunking = bad answers.
 - Chunk size is a trade-off: too small loses context; too big adds noise.
 - Stable chunk IDs make citations and debugging possible.
+- In production, chunking starts with **layout-aware parsing** (hierarchy + tables + anchors), not just splitting strings.
 
 ### Interview questions (staff-level)
 
@@ -864,6 +984,8 @@ Deep (optional):
    - Key points: repeated retrieval results, low diversity, poor answer faithfulness.
 5) What is one strategy to reduce noise in context without changing the model?
    - Key points: smaller k, thresholds, reranking, chunk trimming, dedup.
+6) Why is chunking harder for PDFs/wikis than Markdown, and what metadata do you keep?
+   - Key points: layout/reading order; heading paths; anchors/page ranges; tables as structured artifacts.
 
 
 
@@ -1022,6 +1144,45 @@ Simple mental model:
 - retrieval = “candidate generation”
 - reranking = “final selection”
 
+### 8.6A Bi-encoder vs cross-encoder (why two stages exist)
+
+Modern retrieval stacks often use two different model shapes:
+
+- **Bi-encoder** (embedding model): encodes query and chunk separately into vectors.
+  - fast enough to search over your whole corpus (candidate generation)
+  - works with vector DBs / pgvector
+- **Cross-encoder** (reranker): scores *query + chunk text together* in one forward pass.
+  - slower, but much higher precision
+  - best used only on a small candidate set (rerank top‑N → top‑K)
+
+Why this matters:
+- embeddings optimize for "vector similarity", not "answerability for this exact question"
+- rerankers optimize the final ordering so you stuff fewer, better chunks into the prompt
+
+### 8.6B Practical reranking pipeline (how it is implemented)
+
+Typical production-shaped pipeline:
+1) retrieve top‑N with a bi-encoder (example: N=50)
+2) rerank those N with a cross-encoder
+3) keep top‑K for generation (example: K=5–10)
+4) if reranker fails/timeouts: fall back to the original vector order (fail open, but log it)
+
+Operational details staff engineers add early:
+- keep reranker input small: include `title + section_path + chunk_text` but cap length
+- add timeouts; reranking is optional when budgets are tight (degradation ladder)
+- cache rerank results for repeated queries (but include `tenant_id`, `model`, and `doc_version` in the cache key)
+
+### 8.6C What “good reranking” looks like (how you measure it)
+
+Do not add a reranker because it sounds fancy. Add it because it moves metrics:
+- retrieval metrics: Recall@K, MRR (Section 9.6)
+- end-to-end metrics: faithfulness + fewer "wrong citations"
+- cost/latency: fewer tokens in context for the same quality
+
+Staff habit:
+- run an A/B benchmark on a fixed question set before and after reranking,
+- keep reranking behind a feature flag so you can disable it quickly if p95 worsens.
+
 ### 8.7 Prompt injection (RAG-specific risk)
 
 In RAG, you feed retrieved text into the model.
@@ -1080,6 +1241,37 @@ This is not weakness. It is correctness.
 Staff-level pattern:
 - use similarity thresholds and refusal rules,
 - ask a clarifying question when it would unlock the right retrieval.
+
+### 8.12 Graph + vector retrieval (GraphRAG / knowledge graph hybrid)
+
+Some real questions are not "find one chunk and answer". They are multi-hop:
+- “Which services depend on the API that failed yesterday?”
+- “What changed recently that could explain these 3 correlated errors?”
+
+Vector RAG is great at "find relevant text". Graphs are great at "follow relationships".
+
+GraphRAG (in practice) usually means a **hybrid**:
+- a graph store for entities/relationships (service → dependency → service),
+- vector search for grounding text (runbooks, incidents, design docs),
+- an orchestrated retrieval plan that does both and produces citations.
+
+Minimal mental model (OpsPilot-shaped):
+1) extract entities from the question (services, APIs, env, time window)
+2) fetch a small subgraph (neighbors / dependency path) from a graph DB (or a relational table)
+3) use that subgraph to **filter and focus** vector retrieval (only docs for those services)
+4) optionally rerank (Section 8.6A–8.6C)
+5) answer with citations from text sources (graphs help navigation; text is the evidence)
+
+Why staff engineers like this:
+- improves recall on relationship queries,
+- makes retrieval more controllable (explicit paths),
+- creates better debug traces ("we traversed edges A→B→C, then retrieved these chunks").
+
+Reality check:
+- graphs add complexity (entity resolution, schema drift, backfills),
+- you must evaluate them like any other retrieval feature (Section 9).
+- for multi-tenant: graphs must be tenant-scoped just like runbooks and tools.
+
 ### Must know (fast path)
 
 - RAG = retrieve relevant chunks first, then answer using them with citations.
@@ -1549,6 +1741,71 @@ How to use it (staff habit):
 
 Interview angle:
 - “We codified our agent workflow in `AGENTS.md` so contributions stay safe (no secret logging, no cross-tenant leaks, eval gates before merge).”
+
+### 12.13 Complex orchestration (what “multi-agent” actually means)
+
+Tool calling is "one decision". Orchestration is "many decisions with control".
+
+Staff mental model:
+- an agent loop is a **state machine** with explicit transitions,
+- every transition has budgets (time/tokens/tool calls) and logs,
+- unsafe work is behind gates (approvals, allowlists, bounds).
+
+Single-agent is usually enough when:
+- the task is linear (retrieve → tool → answer),
+- failures are obvious and you have good evals.
+
+Multi-agent becomes useful when:
+- you want independent critique (reduce one-model failure),
+- you have multiple objectives (correctness, safety, cost) that conflict,
+- tasks require different retrieval/tool skills (specialization).
+
+### 12.14 Reflection / critique loops (high leverage pattern)
+
+Reflection means you deliberately add a "critic" pass before finalizing.
+
+Example pattern (OpsPilot-shaped):
+1) draft answer (with citations + decision trace)
+2) critic checks constraints:
+   - are citations present and relevant?
+   - did we call tools when required (metrics/logs)?
+   - did we stay within budgets and bounds?
+   - are we leaking cross-tenant data?
+3) if failed: revise once with the critic's feedback, otherwise finalize
+
+Key rule:
+- reflection improves **constraint compliance** more than factuality (factuality still depends on retrieval/tools).
+
+### 12.15 Multi-agent debate (when you need alternative hypotheses)
+
+Debate means multiple agents independently propose a plan/diagnosis, then a judge selects.
+
+Good fit:
+- incident diagnosis where multiple root causes are plausible,
+- routing decisions where you want a conservative option under uncertainty.
+
+Guardrails you must keep:
+- strict termination (max rounds),
+- keep all tool calls bounded and logged,
+- judge must prefer evidence-backed outputs (citations/tool facts), not "confidence".
+
+### 12.16 Termination conditions (how you prevent agent thrash)
+
+Every orchestrated flow needs explicit stop rules:
+- max steps / max tool calls
+- per-step timeouts and global deadline
+- token budgets (Section 3.13)
+- fail-closed behavior (if required tools fail, do not guess)
+
+Without termination rules, agents "thrash": they loop, call tools repeatedly, and blow p95/cost.
+
+### 12.17 Frameworks (LangGraph, AutoGen, Swarm) are implementations, not the skill
+
+Frameworks help you implement orchestration patterns, but they do not remove the core requirements:
+- explicit state machine/graph,
+- budgets + termination,
+- auditability + replay,
+- eval gates for behavior changes.
 
 ### Must know (fast path)
 
@@ -2286,11 +2543,71 @@ Postgres can enforce tenant isolation at the database layer using RLS:
 - even if a developer forgets a `WHERE tenant_id = ...`, the DB still blocks leaks.
 
 This is a strong platform pattern for multi-tenant systems.
+
+### 22.5 “Indexing strategy” (query patterns → indexes)
+
+"Indexing strategy" is not "add random indexes".
+It is: **write down your top query patterns**, then add the smallest set of indexes that make them fast.
+
+Staff mental model:
+- indexes accelerate specific `WHERE` filters and `ORDER BY` sorts,
+- every index has costs: write overhead, storage, build time, and operational complexity.
+
+OpsPilot-shaped examples (facts tables):
+- query: "errors for tenant T, service S, in window W"
+  - `WHERE tenant_id=? AND service=? AND ts BETWEEN ? AND ?`
+  - index idea: `(tenant_id, service, ts)` (so the DB can filter quickly and scan a tight range)
+
+OpsPilot-shaped examples (RAG chunk tables):
+- query: "top‑k chunks for tenant T"
+  - `WHERE tenant_id=? ORDER BY embedding <=> :q LIMIT :k`
+- you still need classic indexes for metadata filters (`tenant_id`, `runbook_id`, `doc_version`)
+- and a vector index to avoid full scans as the corpus grows
+
+### 22.6 pgvector indexes (HNSW vs IVF) in plain words
+
+Two common pgvector index families:
+- **HNSW**: usually strong recall and fast search, often higher memory/build cost.
+- **IVF (IVFFlat)**: faster/smaller to build, tunable recall via probes, can miss neighbors if under-tuned.
+
+What you actually do in practice:
+- pick one index type,
+- pick one recall target (retrieval metrics),
+- tune until you meet your p95 budget.
+
+Concrete (illustrative) DDL shape (exact syntax depends on pgvector version):
+- HNSW:
+  - `CREATE INDEX ... ON runbook_chunks USING hnsw (embedding);`
+- IVFFlat:
+  - `CREATE INDEX ... ON runbook_chunks USING ivfflat (embedding) WITH (lists = ...);`
+
+Query-time tuning (conceptual knobs):
+- HNSW search depth (often `ef_search`): higher = better recall, slower.
+- IVF probes: higher = better recall, slower.
+
+Staff habit:
+- treat index knobs as configuration you version + log with benchmarks.
+
+### 22.7 EXPLAIN mental model (how you debug “retrieval is slow”)
+
+When someone says "retrieval is slow", answer two questions first:
+1) Are we scanning too many rows?
+2) Are we using the intended index/plan?
+
+Use `EXPLAIN (ANALYZE, BUFFERS)` and look for:
+- `Seq Scan` on big tables (usually a red flag),
+- whether `tenant_id` filters are applied early,
+- where time is spent (I/O vs CPU),
+- how many rows were visited vs returned.
+
+For a practical walkthrough, see Section 39 (it is worth doing once).
 ### Must know (fast path)
 
 - Good data modeling makes tools fast: indexes, partitions, and stable keys.
 - For RAG, you need chunk tables with embeddings + metadata.
 - You measure query plans (EXPLAIN) instead of guessing.
+- Index strategy is workload-driven: top queries first, then minimal indexes.
+- Vector index choice is a recall/latency trade-off you must measure.
 
 ### Interview questions (staff-level)
 
