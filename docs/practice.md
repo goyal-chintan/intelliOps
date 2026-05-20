@@ -87,7 +87,7 @@ Use this shape when adding new labs:
 **Inputs:**
 - The same document as Lab 1.
 - A small gold set: 5 question-answer pairs you wrote by hand from the document.
-- A retrieval evaluation script (see `docs/learning-fundamentals.md` → Retrieval Eval).
+- A retrieval evaluation script (see `docs/learning-fundamentals.md` → Section 9.6 Retrieval metrics).
 
 **Steps:**
 
