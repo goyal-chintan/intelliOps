@@ -12,6 +12,33 @@ This file is curated, not exhaustive. Use it when the daily guide or fundamental
 
 ---
 
+## Concept Signposts
+
+Use these entries when a fundamentals section names a concept that is covered across several resource groups below.
+
+**Compound AI systems signpost**
+- **Use for:** Seeing a production AI product as retrieval, prompts, models, tools, orchestration, evals, observability, and guardrails—not just "an LLM call." Start with [Compound AI systems](learning-fundamentals.md#compound-ai-systems-why-the-llm-is-only-one-component), then read the agent and system-design resources below.
+- **Why it matters:** Most reliability work lives outside the model. This signpost helps you decide whether a problem needs a prompt, a workflow, an agent, or a broader system boundary.
+- **What to skip:** Framework tutorials until you can draw the system inputs, outputs, state, failure modes, and eval loop.
+- **Freshness note:** Durable architecture lens. Framework names and APIs change; the component boundary thinking stays useful.
+- **Related resources:** [First-Principles AI Engineering](#first-principles-ai-engineering), [Agentic Systems](#agentic-systems), [Observability and Security](#observability-and-security).
+
+**AI data lifecycle signpost**
+- **Use for:** Connecting source documents, parsing, chunking, metadata, embeddings, retrieval, answer generation, eval feedback, and refresh jobs into one lifecycle. Start with [AI data lifecycle](learning-fundamentals.md#ai-data-lifecycle-source--chunk--embedding--answer--eval-feedback), then use the ingestion and RAG resources below.
+- **Why it matters:** RAG quality is usually a data lifecycle problem before it is a model problem. Bad source hygiene, chunking, metadata, or refresh logic creates failures that better prompts cannot fix.
+- **What to skip:** Vendor pipeline features until you understand the minimum lifecycle stages and the quality checks between them.
+- **Freshness note:** Stable lifecycle model. Specific parsers, vector stores, and managed pipelines evolve quickly.
+- **Related resources:** [AI Data Pipelines and Unstructured Ingestion](#ai-data-pipelines-and-unstructured-ingestion), [RAG and Evals](#rag-and-evals), [Observability and Security](#observability-and-security).
+
+**Long context vs RAG signpost**
+- **Use for:** Deciding when to put more text directly in the prompt and when to retrieve smaller evidence sets. Start with [Long context vs RAG](learning-fundamentals.md#long-context-vs-rag-why-bigger-windows-do-not-remove-retrieval), then read the retrieval and serving resources below.
+- **Why it matters:** Bigger context windows reduce some retrieval pressure, but they do not remove cost, latency, attention dilution, citation, freshness, or access-control problems.
+- **What to skip:** Marketing claims that long context replaces retrieval. Focus on measurable answer quality, token cost, latency, and data-governance constraints.
+- **Freshness note:** Trade-off is stable. Context sizes, prices, and model behavior change fast, so re-check numbers for your target model.
+- **Related resources:** [RAG and Evals](#rag-and-evals), [Model Serving and Inference](#model-serving-and-inference), [AI Data Pipelines and Unstructured Ingestion](#ai-data-pipelines-and-unstructured-ingestion).
+
+---
+
 ## First-Principles AI Engineering
 
 The foundation. Read these before any framework or tooling.
