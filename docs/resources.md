@@ -338,7 +338,7 @@ The foundation. Read these before any framework or tooling.
 - **Freshness note:** Stable principles; tooling references may age.
 - **URL:** https://ai.google/responsibility/responsible-ai-practices/
 
-**EU AI Act Summary for Engineers (Ada Lovelace Institute or similar)**
+**EU AI Act: Annotated Text and Summary (artificialintelligenceact.eu)**
 - **Use for:** Understanding how regulatory risk classification affects AI system design.
 - **Why it matters:** Staff-level AI engineers need to understand which AI systems carry regulatory risk and what documentation (model cards, impact assessments) is required.
 - **What to skip:** The legal interpretation sections. Focus on the risk classification tiers.

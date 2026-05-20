@@ -197,7 +197,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 4: AI Data Pipelines
 
-**References:** `docs/learning-fundamentals.md` → Data Ingestion, Embeddings, Section 6 Chunk Metadata, Section 8 RAG Pipeline  
+**References:** `docs/learning-fundamentals.md` → Section 6.4 Real-world Ingestion, Section 5 Embeddings, Section 6 Chunk Metadata, Section 8 RAG Pipeline, Section 19 Data Pipeline Fundamentals  
 **Related artifacts:** Lab 2 (Chunking), Lab 6 (Tracing) in `docs/practice.md`
 
 ### Core questions
