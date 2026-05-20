@@ -33,6 +33,8 @@ Tip for Obsidian:
 
 Good AI engineering is not memorizing tools. It is understanding boundaries, failure modes, measurements, and trade-offs.
 
+New sections and rewrite passes follow this pattern. Existing sections may cover the same ground with their current structure until they are rewritten.
+
 For every important concept, use this reading pattern:
 
 1. **Why it exists** — the production problem.
@@ -183,7 +185,7 @@ flowchart LR
 
 ## Decision diagrams
 
-Use these when you need to choose an architecture approach. Both diagrams end at "Measure" because every choice must be validated with data.
+Use these when you need to choose an architecture approach. Each path ultimately leads to a measurement or control step — every choice must be validated with data and governed in production.
 
 ### RAG vs long context vs fine-tuning
 
