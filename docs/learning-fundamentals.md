@@ -1417,7 +1417,7 @@ Deep (optional):
 5) How do you design RAG so it is safe for multi-tenant use?
    - Key points: tenant filter at retrieval and tool layer; cache keys include tenant; tests.
 
-### AI data lifecycle (source → chunk → embedding → answer)
+### AI data lifecycle (source → chunk → embedding → answer → eval feedback)
 
 #### Why this exists
 
