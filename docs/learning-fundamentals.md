@@ -223,11 +223,11 @@ Choose the track that matches your role focus. Core sections overlap intentional
 | Track | Core sections | Practice |
 |---|---|---|
 | AI application engineering | Sections 3, 5–9, 12, 21, 25 | `docs/practice.md` RAG, structured output, eval labs |
-| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle notes (next coverage pass) | `docs/practice.md` chunking/retrieval quality lab |
+| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle (§ "AI data lifecycle: source → chunk → embedding → answer") | `docs/practice.md` chunking/retrieval quality lab |
 | AI platform engineering | Sections 10–14, 20–24, 26, 28, 30, 35, 40 | `docs/practice.md` MCP, traces, security, budget labs |
 | AI infrastructure depth | Sections 13, 14, 35, 36, 38, 40, 41 | `docs/practice.md` serving benchmark and cost labs |
 
-> **Note — AI data engineering:** detailed AI data lifecycle notes (ingestion contracts, feature lineage, schema evolution) and the corresponding ingestion/lineage labs are planned for the next coverage and practice pass. The section references above cover the existing fundamentals.
+> **Note — AI data engineering:** the lifecycle coverage (source → chunk → embedding → eval result) is in the section "AI data lifecycle" in Section 8. Detailed ingestion contracts, feature lineage, and schema-evolution labs are not yet in `docs/practice.md`; those lab exercises remain a future addition.
 
 ## Coverage scorecard (sections → mastery → artifact)
 
@@ -240,7 +240,7 @@ Priority legend:
 
 | Section | Layer / priority | Mastery check (you can…) | Proof artifact (repo/Obsidian) |
 |---|---|---|---|
-| 1 | L0 (P0) | Pitch OpsPilot + offline/online split | 60-sec pitch + architecture sketch |
+| 1 | L0 (P0) | Pitch OpsPilot + offline/online split; draw `/ask` path with deterministic and model-driven segments (Compound AI systems) | 60-sec pitch + architecture sketch |
 | 2 | L0 (P0) | Define logs/metrics/traces + runbooks/RCAs | 1-page ops glossary note |
 | 3 | L0/L1 (P0) | Estimate tokens→latency→$; defend decoding defaults | Filled 35.0C worksheet + logged gen config |
 | 4 | L2 (P1) | Explain prefill vs decode + KV cache intuition | Trace note: prefill vs decode time |
@@ -1894,25 +1894,35 @@ If you implement one MCP server in this repo, include a small test suite that pr
 
 ### MCP trust boundary (why tool servers are security boundaries)
 
+Section 12.9A is the enforcement checklist; this section explains why those controls exist.
+
 #### Why this exists
 
-MCP makes tools easier to connect, but every tool server expands what an agent can read or do. A remote or untrusted MCP server can become a data exfiltration or command-execution risk.
+MCP makes it easy to add tool servers, but every server you connect expands the attack surface of your agent. A remote or third-party MCP server is a **supply-chain risk**: you are trusting external code to produce well-formed, honest tool responses that the model will read and act on. A compromised or malicious server can exfiltrate data, trigger unintended writes, or mislead the model into unsafe decisions.
 
 #### First-principles model
 
-A tool boundary is a permission boundary. The model proposes tool calls, but the platform must decide whether the call is allowed, bounded, logged, and safe.
+A tool boundary is a **permission boundary and a trust boundary at the same time**.
+
+Three specific risks that are easy to overlook:
+
+1. **Prompt injection via tool responses.** The model reads tool output as context. A malicious tool can embed instructions inside its response ("ignore previous instructions and...") and the model may follow them. Tool output must be treated as untrusted data, not trusted instructions.
+
+2. **Server impersonation and credential abuse.** An agent may hold credentials scoped broadly so it can call multiple services. A compromised or misconfigured MCP server can use those credentials beyond its intended scope. Credentials must be tenant-scoped and least-privilege — one server should not be able to access another tenant's data.
+
+3. **Overly broad tool permissions.** A server registered as "read logs" might also accept write parameters. If the schema is not strictly enforced, the model can accidentally (or via injection) call write paths. Strict schema validation and read-only defaults prevent this.
 
 #### Design decision
 
-Default to read-only tools, strict schemas, tenant-scoped credentials, bounded rows/windows, timeouts, redaction, and audit logs. Write-capable tools require explicit approval.
+The platform, not the model, decides what a tool call is allowed to do. The model proposes; the platform authorizes, validates, bounds, executes, and audits.
 
 #### Trade-off
 
-Strict tool governance slows experimentation, but it prevents invisible unsafe actions.
+Strict tool governance slows experimentation, but it prevents invisible unsafe actions that are difficult to detect or roll back after the fact.
 
 #### Practice
 
-Pick one tool and write its schema, timeout, max rows, tenant rule, and audit fields.
+Pick one MCP server you plan to integrate. List the three risks above (prompt injection, impersonation, overly broad permissions) and write one mitigation for each. Then implement the 12.9A checklist for that server.
 
 ### 12.10 Approvals (human-in-the-loop) for write tools
 
