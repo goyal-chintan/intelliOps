@@ -214,34 +214,35 @@ Use this shape when adding new labs:
 
 **Inputs:**
 - The RAG pipeline from Lab 1.
-- A gold set of 20 question-answer pairs, hand-authored from the source document.
+- A 30-case gold set of question-answer pairs, hand-authored from the source document.
 - An eval approach (one of: exact-match, LLM-as-judge with a rubric, or BERTScore).
 
 **Steps:**
 
-1. Run the RAG pipeline against all 20 gold questions.
+1. Run the RAG pipeline against all 30 gold cases.
 2. For each answer, score it using your chosen eval method. If using LLM-as-judge, define a rubric with at least three dimensions (correctness, groundedness, completeness) and a 1–5 scale per dimension.
 3. Calculate mean score per dimension and an overall pass rate (e.g., score ≥ 3 on all dimensions counts as pass).
 4. Identify the 5 lowest-scoring answers. Explain what went wrong in each.
 5. Make one change to the pipeline (e.g., increase top-k from 3 to 5) and rerun. Compare before/after.
 
 **Expected output:**
-- A table: 20 rows × (question, retrieved chunks, answer, correctness score, groundedness score, completeness score, pass/fail).
+- A table: 30 rows × (question, retrieved chunks, answer, correctness score, groundedness score, completeness score, pass/fail).
 - Before/after comparison for the one pipeline change.
 - A root-cause note for each of the 5 failures.
 
 **Pass criteria:**
-- All 20 gold questions are scored with the chosen eval method and rubric.
+- All 30 gold cases are scored with the chosen eval method and rubric.
 - Summary metrics include dimension means and overall pass rate.
 - Before/after results and five failure root causes are included.
 
 **Fail criteria:**
-- Fewer than 20 questions are scored, no rubric or scoring method is stated, or before/after comparison is missing.
+- Fewer than 30 cases are scored, no rubric or scoring method is stated, or before/after comparison is missing.
 
 **Artifact schema:**
+- `gold_set_size`: `30`.
 - `eval_method`: exact-match, LLM-as-judge, or BERTScore configuration.
 - `rubric`: scoring dimensions and pass threshold.
-- `rows`: list of `{question, retrieved_chunks, answer, scores, pass}`.
+- `rows`: 30-item list of `{question, retrieved_chunks, answer, scores, pass}`.
 - `summary_metrics`: dimension means and overall pass rate.
 - `pipeline_change`: change tested between runs.
 - `failure_root_causes`: list of `{question, cause, proposed_fix}`.
@@ -254,7 +255,7 @@ Use this shape when adding new labs:
 **Failure modes:**
 - Gold set answers are too vague, so the judge scores them as pass regardless of quality.
 - LLM-as-judge is inconsistent: same question scores differently on two runs (add temperature=0 and deterministic seed).
-- All 20 answers pass trivially (gold set is too easy; add adversarial questions).
+- All 30 answers pass trivially (gold set is too easy; add adversarial questions).
 
 **Staff-level explanation:** "Evals are the quality gate for an AI system, equivalent to unit tests for code. I run evals before and after every prompt or pipeline change. The first decision is eval method: exact match is cheap but brittle, LLM-as-judge is flexible but needs calibration, BERTScore is automatic but doesn't capture reasoning errors. I use LLM-as-judge with a rubric I can explain to a product owner, and I track regression over time."
 
