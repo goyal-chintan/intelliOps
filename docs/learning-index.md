@@ -23,25 +23,25 @@ After following this system, you should be able to build and defend a production
 ## Start here
 
 1. Read this file to understand the system.
-2. Use `docs/learning-book.md` for today's learning/build task.
-3. Use `docs/learning-fundamentals.md` when a concept is unclear.
-4. Use `docs/practice.md` for labs and artifacts. _(planned support doc; added in the next implementation task)_
-5. Use `docs/interview-bank.md` to practice explanation. _(planned support doc; added in the next implementation task)_
-6. Use `docs/resources.md` only when the guide points you there. _(planned support doc; added in the next implementation task)_
+2. Use [Learning Book](learning-book.md) for today's learning/build task.
+3. Use [Learning Fundamentals](learning-fundamentals.md) when a concept is unclear.
+4. Use [Practice](practice.md) for labs and artifacts.
+5. Use [Interview Bank](interview-bank.md) to practice explanation.
+6. Use [Resources](resources.md) only when the guide points you there.
 
 ## Document map
 
 | If you need... | Open... |
 |---|---|
-| What to learn and in what order | `docs/learning-book.md` |
-| What to build and how it is judged | `docs/roadmap.md` |
-| First-principles theory | `docs/learning-fundamentals.md` |
-| Labs and proof artifacts | `docs/practice.md` _(planned support doc; added in the next implementation task)_ |
-| Curated external resources | `docs/resources.md` _(planned support doc; added in the next implementation task)_ |
-| Staff interview drills | `docs/interview-bank.md` _(planned support doc; added in the next implementation task)_ |
-| Architecture decisions | `docs/decisions/` |
-| Copy/paste help when stuck | `docs/hints/` |
-| Context for coding agents | `docs/llm-context.md` |
+| What to learn and in what order | [Learning Book](learning-book.md) |
+| What to build and how it is judged | [Roadmap](roadmap.md) |
+| First-principles theory | [Learning Fundamentals](learning-fundamentals.md) |
+| Labs and proof artifacts | [Practice](practice.md) |
+| Curated external resources | [Resources](resources.md) |
+| Staff interview drills | [Interview Bank](interview-bank.md) |
+| Architecture decisions | [ADRs](decisions/) |
+| Copy/paste help when stuck | [Hints](hints/) |
+| Context for coding agents | [LLM Context](llm-context.md) |
 
 ## Skill tree
 

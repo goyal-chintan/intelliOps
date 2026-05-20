@@ -2,7 +2,7 @@
 
 _Last updated: 2026-05-20 IST_
 
-> Human learners should start at `docs/learning-index.md`.
+> Human learners should start at [Learning Index](learning-index.md).
 > This file is the compact handoff for LLM/coding-agent sessions.
 
 This file is a **clean handoff** you can paste into any LLM so it understands what you want, without reading chat history.
@@ -53,12 +53,16 @@ This file is a **clean handoff** you can paste into any LLM so it understands wh
 
 ## Documentation map for agents
 
-- `docs/learning-index.md` = human learning front door and doc map.
-- `docs/roadmap.md` = canonical **what to build + pass/fail gates**.
-- `docs/learning-book.md` = daily plan (**45m learn + 45m build**), with step‑by‑step instructions.
-- `docs/learning-fundamentals.md` = the **textbook** (definitions, mental models, math, interview questions).
-- `docs/decisions/` = canonical **architecture decisions (ADRs)** you can reference in interviews.
-- `docs/hints/` = optional copy/paste playbooks (only when stuck).
+- [Learning Index](learning-index.md) = human learning front door and doc map.
+- [LLM Context](llm-context.md) = coding-agent handoff only; do not treat it as the canonical learner guide.
+- [Roadmap](roadmap.md) = canonical **what to build + pass/fail gates**.
+- [Learning Book](learning-book.md) = daily plan (**45m learn + 45m build**), with step‑by‑step instructions.
+- [Learning Fundamentals](learning-fundamentals.md) = the **textbook** (definitions, mental models, math, interview questions).
+- [Practice](practice.md) = labs and proof artifacts.
+- [Resources](resources.md) = curated external references; use only when the learning guide points there.
+- [Interview Bank](interview-bank.md) = Staff-level explanation and interview drills.
+- [ADRs](decisions/) = canonical **architecture decisions** you can reference in interviews.
+- [Hints](hints/) = optional copy/paste playbooks (only when stuck).
 - `AGENTS.md` = how coding agents should work in this repo (so agents don’t guess).
 
 ## Positioning (how this should sound in interviews)
