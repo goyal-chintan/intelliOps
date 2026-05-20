@@ -356,7 +356,7 @@ If you complete everything here, you’ll be able to:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
-**Practice link**: `docs/practice.md` — Lab 1: RAG Baseline.
+**Practice link**: `docs/practice.md` — Local daily guide artifact (pgvector setup note); reference Lab 1: RAG Baseline later; do not complete the full lab today.
 
 
 **Goal**: Understand what pgvector gives you.
@@ -487,7 +487,7 @@ services:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
-**Practice link**: `docs/practice.md` — Lab 1: RAG Baseline.
+**Practice link**: `docs/practice.md` — Local daily guide artifact (embedding sanity note); reference Lab 1: RAG Baseline later; do not complete the full lab today.
 
 
 **Plain definition**:
@@ -517,7 +517,7 @@ services:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
-**Practice link**: `docs/practice.md` — Lab 2: Chunking and Retrieval Quality.
+**Practice link**: `docs/practice.md` — Local daily guide artifact (chunk sample); reference Lab 2: Chunking and Retrieval Quality later; do not complete the full lab today.
 
 
 **Plain definition**:
@@ -551,7 +551,7 @@ services:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
-**Practice link**: `docs/practice.md` — Lab 2: Chunking and Retrieval Quality.
+**Practice link**: `docs/practice.md` — Local daily guide artifact (top-k retrieval table); reference Lab 2: Chunking and Retrieval Quality later; do not complete the full lab today.
 
 
 **Plain definition**:
@@ -598,7 +598,7 @@ services:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
-**Practice link**: `docs/practice.md` — Lab 1: RAG Baseline.
+**Practice link**: `docs/practice.md` — Local daily guide artifact (first RAG answer with citations); reference Lab 1: RAG Baseline later; do not complete the full lab today.
 
 
 **Plain definition**:
@@ -631,7 +631,7 @@ services:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
-**Practice link**: `docs/practice.md` — Lab 3: Structured Output and Refusal.
+**Practice link**: `docs/practice.md` — Local daily guide artifact (schema-valid JSON response); reference Lab 3: Structured Output and Refusal later; do not complete the full lab today.
 
 
 **Goal**: A prompt is a format, not a trick.
@@ -697,7 +697,7 @@ services:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
 
-**Practice link**: `docs/practice.md` — Lab 7: Prompt Injection and Exfiltration Drill.
+**Practice link**: `docs/practice.md` — Local daily guide artifact (45-minute failure-mode drill); reference Lab 7: Prompt Injection and Exfiltration Drill later; do not complete the full lab today.
 
 
 **Common failures**:
