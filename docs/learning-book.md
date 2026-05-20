@@ -7,12 +7,19 @@ This file is your **day-by-day plan**.
 Theory (definitions + mental models + math + interview questions) is in:
 - `docs/learning-fundamentals.md`
 
-How to use this daily (don’t overthink it):
-1) Read today’s **Theory** sections (~30 min)
-2) Answer today’s **Core interview questions** (~15 min)
-3) Do today’s **Build step** (~45 min, time-boxed)
-4) Write 5 lines in Obsidian (2–5 min)
-5) Stop.
+How to use this daily:
+
+1. Read today’s **Theory** sections (~30 min).
+2. Answer today’s **Core interview questions** (~15 min).
+3. Do today’s **Build or Practice step** (~45 min).
+4. Save one artifact: eval report, trace, benchmark table, ADR, security drill, screenshot, or 5-line note.
+5. Write a 5-line reflection:
+   - what changed;
+   - why it matters;
+   - trade-off;
+   - failure mode;
+   - next question.
+6. Stop.
 
 Beginner rule (non-negotiable):
 - If something feels confusing, **don’t detour** into random videos/docs.
@@ -155,6 +162,30 @@ Post‑30 extension (optional, Days 31–60):
 - one 5-minute demo script (Day 20/30) and one 60-second pitch (Day 30)
 
 ---
+
+## Module map
+
+| Module | Days | Gate | Outcome |
+|---|---:|---|---|
+| Module 1: Platform skeleton and data contracts | 1-7 | G1 | Health check, Postgres/pgvector path, first LLM call, request logging. |
+| Module 2: RAG and governed tools | 8-14 | G2 | Citations, structured JSON, retrieval baseline, read-only tools, abuse drills. |
+| Module 3: Evals and operability | 15-21 | G3 | Gold set, eval gate, traces, MCP surface, approval modes. |
+| Module 4: Optimization proof and demo | 22-30 | G4 | Benchmark, cost/latency proof, rollback/degrade story, proof pack. |
+| Extension: Platform depth | 31-60 | Post-30 | Serving, multi-tenant hardening, unstructured ingestion, advanced retrieval, agent hardening. |
+
+## Standard day shape
+
+Each day should contain:
+
+- **Module / gate**
+- **Theory**
+- **Core interview questions**
+- **Practice link**
+- **Build step**
+- **Artifact to save**
+- **If short on time**
+- **Reflection**
+
 # Part 2 — 30-day sprint (build track)
 
 ## Day ranges (map to the roadmap)
@@ -177,12 +208,15 @@ If you complete everything here, you’ll be able to:
 - All theory reading is listed inside each day’s **Theory** block below (from `docs/learning-fundamentals.md`).
 
 ## Day 1 — Read the roadmap like a spec
+**Module / gate**: Module 1: Platform skeleton and data contracts / Gate G1
 **Theory (~30 min)**:
 - `docs/learning-fundamentals.md` Part 0, Section 1, Section 2
 
 **Core interview questions (~15 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Local daily guide artifact (roadmap acceptance checklist).
 
 
 **Goal**: Treat `docs/roadmap.md` like acceptance criteria, not a blog post.
@@ -197,16 +231,22 @@ If you complete everything here, you’ll be able to:
 - If short on time: run the CLI once + write the Layer 0 acceptance criteria in your own words.
 - Done when: you can restate Layer 0 as **Inputs → Components → Outputs → Metrics** without looking.
 
+**Artifact to save**: 5-line note with Layer 0 acceptance criteria and degradation ladder.
+
+
 **Interview answer**:
 - “How do you break down a vague AI project into measurable milestones?”
 
 ## Day 2 — Understand the Layer 0 data contracts
+**Module / gate**: Module 1: Platform skeleton and data contracts / Gate G1
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 19, Section 22
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Local daily guide artifact (Layer 0 data contract inventory).
 
 
 **Goal**: Know what is in `level_zero/` and how it connects.
@@ -222,10 +262,14 @@ If you complete everything here, you’ll be able to:
 - If short on time: only do incidents + hourly metrics and list the key fields.
 - Done when: you can explain how **logs → incidents → runbooks** connect in this repo.
 
+**Artifact to save**: field inventory showing the minimum query fields and data-contract risks.
+
+
 **Interview answer**:
 - “Why do good data contracts matter more than prompts?”
 
 ## Day 3 — Run the deterministic CLI baseline (your ‘unit test’)
+**Module / gate**: Module 1: Platform skeleton and data contracts / Gate G1
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 16, Section 9
 
@@ -235,6 +279,8 @@ If you complete everything here, you’ll be able to:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 1: RAG Baseline.
 
 
 **Goal**: See the “boring baseline” output before adding LLMs.
@@ -250,10 +296,14 @@ If you complete everything here, you’ll be able to:
 - If short on time: run 1 query and write the paragraph.
 - Done when: you can explain why you always build a baseline before LLMs.
 
+**Artifact to save**: baseline output table with matched incidents, runbooks, and symptom summaries.
+
+
 **Interview answer**:
 - “Why build a deterministic baseline before an LLM?”
 
 ## Day 4 — HTTP + APIs (minimum you need)
+**Module / gate**: Module 1: Platform skeleton and data contracts / Gate G1
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 21
 
@@ -263,6 +313,8 @@ If you complete everything here, you’ll be able to:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Local daily guide artifact (AI service health check).
 
 
 **Goal**: Understand the request path for Layer 0 and Layer 1.
@@ -284,10 +336,14 @@ If you complete everything here, you’ll be able to:
 - If short on time: only get `/health` working.
 - Done when: you can hit `/health` and see a stable JSON response.
 
+**Artifact to save**: `/health` response screenshot or curl output showing stable JSON.
+
+
 **Interview answer**:
 - “What responsibilities belong in the gateway vs the AI service?”
 
 ## Day 5 — Postgres + pgvector mental model (simple)
+**Module / gate**: Module 1: Platform skeleton and data contracts / Gate G1
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 7, Section 39
 
@@ -297,6 +353,8 @@ If you complete everything here, you’ll be able to:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 1: RAG Baseline.
 
 
 **Goal**: Understand what pgvector gives you.
@@ -332,6 +390,9 @@ services:
 - If short on time: only bring up Postgres + run `CREATE EXTENSION`.
 - Done when: your AI service can connect to Postgres and run a simple `SELECT 1`.
 
+**Artifact to save**: pgvector setup note with `CREATE EXTENSION` result and `SELECT 1` check.
+
+
 **Interview answer**:
 - “Why store embeddings in Postgres instead of a separate vector DB?”
 
@@ -345,12 +406,15 @@ services:
 - All theory reading is listed inside each day’s **Theory** block below (from `docs/learning-fundamentals.md`).
 
 ## Day 6 — What an LLM is (no magic)
+**Module / gate**: Module 1: Platform skeleton and data contracts / Gate G1
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 3
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Local daily guide artifact (first LLM call wrapper).
 
 
 **Plain definition**:
@@ -369,10 +433,14 @@ services:
 - If short on time: only implement the wrapper and print the response.
 - Done when: you can make a hosted LLM call from the service reliably.
 
+**Artifact to save**: first LLM response with model, timeout, token counts, and latency if available.
+
+
 **Interview answer**:
 - “What causes hallucinations, and how do you reduce them?”
 
 ## Day 7 — Tokens, cost, and latency (what you measure)
+**Module / gate**: Module 1: Platform skeleton and data contracts / Gate G1
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 3 (focus 3.10–3.13), Section 23, Section 30
 
@@ -382,6 +450,8 @@ services:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 8: Budget and Cost Control.
 
 
 **Plain definition**:
@@ -397,10 +467,14 @@ services:
 - If short on time: just log `total_ms` + tokens.
 - Done when: every LLM call produces one structured log line with tokens and latency.
 
+**Artifact to save**: structured cost/latency log line plus the cost formula you used.
+
+
 **Interview answer**:
 - “How do you measure and control LLM cost?”
 
 ## Day 8 — Embeddings (meaning as numbers)
+**Module / gate**: Module 2: RAG and governed tools / Gate G2
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 5
 
@@ -410,6 +484,8 @@ services:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 1: RAG Baseline.
 
 
 **Plain definition**:
@@ -424,16 +500,22 @@ services:
 - If short on time: only implement the embeddings call and print vector length.
 - Done when: you can embed text and you know your embedding dimension (D).
 
+**Artifact to save**: embedding sanity note with vector dimension and three query-to-runbook expectations.
+
+
 **Interview answer**:
 - “Why embeddings beat keyword search for runbooks?”
 
 ## Day 9 — Chunking (how you cut docs controls quality)
+**Module / gate**: Module 2: RAG and governed tools / Gate G2
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 6
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 2: Chunking and Retrieval Quality.
 
 
 **Plain definition**:
@@ -449,10 +531,14 @@ services:
 - If short on time: chunk one runbook by headings (section-based).
 - Done when: you can point to a stable chunk ID you would cite in answers.
 
+**Artifact to save**: chunk sample with stable chunk ID, section title, and overlap decision.
+
+
 **Interview answer**:
 - “What chunk size works best, and why is the answer ‘it depends’?”
 
 ## Day 10 — Retrieval (top‑k + filters)
+**Module / gate**: Module 2: RAG and governed tools / Gate G2
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 8
 
@@ -462,6 +548,8 @@ services:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 2: Chunking and Retrieval Quality.
 
 
 **Plain definition**:
@@ -480,6 +568,9 @@ services:
   - use `docs/learning-fundamentals.md` Section 35.0D to estimate how much `k: 8 → 16` would cost in extra input tokens
 - Done when: your 3 test queries return the expected runbook chunks in top‑k.
 
+**Artifact to save**: top-k retrieval table with chunk IDs, scores, filters, and cost sanity note.
+
+
 **Interview answer**:
 - “How do you debug a wrong answer: retrieval vs prompt vs model?”
 
@@ -493,6 +584,7 @@ services:
 - All theory reading is listed inside each day’s **Theory** block below (from `docs/learning-fundamentals.md`).
 
 ## Day 11 — RAG in one sentence
+**Module / gate**: Module 2: RAG and governed tools / Gate G2
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 8
 
@@ -502,6 +594,8 @@ services:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 1: RAG Baseline.
 
 
 **Plain definition**:
@@ -519,16 +613,22 @@ services:
 - If short on time: return citations even if the answer text is basic.
 - Done when: one request returns an answer with at least 1–2 correct citations.
 
+**Artifact to save**: first RAG answer with 1–2 correct citations and the retrieved chunk IDs.
+
+
 **Interview answer**:
 - “What does ‘grounded answer’ mean?”
 
 ## Day 12 — Prompt template (simple and strict)
+**Module / gate**: Module 2: RAG and governed tools / Gate G2
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 3 (focus 3.4 + 3.6 + 3.10–3.13), Section 21
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 3: Structured Output and Refusal.
 
 
 **Goal**: A prompt is a format, not a trick.
@@ -546,16 +646,22 @@ services:
 - If short on time: only enforce JSON + validate required fields.
 - Done when: `/ask` always returns valid JSON (or a safe error) and never free-text.
 
+**Artifact to save**: schema-valid JSON response example plus one safe parse-failure response.
+
+
 **Interview answer**:
 - “Why structured output helps reliability?”
 
 ## Day 13 — Citations (your debugging tool)
+**Module / gate**: Module 2: RAG and governed tools / Gate G2
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 6, Section 21
 
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 3: Structured Output and Refusal.
 
 
 **Goal**: Every answer should show “where it came from”.
@@ -570,10 +676,14 @@ services:
 - If short on time: implement stable IDs even if you don’t return full chunk text.
 - Done when: you can click a citation and find the exact chunk used.
 
+**Artifact to save**: citation mapping example from answer citation to stored chunk text.
+
+
 **Interview answer**:
 - “Why citations reduce hallucinations and improve trust?”
 
 ## Day 14 — Failure modes (fix retrieval before prompts)
+**Module / gate**: Module 2: RAG and governed tools / Gate G2
 **Theory (10–15 min)**:
 - `docs/learning-fundamentals.md` Section 8
 
@@ -583,6 +693,8 @@ services:
 **Core interview questions (5–10 min)**:
 - Answer the **Core (must)** questions at the end of each section above.
 - If you are short on time: read **Must know (fast path)** and answer only Core Q1–Q3.
+
+**Practice link**: `docs/practice.md` — Lab 7: Prompt Injection and Exfiltration Drill.
 
 
 **Common failures**:
@@ -625,6 +737,9 @@ services:
   - metadata/filters → chunking → retrieval params → prompt → model
 - If short on time: implement only `search_runbooks` + the abuse drill + one audit log line per request.
 - Done when: the system refuses safely instead of guessing when sources are missing.
+
+**Artifact to save**: abuse drill output showing safe refusal, bounded tool args, and tenant leak check result.
+
 
 **Interview answer**:
 - “Why prompt engineering is usually not the first fix?”
@@ -748,7 +863,7 @@ services:
   3) tighten tool/retrieval timeouts
 - If short on time: run 20 requests and compute p95 manually.
 - Optional (if time): do a “predicted vs measured” check:
-  - fill in `docs/learning-fundamentals.md` Section 35.0C for one request
+  - complete `docs/learning-fundamentals.md` Section 35.0C for one request
   - predict `prefill_s` and `decode_s` from your token counts and measured tokens/sec
   - write 3 lines: “prediction was off because ____” (retrieval/tool time, queueing, long context, etc.)
 - Done when: you saved baseline p50/p95 + a short note: “biggest latency contributor is X; next fix is Y”.
@@ -987,7 +1102,7 @@ Non-negotiable gates in this window:
 - Do the “worst-case cost” math (10 minutes, write it in Obsidian):
   - choose your caps: `max_input_tokens`, `max_tokens`, `max_tool_calls`
   - compute worst-case tokens and a worst-case $/request using `docs/learning-fundamentals.md` Section 3.10
-  - use that to set a daily budget that you can defend (even if the numbers are placeholders)
+  - use that to set a daily budget that you can defend (even if the numbers are rough estimates)
 - Add two kill switches (feature flags) you can flip instantly:
   - disable agent mode (force “RAG-only”)
   - disable all write tools (default deny)
