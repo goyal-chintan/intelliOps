@@ -197,7 +197,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 4: AI Data Pipelines
 
-**References:** `docs/learning-fundamentals.md` → Data Ingestion, Embeddings, Lineage  
+**References:** `docs/learning-fundamentals.md` → Data Ingestion, Embeddings, Section 6 Chunk Metadata, Section 8 RAG Pipeline  
 **Related artifacts:** Lab 2 (Chunking), Lab 6 (Tracing) in `docs/practice.md`
 
 ### Core questions
@@ -293,7 +293,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
    *Answer shape:* Agentic loop failures: (1) infinite loop—the model keeps calling tools without converging on an answer, (2) tool call storm—exponentially increasing tool calls due to a planning error, (3) context overflow—the conversation history grows beyond the context window after many tool calls, (4) stuck state—the model cannot make progress because a required tool is unavailable. Detection: max iterations limit, timeout per request, context window monitoring, tool call rate limit per session. Observability: trace every tool call with a span; alert when a session exceeds N tool calls.
 
-   *Strong signals:* Names all four failure modes. Has a detection mechanism for each. Links to Lab 5 tracing artifact.
+   *Strong signals:* Names all four failure modes. Has a detection mechanism for each. Links to Lab 6 trace artifact (span tree showing tool call spans).
 
    *Weak signals:* Knows about infinite loops but not the others.
 
