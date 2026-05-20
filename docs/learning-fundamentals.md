@@ -223,11 +223,11 @@ Choose the track that matches your role focus. Core sections overlap intentional
 | Track | Core sections | Practice |
 |---|---|---|
 | AI application engineering | Sections 3, 5–9, 12, 21, 25 | `docs/practice.md` RAG, structured output, eval labs |
-| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle notes (next coverage pass) | `docs/practice.md` ingestion, chunking, lineage labs |
-| AI platform engineering | Sections 10–14, 20–24, 26, 28, 30, 35, 40 | `docs/practice.md` gateway, MCP, traces, security, budget labs |
+| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle notes (next coverage pass) | `docs/practice.md` chunking/retrieval quality lab |
+| AI platform engineering | Sections 10–14, 20–24, 26, 28, 30, 35, 40 | `docs/practice.md` MCP, traces, security, budget labs |
 | AI infrastructure depth | Sections 13, 14, 35, 36, 38, 40, 41 | `docs/practice.md` serving benchmark and cost labs |
 
-> **Note — AI data engineering:** detailed AI data lifecycle notes (ingestion contracts, feature lineage, schema evolution) are planned for the next coverage pass. The section references above cover the existing fundamentals.
+> **Note — AI data engineering:** detailed AI data lifecycle notes (ingestion contracts, feature lineage, schema evolution) and the corresponding ingestion/lineage labs are planned for the next coverage and practice pass. The section references above cover the existing fundamentals.
 
 ## Coverage scorecard (sections → mastery → artifact)
 
