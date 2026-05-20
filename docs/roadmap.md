@@ -6,11 +6,15 @@ This is the **canonical build spec** for the repo.
 
 Plain-English map (no ambiguity):
 
+- `docs/learning-index.md` = **where to start** and how the learning system fits together
 - `docs/roadmap.md` (this file) = **what to build** + **pass/fail gates**
 - `docs/learning-book.md` = **what to do today** (reading + coding, time-boxed)
-- `docs/learning-fundamentals.md` = **the “textbook”** (definitions, mental models, math, interview questions)
+- `docs/learning-fundamentals.md` = **the textbook** (first-principles theory, mental models, math, diagrams, interview questions)
+- `docs/practice.md` = **labs and proof artifacts**
+- `docs/resources.md` = **curated external references**
+- `docs/interview-bank.md` = **Staff-level interview drills**
 - `docs/hints/` = **optional help** (rationale + copy/paste playbooks)
-- `AGENTS.md` = **how coding agents should work in this repo** (rules + expectations)
+- `AGENTS.md` = **how coding agents should work in this repo**
 
 You are not “learning random AI stuff”. You are building one project, in layers, and collecting proof artifacts as you go.
 

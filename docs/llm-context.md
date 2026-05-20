@@ -2,6 +2,9 @@
 
 _Last updated: 2026-01-09 16:10 IST_
 
+> Human learners should start at `docs/learning-index.md`.
+> This file is the compact handoff for LLM/coding-agent sessions.
+
 This file is a **clean handoff** you can paste into any LLM so it understands what you want, without reading chat history.
 
 ## Primary goal (30 days)
@@ -48,8 +51,9 @@ This file is a **clean handoff** you can paste into any LLM so it understands wh
   - **raw log lines** (`.raw.txt`) and **compressed** (`.gz`) where applicable.
 - Any parsed/structured artifacts are **derived outputs** (useful for tools + retrieval), but the raw source stays raw.
 
-## “Single source of truth” docs (how the repo should be organized)
+## Documentation map for agents
 
+- `docs/learning-index.md` = human learning front door and doc map.
 - `docs/roadmap.md` = canonical **what to build + pass/fail gates**.
 - `docs/learning-book.md` = daily plan (**45m learn + 45m build**), with step‑by‑step instructions.
 - `docs/learning-fundamentals.md` = the **textbook** (definitions, mental models, math, interview questions).
