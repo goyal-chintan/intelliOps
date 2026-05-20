@@ -2,20 +2,47 @@
 
 _Last updated: 2026-01-09 16:10 IST_
 
-This file is the **theory book**.
+This file is the **first-principles textbook** for IntelliOps/OpsPilot.
+
+Use it when you need to understand a concept deeply enough to design, build, debug, and defend it in a Staff-level interview.
+
+Each major topic should answer:
+- **Why does this exist?**
+- **What problem breaks without it?**
+- **How does it work from first principles?**
+- **What trade-offs does it create?**
+- **How do I practice it?**
+- **How do I explain it in an interview?**
 
 How to use it (~45 min/day):
 - Each day, your daily guide (`docs/learning-book.md`) tells you which section(s) to read here.
 - If you are short on time, read the **Must know** bullets and answer the **Core interview questions**.
 - If you have extra time, answer the **Deep interview questions**.
 
-Where “why did we choose X?” lives:
+Where "why did we choose X?" lives:
 - Canonical decision docs (ADRs): `docs/decisions/`
 - Optional copy/paste playbooks: `docs/hints/`
 
 Tip for Obsidian:
 - Make one note per day.
 - Copy the Core questions for today and write your answers in your own words.
+
+---
+
+## How each concept is explained
+
+Good AI engineering is not memorizing tools. It is understanding boundaries, failure modes, measurements, and trade-offs.
+
+For every important concept, use this reading pattern:
+
+1. **Why it exists** — the production problem.
+2. **Concrete example** — an OpsPilot scenario.
+3. **First-principles model** — the simplest mental model.
+4. **Mechanism** — the step-by-step flow.
+5. **Design decision** — why this approach, not another.
+6. **Failure mode** — how it breaks.
+7. **Practice** — one artifact or exercise.
+8. **Interview explanation** — the concise Staff-level version.
 
 ---
 # Part 0 — How to use this book (key principles + roadmap map)
@@ -134,6 +161,71 @@ Read:
 - Security abuse tests: Section 24.8
 - Observability + failure debugging: Section 10, Section 23
 - Shipping/rollbacks: Section 26, Section 28
+
+## Core system map
+
+Every OpsPilot request flows through the same pipeline. Internalise this shape before diving into individual sections.
+
+```mermaid
+flowchart LR
+  U[User question] --> G[Gateway: auth, tenant, budgets]
+  G --> A[AI service: orchestration]
+  A --> R[Retrieval: chunks, embeddings, citations]
+  A --> T[Tools: metrics, logs, cost, incidents]
+  R --> C[Context package]
+  T --> C
+  C --> M[Model: generate structured answer]
+  M --> V[Validation: schema, citations, policy]
+  V --> O[Observable answer]
+  A --> E[Evals and traces]
+  G --> AU[Audit and cost attribution]
+```
+
+## Decision diagrams
+
+Use these when you need to choose an architecture approach. Both diagrams end at "Measure" because every choice must be validated with data.
+
+### RAG vs long context vs fine-tuning
+
+```mermaid
+flowchart TD
+  Q[Need model to answer with domain knowledge] --> Fresh{Knowledge changes often?}
+  Fresh -->|Yes| RAG[RAG or tools]
+  Fresh -->|No| Behavior{Need behavior/style change?}
+  Behavior -->|Yes| Tune[Fine-tuning or distillation]
+  Behavior -->|No| Context{Fits budget and latency?}
+  Context -->|Yes| Long[Long context]
+  Context -->|No| RAG
+  RAG --> Eval[Measure faithfulness, recall, latency, cost]
+  Tune --> Eval
+  Long --> Eval
+```
+
+### Workflow vs agent
+
+```mermaid
+flowchart TD
+  Task[AI task] --> Known{Can you define the steps?}
+  Known -->|Yes| Workflow[Use deterministic workflow]
+  Known -->|No| NeedAutonomy{Does autonomy improve outcome enough?}
+  NeedAutonomy -->|No| Workflow
+  NeedAutonomy -->|Yes| Agent[Use bounded agent]
+  Agent --> Controls[Add tool limits, evals, audit, stop conditions]
+  Workflow --> Controls
+```
+
+## Four-track learning map
+
+Choose the track that matches your role focus. Core sections overlap intentionally — platform knowledge reinforces application knowledge.
+
+| Track | Core sections | Practice |
+|---|---|---|
+| AI application engineering | Sections 3, 5–9, 12, 21, 25 | `docs/practice.md` RAG, structured output, eval labs |
+| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle notes (next coverage pass) | `docs/practice.md` ingestion, chunking, lineage labs |
+| AI platform engineering | Sections 10–14, 20–24, 26, 28, 30, 35, 40 | `docs/practice.md` gateway, MCP, traces, security, budget labs |
+| AI infrastructure depth | Sections 13, 14, 35, 36, 38, 40, 41 | `docs/practice.md` serving benchmark and cost labs |
+
+> **Note — AI data engineering:** detailed AI data lifecycle notes (ingestion contracts, feature lineage, schema evolution) are planned for the next coverage pass. The section references above cover the existing fundamentals.
 
 ## Coverage scorecard (sections → mastery → artifact)
 
