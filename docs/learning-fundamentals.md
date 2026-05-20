@@ -33,7 +33,7 @@ Tip for Obsidian:
 
 Good AI engineering is not memorizing tools. It is understanding boundaries, failure modes, measurements, and trade-offs.
 
-New sections and rewrite passes follow this pattern. Existing sections may cover the same ground with their current structure until they are rewritten.
+Quality standard: read this as a first-principles textbook, not a glossary. Each section aims to make clear why the concept exists, build a usable mental model, name the design trade-off, and, where applicable, connect the idea to a practice artifact or interview check. Sections may use different headings, but the standard is the same: no shallow stubs, and no concept without learner-trust context.
 
 For every important concept, use this reading pattern:
 
