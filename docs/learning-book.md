@@ -182,9 +182,9 @@ For Days 1-14, each expanded day should contain:
 - **Core interview questions**
 - **Practice link**
 - **Build step**
+  - Include the **Short-time fallback** inside the Build step.
 - **Artifact to save**
-- **If short on time**
-- **Reflection**
+- Use the **5-line reflection** from the opening daily loop after saving the artifact.
 
 Days 15–60 still follow the daily 90-minute loop and the legacy day format unless expanded in a later pass.
 
