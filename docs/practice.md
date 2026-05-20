@@ -27,10 +27,13 @@ Use this shape when adding new labs:
 3. **Inputs**
 4. **Steps**
 5. **Expected output**
-6. **What to observe**
-7. **Failure modes**
-8. **Staff-level explanation**
-9. **Artifact to save**
+6. **Pass criteria**
+7. **Fail criteria**
+8. **Artifact schema**
+9. **What to observe**
+10. **Failure modes**
+11. **Staff-level explanation**
+12. **Artifact to save**
 
 ---
 
@@ -60,6 +63,21 @@ Use this shape when adding new labs:
 - Answer with cited chunk IDs or source doc references.
 - A second answer from the bare LLM showing hallucination or missing context.
 - A log line showing retrieval latency and generation latency separately.
+
+**Pass criteria:**
+- Top-5 retrieval includes at least one chunk that contains the answer.
+- RAG answer cites chunk IDs and is more grounded than the bare LLM answer.
+- Retrieval and generation latency are recorded separately.
+
+**Fail criteria:**
+- Answer has no source IDs, retrieved chunks do not support it, or latency split is missing.
+
+**Artifact schema:**
+- `question`: test question.
+- `retrieved_chunks`: list of `{id, source, score, excerpt}`.
+- `rag_answer`: grounded answer with citations.
+- `bare_llm_answer`: no-retrieval comparison.
+- `latency_ms`: `{retrieval, generation}`.
 
 **What to observe:**
 - Does the retrieved context actually appear in the answer?
@@ -104,6 +122,20 @@ Use this shape when adding new labs:
 - A 3×2 comparison table: strategy × (hit@5, avg cosine score).
 - Two failure case explanations per strategy.
 
+**Pass criteria:**
+- All three strategies run against the same five gold questions.
+- The table reports hit@5 and average cosine score per strategy.
+- Two miss or weak-hit cases are explained for each strategy.
+
+**Fail criteria:**
+- Fewer than three strategies or five questions are tested, answer-containing chunks are not identified, or failure analysis is absent.
+
+**Artifact schema:**
+- `document_id`: source document name or path.
+- `gold_set`: list of `{question, answer, answer_source}`.
+- `results`: list of `{strategy, hit_at_5, avg_cosine_score}`.
+- `failure_cases`: list of `{strategy, question, retrieved_chunks, root_cause}`.
+
 **What to observe:**
 - Does overlap significantly improve hit@5?
 - Does semantic chunking outperform fixed-size on this document type?
@@ -144,6 +176,20 @@ Use this shape when adding new labs:
 - A note on how the model handled the ambiguous input.
 - A note on refusal behavior.
 
+**Pass criteria:**
+- All five normal responses parse through the validator or return a documented structured refusal.
+- Ambiguous severity choice is recorded with reasoning.
+- The deliberate schema violation produces a clear validation or downstream error.
+
+**Fail criteria:**
+- Validation is skipped, free-form output is accepted as valid, or the out-of-scope input becomes a hallucinated incident.
+
+**Artifact schema:**
+- `schema_version`: version or hash of the output schema.
+- `inputs`: list of `{id, type, prompt}`.
+- `validation_results`: list of `{input_id, valid, severity, refusal, error}`.
+- `schema_violation_result`: observed failure from the deliberate schema change.
+
 **What to observe:**
 - Does the model ever fail schema validation silently? (Common failure: model returns a string when an enum is expected.)
 - Does severity level correlate with the incident description?
@@ -183,6 +229,22 @@ Use this shape when adding new labs:
 - A table: 20 rows × (question, retrieved chunks, answer, correctness score, groundedness score, completeness score, pass/fail).
 - Before/after comparison for the one pipeline change.
 - A root-cause note for each of the 5 failures.
+
+**Pass criteria:**
+- All 20 gold questions are scored with the chosen eval method and rubric.
+- Summary metrics include dimension means and overall pass rate.
+- Before/after results and five failure root causes are included.
+
+**Fail criteria:**
+- Fewer than 20 questions are scored, no rubric or scoring method is stated, or before/after comparison is missing.
+
+**Artifact schema:**
+- `eval_method`: exact-match, LLM-as-judge, or BERTScore configuration.
+- `rubric`: scoring dimensions and pass threshold.
+- `rows`: list of `{question, retrieved_chunks, answer, scores, pass}`.
+- `summary_metrics`: dimension means and overall pass rate.
+- `pipeline_change`: change tested between runs.
+- `failure_root_causes`: list of `{question, cause, proposed_fix}`.
 
 **What to observe:**
 - Is groundedness (answer supported by retrieved context) the weak dimension or correctness?
@@ -226,6 +288,21 @@ Use this shape when adding new labs:
 - Three interaction traces showing each scenario.
 - Audit log with one entry per tool call.
 - A written policy table: tool → risk level → approval required → max calls per session.
+
+**Pass criteria:**
+- Read-only, write-approved, and write-denied scenarios all produce traces.
+- Write-level tools cannot execute without approval.
+- Audit log records every attempted and executed tool call.
+- Policy table covers each tool in the manifest.
+
+**Fail criteria:**
+- Approval gate is bypassed, malformed arguments execute, or any tool call is missing from the audit log.
+
+**Artifact schema:**
+- `tool_manifest`: list of `{name, description, parameters, risk_level}`.
+- `policy`: list of `{tool, risk_level, approval_required, max_calls_per_session}`.
+- `traces`: list of `{scenario, user_message, tool_choice, approval, outcome}`.
+- `audit_log`: list of `{timestamp, tool, arguments, caller, outcome, approval}`.
 
 **What to observe:**
 - Does the model ever call the write tool without invoking the approval gate?
@@ -271,6 +348,20 @@ Use this shape when adding new labs:
 - A table: span name × (p50 latency, p95 latency) across the five queries.
 - An annotation on the error trace explaining what failed and how the span captured it.
 
+**Pass criteria:**
+- Trace shows one connected root span with retrieval, embedding, LLM, and validation child spans.
+- Span attributes include latency and token or input-size data where applicable.
+- Latency table covers all five queries, and the error trace is annotated.
+
+**Fail criteria:**
+- Spans are disconnected, required span attributes are missing, or the error path is not captured.
+
+**Artifact schema:**
+- `trace_export_path` or `trace_screenshot_path`: saved trace evidence.
+- `span_tree`: list of `{span_id, parent_span_id, name, attributes}`.
+- `latency_table`: list of `{span_name, p50_ms, p95_ms}`.
+- `error_annotation`: `{query_id, failing_span, error, evidence}`.
+
 **What to observe:**
 - Is most latency in the LLM call, the embedding call, or retrieval?
 - Does the error trace show the failure clearly in the span attributes?
@@ -310,6 +401,20 @@ Use this shape when adding new labs:
 - Before-mitigation: evidence the injection changed model behavior.
 - After-mitigation: evidence the injection was blocked or ignored.
 - Exfiltration test result: did the model refuse, and if so, what triggered the refusal?
+
+**Pass criteria:**
+- Baseline run demonstrates at least one injection-driven behavior change.
+- Mitigated run blocks or neutralizes direct and indirect injections, or documents residual risk.
+- Exfiltration result and legitimate-query regression check are recorded.
+
+**Fail criteria:**
+- No baseline attack evidence is captured, mitigation is not rerun, or exfiltration is untested.
+
+**Artifact schema:**
+- `attack_cases`: list of `{type, document_source, query, before_output, after_output, success_before, success_after}`.
+- `mitigation`: `{name, rule_or_guard, known_limitations}`.
+- `exfiltration_result`: `{query, output, refused, reason}`.
+- `legitimate_regression_check`: `{query, expected_behavior, observed_behavior}`.
 
 **What to observe:**
 - How easily does the model follow injected instructions from retrieved documents?
@@ -355,6 +460,21 @@ Use this shape when adding new labs:
 - Evidence that the budget gate triggered on the complex query.
 - Graceful degraded response for the budget-exceeded case.
 
+**Pass criteria:**
+- Every LLM call records prompt tokens, completion tokens, and cost.
+- All five query scenarios are run and summarized.
+- Budget gate triggers before an over-budget model call.
+- Degraded response contains useful partial information.
+
+**Fail criteria:**
+- Cost totals are absent or inaccurate, budget is checked only after spending, or degraded response is empty.
+
+**Artifact schema:**
+- `budget_limit`: `{currency, amount}` or `{token_limit}`.
+- `queries`: list of `{id, scenario, total_cost_usd, total_tokens, gate_triggered, response_type}`.
+- `calls`: list of `{query_id, call_id, prompt_tokens, completion_tokens, cost_usd}`.
+- `budget_exceeded_trace`: `{query_id, last_allowed_call, blocked_call, degraded_response}`.
+
 **What to observe:**
 - Where does the most cost come from: prompt tokens, completion tokens, or number of calls?
 - Does context compression (reducing retrieved chunk count) significantly reduce cost?
@@ -399,6 +519,21 @@ Use this shape when adding new labs:
 - A comparison table: endpoint × (TTFT p50, TTFT p95, throughput tok/s, cost/1K tokens, quality notes).
 - Batch vs serial throughput comparison.
 - A written trade-off note: when would you choose local over hosted?
+
+**Pass criteria:**
+- Same 10 prompts run against local and hosted endpoints.
+- Comparison table includes TTFT p50/p95, throughput, cost, and quality notes.
+- Batch-vs-serial results and trade-off note are included.
+
+**Fail criteria:**
+- Prompt sets differ, cold start is ignored, batch test is absent, or cost/quality notes are missing.
+
+**Artifact schema:**
+- `endpoints`: list of `{name, type, model, hardware_or_provider}`.
+- `prompts`: list of `{id, expected_length, prompt}`.
+- `metrics`: list of `{endpoint, ttft_p50_ms, ttft_p95_ms, throughput_tok_s, cost_per_1k_tokens, quality_notes}`.
+- `batch_results`: list of `{endpoint, concurrency, total_latency_ms, throughput_tok_s}`.
+- `tradeoff_note`: recommendation with supporting metrics.
 
 **What to observe:**
 - Is TTFT dominated by network latency (hosted) or model load time (local)?
@@ -450,6 +585,21 @@ Use this shape when adding new labs:
 - Completed comparison table with real numbers.
 - Two scenarios per approach.
 - ADR-style decision note.
+
+**Pass criteria:**
+- Same 10 gold questions are run through both long-context and RAG approaches.
+- Accuracy, cost, and latency fields are complete with real measurements.
+- Two scenarios per approach and an ADR recommendation are backed by the metrics.
+
+**Fail criteria:**
+- Token count is not verified, question sets differ, cost inputs are missing, or recommendation ignores the measured results.
+
+**Artifact schema:**
+- `corpus_summary`: `{document_count, total_tokens, token_counter}`.
+- `gold_questions`: list of `{question, answer, source_document}`.
+- `comparison_table`: `{accuracy, cost_per_question, latency_p95, freshness, maintenance, lost_in_middle_risk}`.
+- `scenario_analysis`: `{long_context_best_for, rag_best_for}`.
+- `adr`: `{decision, context, options, consequences}`.
 
 **What to observe:**
 - Does the long-context model lose relevant information in the middle of the prompt (lost-in-middle effect)?
