@@ -223,11 +223,11 @@ Choose the track that matches your role focus. Core sections overlap intentional
 | Track | Core sections | Practice |
 |---|---|---|
 | AI application engineering | Sections 3, 5–9, 12, 21, 25 | `docs/practice.md` RAG, structured output, eval labs |
-| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle (§ "AI data lifecycle: source → chunk → embedding → answer") | `docs/practice.md` chunking/retrieval quality lab |
+| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle (§ "AI data lifecycle: source → chunk → embedding → answer → eval feedback") | `docs/practice.md` chunking/retrieval quality lab |
 | AI platform engineering | Sections 10–14, 20–24, 26, 28, 30, 35, 40 | `docs/practice.md` MCP, traces, security, budget labs |
 | AI infrastructure depth | Sections 13, 14, 35, 36, 38, 40, 41 | `docs/practice.md` serving benchmark and cost labs |
 
-> **Note — AI data engineering:** the lifecycle coverage (source → chunk → embedding → answer) is in the section "AI data lifecycle" in Section 8. Eval feedback closes the loop after the answer is produced. Detailed ingestion contracts, feature lineage, and schema-evolution labs are not yet in `docs/practice.md`; those lab exercises remain a future addition.
+> **Note — AI data engineering:** the lifecycle coverage (source → chunk → embedding → answer → eval feedback) is in the section "AI data lifecycle" in Section 8. Eval feedback closes the loop after the answer is produced. Detailed ingestion contracts, feature lineage, and schema-evolution labs are not yet in `docs/practice.md`; those lab exercises remain a future addition.
 
 ## Coverage scorecard (sections → mastery → artifact)
 
@@ -247,7 +247,7 @@ Priority legend:
 | 5 | L0 (P0) | Explain embeddings + recall@k; debug bad retrieval | 3 retrieval test queries + recall@k check |
 | 6 | L0 (P0) | Choose chunk size/overlap; explain stable citation IDs | Chunker output + stable chunk IDs |
 | 7 | L0/L1 (P0) | Explain pgvector schema + filters + index trade-offs | DB schema + one EXPLAIN saved |
-| 8 | L0 (P0) | Describe RAG pipeline + fix-order for failures; explain source→chunk→embedding→answer lineage (AI data lifecycle); choose long context vs RAG | `/ask` returns citations + refusal path |
+| 8 | L0 (P0) | Describe RAG pipeline + fix-order for failures; explain source→chunk→embedding→answer→eval feedback lineage (AI data lifecycle); choose long context vs RAG | `/ask` returns citations + refusal path |
 | 9 | L0/L1 (P0) | Design gold/dev/holdout; run regressions; plan eval cost; write a rubric and calibrate judge checks (Eval rubrics and judge calibration) | Gold set + eval runner + thresholds |
 | 10 | L1 (P0) | Trace latency breakdown and answer “why is p95 slow?” | One end-to-end trace screenshot |
 | 11 | L1→post-30 (P1) | List tenant leak points and how you prove isolation | Leak-test plan + cache-key rules |
@@ -1623,28 +1623,41 @@ Deep (optional):
 
 #### Why this exists
 
-An eval is only useful if it measures the behavior you actually care about. A vague score like "good answer" does not tell you what broke.
+An eval is only useful if it measures the behavior you actually care about. A vague score like "good answer" does not tell you what broke. And an LLM judge that has never been compared to human labels is an unvalidated instrument — it may reward fluent nonsense or penalize correctly cautious answers.
 
 #### First-principles model
 
-Break quality into smaller questions:
+**Rubric design:** break quality into smaller, answerable questions:
 - Did retrieval find the right evidence?
 - Did the answer use only that evidence?
 - Did the output match the required schema?
 - Did it refuse when evidence was missing?
 - Did it avoid unsafe or cross-tenant content?
 
+Each question maps to a concrete check (deterministic, human, or judge). Concrete checks produce actionable regression signals.
+
+**Judge calibration:** an LLM judge is a model with its own biases and blind spots. Calibration is the process of measuring how well the judge agrees with human labels on a sample of known cases. A judge that disagrees with humans more than ~15–20% of the time on clear cases is not reliable enough to gate releases.
+
+Why judges drift and disagree:
+- The judge model may have been updated or its temperature changed.
+- The rubric is ambiguous for borderline answers, so different prompts yield different scores.
+- Judges tend to favor longer, more confident-sounding answers even when shorter, cited answers are better.
+
 #### Design decision
 
-Use deterministic checks where possible, human review for ambiguous cases, and LLM-as-judge only with a clear rubric and spot checks.
+Use deterministic checks where possible. Use human review for ambiguous or high-stakes cases. Use LLM-as-judge only with:
+- a written rubric (1–5 scale with anchors for each score);
+- an initial calibration pass: run the judge on 20–30 human-labeled examples and measure agreement;
+- a disagreement threshold: flag any case where judge score deviates from human label by more than one point for manual review;
+- periodic drift checks: re-run the calibration set whenever the judge model or rubric changes.
 
 #### Trade-off
 
-More detailed rubrics take longer to write, but they make regressions actionable.
+More detailed rubrics and calibration passes take longer to write and maintain, but they make regressions actionable and prevent the eval suite from silently lying.
 
 #### Practice
 
-Write a 1-5 rubric for faithfulness and test it on three answers: good, partially grounded, and hallucinated.
+Write a 1-5 rubric for faithfulness with a one-sentence anchor for each score level. Run your judge on three answers (good, partially grounded, hallucinated). Compare scores to your human label. If they disagree on the hallucinated case, revise the rubric anchor until the judge reliably catches it.
 
 
 
