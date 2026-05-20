@@ -4,6 +4,8 @@ These files are **optional**. Read them only when you are stuck, or when you wan
 
 - `docs/hints/layer2-serving.md` — step-by-step commands for local serving on Mac (`llama.cpp`) and an optional Week 6 cloud GPU smoke test (`vLLM`), plus simple benchmark + cost math.
 
+Use hints only when a practice lab blocks you. Canonical lab goals and expected artifacts live in `docs/practice.md`.
+
 Main files (daily use):
 
 - `docs/roadmap.md` — canonical build spec (what to build + pass/fail gates).
