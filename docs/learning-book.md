@@ -186,7 +186,7 @@ For Days 1-14, each expanded day should contain:
 - **Artifact to save**
 - Use the **5-line reflection** from the opening daily loop after saving the artifact.
 
-Days 15–60 still follow the daily 90-minute loop and the legacy day format unless expanded in a later pass.
+Days 15–60 use a compact daily format; they still follow the same 90-minute loop and include short-time guidance and interview practice where present.
 
 # Part 2 — 30-day sprint (build track)
 
