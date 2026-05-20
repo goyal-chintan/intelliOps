@@ -1,6 +1,6 @@
 # OpsPilot Roadmap (Staff-level, production-shaped)
 
-_Last updated: 2026-01-09 16:10 IST_
+_Last updated: 2026-05-20 IST_
 
 This is the **canonical build spec** for the repo.
 
@@ -10,9 +10,9 @@ Plain-English map (no ambiguity):
 - `docs/roadmap.md` (this file) = **what to build** + **pass/fail gates**
 - `docs/learning-book.md` = **what to do today** (reading + coding, time-boxed)
 - `docs/learning-fundamentals.md` = **the textbook** (first-principles theory, mental models, math, diagrams, interview questions)
-- `docs/practice.md` = **labs and proof artifacts**
-- `docs/resources.md` = **curated external references**
-- `docs/interview-bank.md` = **Staff-level interview drills**
+- `docs/practice.md` = **labs and proof artifacts** _(planned support doc; added in the next implementation task)_
+- `docs/resources.md` = **curated external references** _(planned support doc; added in the next implementation task)_
+- `docs/interview-bank.md` = **Staff-level interview drills** _(planned support doc; added in the next implementation task)_
 - `docs/hints/` = **optional help** (rationale + copy/paste playbooks)
 - `AGENTS.md` = **how coding agents should work in this repo**
 

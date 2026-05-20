@@ -25,9 +25,9 @@ After following this system, you should be able to build and defend a production
 1. Read this file to understand the system.
 2. Use `docs/learning-book.md` for today's learning/build task.
 3. Use `docs/learning-fundamentals.md` when a concept is unclear.
-4. Use `docs/practice.md` for labs and artifacts.
-5. Use `docs/interview-bank.md` to practice explanation.
-6. Use `docs/resources.md` only when the guide points you there.
+4. Use `docs/practice.md` for labs and artifacts. _(planned support doc; added in the next implementation task)_
+5. Use `docs/interview-bank.md` to practice explanation. _(planned support doc; added in the next implementation task)_
+6. Use `docs/resources.md` only when the guide points you there. _(planned support doc; added in the next implementation task)_
 
 ## Document map
 
@@ -36,9 +36,9 @@ After following this system, you should be able to build and defend a production
 | What to learn and in what order | `docs/learning-book.md` |
 | What to build and how it is judged | `docs/roadmap.md` |
 | First-principles theory | `docs/learning-fundamentals.md` |
-| Labs and proof artifacts | `docs/practice.md` |
-| Curated external resources | `docs/resources.md` |
-| Staff interview drills | `docs/interview-bank.md` |
+| Labs and proof artifacts | `docs/practice.md` _(planned support doc; added in the next implementation task)_ |
+| Curated external resources | `docs/resources.md` _(planned support doc; added in the next implementation task)_ |
+| Staff interview drills | `docs/interview-bank.md` _(planned support doc; added in the next implementation task)_ |
 | Architecture decisions | `docs/decisions/` |
 | Copy/paste help when stuck | `docs/hints/` |
 | Context for coding agents | `docs/llm-context.md` |

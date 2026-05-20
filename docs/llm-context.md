@@ -1,6 +1,6 @@
 # IntelliOps / OpsPilot context (consolidated requirements)
 
-_Last updated: 2026-01-09 16:10 IST_
+_Last updated: 2026-05-20 IST_
 
 > Human learners should start at `docs/learning-index.md`.
 > This file is the compact handoff for LLM/coding-agent sessions.
