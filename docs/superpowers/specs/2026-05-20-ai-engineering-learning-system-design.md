@@ -1,8 +1,8 @@
 # AI Engineering Learning System Design
 
-**Date:** 2026-05-20  
-**Status:** Draft for user review  
-**Audience:** Chintan, a Senior Data & Platform Engineer moving into AI application, AI data, and AI platform engineering  
+**Date:** 2026-05-20
+**Status:** Draft for user review
+**Audience:** Chintan, a Senior Data & Platform Engineer moving into AI application, AI data, and AI platform engineering
 **Document type:** Learning roadmap / resource guide + documentation architecture design
 
 ## Summary
@@ -422,4 +422,3 @@ The redesign is successful when:
 5. Keep `learning-fundamentals.md` as the theory source for the first pass.
 6. Add diagrams using Obsidian-friendly Mermaid and optional PNG/SVG exports.
 7. Add first-principles depth without skipping theory.
-

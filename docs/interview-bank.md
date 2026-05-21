@@ -32,7 +32,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 1: LLM Fundamentals and Token Economics
 
-**References:** `docs/learning-fundamentals.md` → LLM Fundamentals, Tokenization, Context Window  
+**References:** `docs/learning-fundamentals.md` → LLM Fundamentals, Tokenization, Context Window
 **Related artifact:** Lab 8 (Budget/Cost Control) in `docs/practice.md`
 
 ### Core questions
@@ -87,7 +87,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 2: RAG and Citations
 
-**References:** `docs/learning-fundamentals.md` → RAG, Embeddings, Retrieval  
+**References:** `docs/learning-fundamentals.md` → RAG, Embeddings, Retrieval
 **Related artifacts:** Lab 1 (RAG Baseline), Lab 2 (Chunking), Lab 10 (Long-context vs RAG) in `docs/practice.md`
 
 ### Core questions
@@ -142,7 +142,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 3: Evals and Quality Gates
 
-**References:** `docs/learning-fundamentals.md` → Evals, LLM-as-Judge, Metrics  
+**References:** `docs/learning-fundamentals.md` → Evals, LLM-as-Judge, Metrics
 **Related artifact:** Lab 4 (Gold-Set Eval) in `docs/practice.md`
 
 ### Core questions
@@ -197,7 +197,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 4: AI Data Pipelines
 
-**References:** `docs/learning-fundamentals.md` → Section 6.4 Real-world Ingestion, Section 5 Embeddings, Section 6 Chunk Metadata, Section 8 RAG Pipeline, Section 19 Data Pipeline Fundamentals  
+**References:** `docs/learning-fundamentals.md` → Section 6.4 Real-world Ingestion, Section 5 Embeddings, Section 6 Chunk Metadata, Section 8 RAG Pipeline, Section 19 Data Pipeline Fundamentals
 **Related artifacts:** Lab 2 (Chunking), Lab 6 (Tracing) in `docs/practice.md`
 
 ### Core questions
@@ -252,7 +252,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 5: Agents, Tools, and MCP
 
-**References:** `docs/learning-fundamentals.md` → Agents, Tool Calling, MCP  
+**References:** `docs/learning-fundamentals.md` → Agents, Tool Calling, MCP
 **Related artifact:** Lab 5 (Tool/MCP Governance) in `docs/practice.md`
 
 ### Core questions
@@ -307,7 +307,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 6: Observability and Debugging
 
-**References:** `docs/learning-fundamentals.md` → Observability, OpenTelemetry  
+**References:** `docs/learning-fundamentals.md` → Observability, OpenTelemetry
 **Related artifact:** Lab 6 (Trace and Observability) in `docs/practice.md`
 
 ### Core questions
@@ -362,7 +362,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 7: Security and Governance
 
-**References:** `docs/learning-fundamentals.md` → Security, OWASP LLM Top 10, Governance  
+**References:** `docs/learning-fundamentals.md` → Security, OWASP LLM Top 10, Governance
 **Related artifact:** Lab 7 (Prompt Injection Drill) in `docs/practice.md`
 
 ### Core questions
@@ -417,7 +417,7 @@ Run one drill group per session. For each question: speak your answer aloud (or 
 
 ## Drill Group 8: Serving, Latency, and Cost
 
-**References:** `docs/learning-fundamentals.md` → Serving, Inference, KV Cache  
+**References:** `docs/learning-fundamentals.md` → Serving, Inference, KV Cache
 **Related artifact:** Lab 9 (Serving Benchmark) in `docs/practice.md`
 
 ### Core questions
