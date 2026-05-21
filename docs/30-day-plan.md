@@ -1,7 +1,9 @@
-# 30‑day plan (deprecated)
+# 30-day plan (deprecated)
 
-Use the canonical daily guide instead:
-- `docs/learning-book.md` (day‑by‑day plan)
-- `docs/roadmap.md` (what to build + gates)
-- `docs/learning-fundamentals.md` (theory + math + interview questions)
-- `docs/decisions/` (architecture decisions)
+Start here instead:
+
+- `docs/learning-index.md` — learning system front door
+- `docs/learning-book.md` — day-by-day 90-minute guide
+- `docs/roadmap.md` — build gates and pass/fail criteria
+
+This file is kept only so older links do not break.

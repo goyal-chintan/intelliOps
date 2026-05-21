@@ -1,16 +1,21 @@
 # OpsPilot Roadmap (Staff-level, production-shaped)
 
-_Last updated: 2026-01-09 16:10 IST_
+_Last updated: 2026-05-20 IST_
 
 This is the **canonical build spec** for the repo.
 
 Plain-English map (no ambiguity):
 
-- `docs/roadmap.md` (this file) = **what to build** + **pass/fail gates**
-- `docs/learning-book.md` = **what to do today** (reading + coding, time-boxed)
-- `docs/learning-fundamentals.md` = **the “textbook”** (definitions, mental models, math, interview questions)
-- `docs/hints/` = **optional help** (rationale + copy/paste playbooks)
-- `AGENTS.md` = **how coding agents should work in this repo** (rules + expectations)
+- [Learning Index](learning-index.md) = **where to start** and how the learning system fits together
+- [Roadmap](roadmap.md) (this file) = **what to build** + **pass/fail gates**
+- [Learning Book](learning-book.md) = **what to do today** (reading + coding, time-boxed)
+- [Learning Fundamentals](learning-fundamentals.md) = **the textbook** (first-principles theory, mental models, math, diagrams, interview questions)
+- [Practice](practice.md) = **labs and proof artifacts**
+- [Resources](resources.md) = **curated external references**
+- [Interview Bank](interview-bank.md) = **Staff-level interview drills**
+- [LLM Context](llm-context.md) = **coding-agent handoff only**
+- [Hints](hints/) = **optional help** (rationale + copy/paste playbooks)
+- `AGENTS.md` = **how coding agents should work in this repo**
 
 You are not “learning random AI stuff”. You are building one project, in layers, and collecting proof artifacts as you go.
 
