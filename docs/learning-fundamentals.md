@@ -2,20 +2,49 @@
 
 _Last updated: 2026-01-09 16:10 IST_
 
-This file is the **theory book**.
+This file is the **first-principles textbook** for IntelliOps/OpsPilot.
+
+Use it when you need to understand a concept deeply enough to design, build, debug, and defend it in a Staff-level interview.
+
+Each major topic should answer:
+- **Why does this exist?**
+- **What problem breaks without it?**
+- **How does it work from first principles?**
+- **What trade-offs does it create?**
+- **How do I practice it?**
+- **How do I explain it in an interview?**
 
 How to use it (~45 min/day):
 - Each day, your daily guide (`docs/learning-book.md`) tells you which section(s) to read here.
 - If you are short on time, read the **Must know** bullets and answer the **Core interview questions**.
 - If you have extra time, answer the **Deep interview questions**.
 
-Where “why did we choose X?” lives:
+Where "why did we choose X?" lives:
 - Canonical decision docs (ADRs): `docs/decisions/`
 - Optional copy/paste playbooks: `docs/hints/`
 
 Tip for Obsidian:
 - Make one note per day.
 - Copy the Core questions for today and write your answers in your own words.
+
+---
+
+## How each concept is explained
+
+Good AI engineering is not memorizing tools. It is understanding boundaries, failure modes, measurements, and trade-offs.
+
+Quality standard: read this as a first-principles textbook, not a glossary. Each section aims to make clear why the concept exists, build a usable mental model, name the design trade-off, and, where applicable, connect the idea to a practice artifact or interview check. Sections may use different headings, but the standard is the same: no shallow stubs, and no concept without learner-trust context.
+
+For every important concept, use this reading pattern:
+
+1. **Why it exists** — the production problem.
+2. **Concrete example** — an OpsPilot scenario.
+3. **First-principles model** — the simplest mental model.
+4. **Mechanism** — the step-by-step flow.
+5. **Design decision** — why this approach, not another.
+6. **Failure mode** — how it breaks.
+7. **Practice** — one artifact or exercise.
+8. **Interview explanation** — the concise Staff-level version.
 
 ---
 # Part 0 — How to use this book (key principles + roadmap map)
@@ -135,6 +164,71 @@ Read:
 - Observability + failure debugging: Section 10, Section 23
 - Shipping/rollbacks: Section 26, Section 28
 
+## Core system map
+
+Every OpsPilot request flows through the same pipeline. Internalise this shape before diving into individual sections.
+
+```mermaid
+flowchart LR
+  U[User question] --> G[Gateway: auth, tenant, budgets]
+  G --> A[AI service: orchestration]
+  A --> R[Retrieval: chunks, embeddings, citations]
+  A --> T[Tools: metrics, logs, cost, incidents]
+  R --> C[Context package]
+  T --> C
+  C --> M[Model: generate structured answer]
+  M --> V[Validation: schema, citations, policy]
+  V --> O[Observable answer]
+  A --> E[Evals and traces]
+  G --> AU[Audit and cost attribution]
+```
+
+## Decision diagrams
+
+Use these when you need to choose an architecture approach. Each path ultimately leads to a measurement or control step — every choice must be validated with data and governed in production.
+
+### RAG vs long context vs fine-tuning
+
+```mermaid
+flowchart TD
+  Q[Need model to answer with domain knowledge] --> Fresh{Knowledge changes often?}
+  Fresh -->|Yes| RAG[RAG or tools]
+  Fresh -->|No| Behavior{Need behavior/style change?}
+  Behavior -->|Yes| Tune[Fine-tuning or distillation]
+  Behavior -->|No| Context{Fits budget and latency?}
+  Context -->|Yes| Long[Long context]
+  Context -->|No| RAG
+  RAG --> Eval[Measure faithfulness, recall, latency, cost]
+  Tune --> Eval
+  Long --> Eval
+```
+
+### Workflow vs agent
+
+```mermaid
+flowchart TD
+  Task[AI task] --> Known{Can you define the steps?}
+  Known -->|Yes| Workflow[Use deterministic workflow]
+  Known -->|No| NeedAutonomy{Does autonomy improve outcome enough?}
+  NeedAutonomy -->|No| Workflow
+  NeedAutonomy -->|Yes| Agent[Use bounded agent]
+  Agent --> Controls[Add tool limits, evals, audit, stop conditions]
+  Workflow --> Controls
+```
+
+## Four-track learning map
+
+Choose the track that matches your role focus. Core sections overlap intentionally — platform knowledge reinforces application knowledge.
+
+| Track | Core sections | Practice |
+|---|---|---|
+| AI application engineering | Sections 3, 5–9, 12, 21, 25 | `docs/practice.md` RAG, structured output, eval labs |
+| AI data engineering | Sections 6–8, 19, 22, 37, 39 plus AI data lifecycle (§ "AI data lifecycle: source → chunk → embedding → answer → eval feedback") | `docs/practice.md` chunking/retrieval quality lab |
+| AI platform engineering | Sections 10–14, 20–24, 26, 28, 30, 35, 40 | `docs/practice.md` MCP, traces, security, budget labs |
+| AI infrastructure depth | Sections 13, 14, 35, 36, 38, 40, 41 | `docs/practice.md` serving benchmark and cost labs |
+
+> **Note — AI data engineering:** the lifecycle coverage (source → chunk → embedding → answer → eval feedback) is in the section "AI data lifecycle" in Section 8. Eval feedback closes the loop after the answer is produced. Detailed ingestion contracts, feature lineage, and schema-evolution labs are not yet in `docs/practice.md`; those lab exercises remain a future addition.
+
 ## Coverage scorecard (sections → mastery → artifact)
 
 Use this as a study tracker and a “do I actually understand this?” checklist.
@@ -146,20 +240,20 @@ Priority legend:
 
 | Section | Layer / priority | Mastery check (you can…) | Proof artifact (repo/Obsidian) |
 |---|---|---|---|
-| 1 | L0 (P0) | Pitch OpsPilot + offline/online split | 60-sec pitch + architecture sketch |
+| 1 | L0 (P0) | Pitch OpsPilot + offline/online split; draw `/ask` path with deterministic and model-driven segments (Compound AI systems) | 60-sec pitch + architecture sketch |
 | 2 | L0 (P0) | Define logs/metrics/traces + runbooks/RCAs | 1-page ops glossary note |
 | 3 | L0/L1 (P0) | Estimate tokens→latency→$; defend decoding defaults | Filled 35.0C worksheet + logged gen config |
 | 4 | L2 (P1) | Explain prefill vs decode + KV cache intuition | Trace note: prefill vs decode time |
 | 5 | L0 (P0) | Explain embeddings + recall@k; debug bad retrieval | 3 retrieval test queries + recall@k check |
 | 6 | L0 (P0) | Choose chunk size/overlap; explain stable citation IDs | Chunker output + stable chunk IDs |
 | 7 | L0/L1 (P0) | Explain pgvector schema + filters + index trade-offs | DB schema + one EXPLAIN saved |
-| 8 | L0 (P0) | Describe RAG pipeline + fix-order for failures | `/ask` returns citations + refusal path |
-| 9 | L0/L1 (P0) | Design gold/dev/holdout; run regressions; plan eval cost | Gold set + eval runner + thresholds |
+| 8 | L0 (P0) | Describe RAG pipeline + fix-order for failures; explain source→chunk→embedding→answer→eval feedback lineage (AI data lifecycle); choose long context vs RAG | `/ask` returns citations + refusal path |
+| 9 | L0/L1 (P0) | Design gold/dev/holdout; run regressions; plan eval cost; write a rubric and calibrate judge checks (Eval rubrics and judge calibration) | Gold set + eval runner + thresholds |
 | 10 | L1 (P0) | Trace latency breakdown and answer “why is p95 slow?” | One end-to-end trace screenshot |
 | 11 | L1→post-30 (P1) | List tenant leak points and how you prove isolation | Leak-test plan + cache-key rules |
-| 12 | L1/L3 (P0) | Design tools safely (schema/bounds/audit); explain MCP | Tool schemas + audit logs (+ optional MCP) |
+| 12 | L1/L3 (P0) | Design tools safely (schema/bounds/audit); explain MCP trust boundary and why 12.9A controls exist | Tool schemas + audit logs (+ optional MCP) |
 | 13 | L2 (P1) | Explain tokens/sec, batching, TTFT, quantization trade | Bench notes: concurrency vs p95 |
-| 14 | L1/L2 (P0) | Set budgets/quotas; justify cascade routing with math | Worst-case $/req + route decision log |
+| 14 | L1/L2 (P0) | Set budgets/quotas; justify cascade routing with math; attribute token spend per request/tenant (AI FinOps) | Worst-case $/req + route decision log |
 | 15 | All (P2) | Explain “framework vs build yourself” trade-offs | 1-page “why these tools” note |
 | 16 | All (P0) | Use a staff design-doc skeleton + failure-mode thinking | 1-page design doc for OpsPilot |
 | 17 | L2 (P1) | Explain fine-tune vs RAG vs prompting; key risks | Decision note: why/when fine-tune |
@@ -297,6 +391,35 @@ Deep (optional):
    - Key points: check citations → retrieval results → tool outputs → prompt → model choice; use traces.
 5) If you had to explain “why this roadmap is layered”, what’s the staff reasoning?
    - Key points: add one new reliability capability per layer; measure and keep regressions out.
+
+### Compound AI systems (why the LLM is only one component)
+
+#### Why this exists
+
+Production AI systems fail when engineers treat the model as the whole product. A useful AI application is usually a compound system: deterministic code, databases, retrieval, tools, policies, evals, queues, caches, and an LLM.
+
+#### First-principles model
+
+An LLM is a probabilistic reasoning and language component. It is not a database, permission system, scheduler, audit log, or source of truth.
+
+The platform decides:
+- what data the model can see;
+- which tools it may call;
+- how much it may spend;
+- what output shape is accepted;
+- how failures are detected.
+
+#### Design decision
+
+Use deterministic code for rules, permissions, budgets, validation, and routing. Use the model for language understanding, summarization, classification, and reasoning where deterministic code is too brittle.
+
+#### Trade-off
+
+The more you put around the model, the more reliable the system becomes, but the more engineering surfaces you must operate.
+
+#### Practice
+
+Draw your `/ask` path and label which parts are deterministic and which parts are model-driven.
 
 
 
@@ -1294,9 +1417,67 @@ Deep (optional):
 5) How do you design RAG so it is safe for multi-tenant use?
    - Key points: tenant filter at retrieval and tool layer; cache keys include tenant; tests.
 
+### AI data lifecycle (source → chunk → embedding → answer → eval feedback)
+
+#### Why this exists
+
+RAG quality depends on data quality. If the source document is stale, badly parsed, poorly chunked, or embedded with the wrong model, the answer will be bad even if the LLM is strong.
+
+#### First-principles model
+
+AI context is a data product. It needs lineage, freshness, versioning, validation, and ownership.
+
+The lifecycle is:
+1. source document or raw event;
+2. parsed text or structured record;
+3. chunk with stable ID and metadata;
+4. embedding generated by a specific model version;
+5. vector index entry;
+6. retrieved evidence;
+7. cited answer;
+8. eval result or user feedback.
+
+#### Design decision
+
+Store enough metadata to answer: "Which source produced this answer, using which parser, chunker, embedding model, and retrieval config?"
+
+#### Trade-off
+
+More metadata costs storage and implementation time, but without it you cannot debug bad answers or safely re-embed.
+
+#### Practice
+
+For one runbook chunk, write its lineage record from source file to final citation.
+
+### Long context vs RAG (why bigger windows do not remove retrieval)
+
+#### Why this exists
+
+Modern models can accept very large contexts, but long context is not free. It increases cost, latency, and debugging difficulty. RAG still matters when you need freshness, access control, citations, and predictable evidence selection.
+
+#### First-principles model
+
+Context window answers: "How much text can the model read right now?"
+
+Retrieval answers: "Which text should the model read, and why is it allowed?"
+
+These are different problems.
+
+#### Design decision
+
+Use long context when the input is bounded, allowed, and worth reading as a whole. Use RAG when the corpus is large, changing, permissioned, or needs citations.
+
+#### Trade-off
+
+Long context simplifies architecture but can hide evidence-selection bugs. RAG adds moving parts but makes evidence selection measurable and auditable.
+
+#### Practice
+
+Take one OpsPilot question and decide whether to use long context, RAG, or tools. Defend the choice using cost, latency, freshness, and access control.
 
 
-## 9) Evals (how serious teams avoid “it feels good”)
+
+## 9) Evals (how serious teams avoid "it feels good")
 
 ### 9.1 Offline vs online evaluation
 
@@ -1437,6 +1618,46 @@ Deep (optional):
    - Key points: strengthen citation requirements, better chunking, reranking, stricter refusal rules.
 5) How do you evaluate changes safely (prompt change vs model change vs retrieval change)?
    - Key points: version everything; A/B; rerun gold set; rollback path.
+
+### Eval rubrics and judge calibration
+
+#### Why this exists
+
+An eval is only useful if it measures the behavior you actually care about. A vague score like "good answer" does not tell you what broke. And an LLM judge that has never been compared to human labels is an unvalidated instrument — it may reward fluent nonsense or penalize correctly cautious answers.
+
+#### First-principles model
+
+**Rubric design:** break quality into smaller, answerable questions:
+- Did retrieval find the right evidence?
+- Did the answer use only that evidence?
+- Did the output match the required schema?
+- Did it refuse when evidence was missing?
+- Did it avoid unsafe or cross-tenant content?
+
+Each question maps to a concrete check (deterministic, human, or judge). Concrete checks produce actionable regression signals.
+
+**Judge calibration:** an LLM judge is a model with its own biases and blind spots. Calibration is the process of measuring how well the judge agrees with human labels on a sample of known cases. A judge that disagrees with humans more than ~15–20% of the time on clear cases is not reliable enough to gate releases.
+
+Why judges drift and disagree:
+- The judge model may have been updated or its temperature changed.
+- The rubric is ambiguous for borderline answers, so different prompts yield different scores.
+- Judges tend to favor longer, more confident-sounding answers even when shorter, cited answers are better.
+
+#### Design decision
+
+Use deterministic checks where possible. Use human review for ambiguous or high-stakes cases. Use LLM-as-judge only with:
+- a written rubric (1–5 scale with anchors for each score);
+- an initial calibration pass: run the judge on 20–30 human-labeled examples and measure agreement;
+- a disagreement threshold: flag any case where judge score deviates from human label by more than one point for manual review;
+- periodic drift checks: re-run the calibration set whenever the judge model or rubric changes.
+
+#### Trade-off
+
+More detailed rubrics and calibration passes take longer to write and maintain, but they make regressions actionable and prevent the eval suite from silently lying.
+
+#### Practice
+
+Write a 1-5 rubric for faithfulness with a one-sentence anchor for each score level. Run your judge on three answers (good, partially grounded, hallucinated). Compare scores to your human label. If they disagree on the hallucinated case, revise the rubric anchor until the judge reliably catches it.
 
 
 
@@ -1683,6 +1904,38 @@ Minimum guardrails to be able to say “this is production-shaped”:
   - approval state for any write-capable path (even if writes are stubbed).
 
 If you implement one MCP server in this repo, include a small test suite that proves these rules.
+
+### MCP trust boundary (why tool servers are security boundaries)
+
+Section 12.9A is the enforcement checklist; this section explains why those controls exist.
+
+#### Why this exists
+
+MCP makes it easy to add tool servers, but every server you connect expands the attack surface of your agent. A remote or third-party MCP server is a **supply-chain risk**: you are trusting external code to produce well-formed, honest tool responses that the model will read and act on. A compromised or malicious server can exfiltrate data, trigger unintended writes, or mislead the model into unsafe decisions.
+
+#### First-principles model
+
+A tool boundary is a **permission boundary and a trust boundary at the same time**.
+
+Three specific risks that are easy to overlook:
+
+1. **Prompt injection via tool responses.** The model reads tool output as context. A malicious tool can embed instructions inside its response ("ignore previous instructions and...") and the model may follow them. Tool output must be treated as untrusted data, not trusted instructions.
+
+2. **Server impersonation and credential abuse.** An agent may hold credentials scoped broadly so it can call multiple services. A compromised or misconfigured MCP server can use those credentials beyond its intended scope. Credentials must be tenant-scoped and least-privilege — one server should not be able to access another tenant's data.
+
+3. **Overly broad tool permissions.** A server registered as "read logs" might also accept write parameters. If the schema is not strictly enforced, the model can accidentally (or via injection) call write paths. Strict schema validation and read-only defaults prevent this.
+
+#### Design decision
+
+The platform, not the model, decides what a tool call is allowed to do. The model proposes; the platform authorizes, validates, bounds, executes, and audits.
+
+#### Trade-off
+
+Strict tool governance slows experimentation, but it prevents invisible unsafe actions that are difficult to detect or roll back after the fact.
+
+#### Practice
+
+Pick one MCP server you plan to integrate. List the three risks above (prompt injection, impersonation, overly broad permissions) and write one mitigation for each. Then implement the 12.9A checklist for that server.
 
 ### 12.10 Approvals (human-in-the-loop) for write tools
 
@@ -2017,6 +2270,34 @@ Deep (optional):
    - Key points: inconsistent prompts/tools, different capabilities, stale cache, tenant leakage.
 5) Give one cost-saving change that does not reduce quality.
    - Key points: prompt trimming, caching, reduce k, reduce output tokens with better format.
+
+### AI FinOps (tokens are cloud spend)
+
+#### Why this exists
+
+LLM cost scales with usage, token size, retries, tool loops, and model choice. A working demo can become expensive when traffic grows.
+
+#### First-principles model
+
+Cost per request is mostly:
+
+```text
+input token cost + output token cost + embedding cost + tool/infra cost
+```
+
+Platform controls reduce cost by limiting token size, routing easy requests to cheaper models, caching repeated work, and stopping runaway tool loops.
+
+#### Design decision
+
+Log tokens, model, route, tenant, feature, cache hit, and estimated cost for every request.
+
+#### Trade-off
+
+Cost controls can reduce quality if applied blindly. Every optimization must be checked against evals.
+
+#### Practice
+
+Calculate cost/query for three request shapes: short RAG answer, long incident analysis, and failed retry loop.
 
 
 

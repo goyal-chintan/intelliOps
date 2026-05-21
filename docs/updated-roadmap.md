@@ -1,5 +1,8 @@
 # Updated roadmap (moved)
 
-`docs/roadmap.md` is now the single canonical roadmap/spec.
+Start here instead:
 
-This file is kept only so older links don’t break.
+- `docs/learning-index.md` — learning system front door
+- `docs/roadmap.md` — canonical roadmap and build spec
+
+This file is kept only so older links do not break.
